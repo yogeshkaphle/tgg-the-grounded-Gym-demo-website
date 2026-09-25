@@ -54,29 +54,6 @@ const list = workouts.filter((w) => w.slug !== exclude);
     background: var(--card);
     border: 1px solid var(--line);
     overflow: hidden;
-    isolation: isolate;
-  }
-  .workout::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--brick);
-    opacity: 0.1;
-    -webkit-mask: url('/contours.svg') center / 260% no-repeat;
-    mask: url('/contours.svg') center / 260% no-repeat;
-  }
-  .workouts li:nth-child(2) .workout::before {
-    -webkit-mask-position: 20% 70%;
-    mask-position: 20% 70%;
-  }
-  .workouts li:nth-child(3) .workout::before {
-    -webkit-mask-position: 80% 20%;
-    mask-position: 80% 20%;
-  }
-  .workouts li:nth-child(4) .workout::before {
-    -webkit-mask-position: 60% 90%;
-    mask-position: 60% 90%;
   }
   .workout__place {
     align-self: flex-start;
@@ -86,12 +63,12 @@ const list = workouts.filter((w) => w.slug !== exclude);
     text-transform: uppercase;
     padding: 0.3rem 0.6rem;
     border-radius: 999px;
-    background: var(--ink);
-    color: var(--on-dark);
+    background: var(--slate);
+    color: var(--on-slate);
   }
   .workout__title {
     font-size: 1.35rem;
-    font-stretch: 114%;
+    font-family: var(--font-display);
     line-height: 1.1;
     margin-top: 0.3rem;
   }
@@ -102,10 +79,10 @@ const list = workouts.filter((w) => w.slug !== exclude);
     gap: 0.35rem;
     font-size: 0.875rem;
     font-weight: 650;
-    color: var(--stone);
+    color: var(--stone-ink);
   }
   .workout__summary {
-    color: var(--ink-2);
+    color: var(--slate-2);
     font-size: 0.975rem;
     line-height: 1.45;
     flex: 1;
@@ -115,10 +92,10 @@ const list = workouts.filter((w) => w.slug !== exclude);
     align-items: center;
     gap: 0.35rem;
     font-weight: 750;
-    color: var(--brick-strong);
+    color: var(--flag-ink);
     margin-top: 0.4rem;
   }
   .workout:hover .workout__go {
-    color: var(--ink);
+    color: var(--slate);
   }
 </style>

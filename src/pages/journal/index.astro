@@ -17,7 +17,6 @@ const minutes = (body = '') => Math.max(2, Math.round(body.split(/\s+/).length /
   description={`Ideas from the coaches at ${site.name} on movement, training culture, practical fitness and a steady mind.`}
 >
   <PageHero
-    eyebrow="Journal"
     title="Notes on getting ready for real life."
     lede="Short pieces from our coaches on movement, training culture, practical fitness and a steady mind. Each one ends with something you can do today."
   />
@@ -78,15 +77,15 @@ const minutes = (body = '') => Math.max(2, Math.round(body.split(/\s+/).length /
     gap: 0.4rem;
     font-size: 0.875rem;
     font-weight: 650;
-    color: var(--stone);
+    color: var(--stone-ink);
   }
   .post__title {
     font-size: clamp(1.45rem, 1.25rem + 0.8vw, 1.8rem);
-    font-stretch: 114%;
+    font-family: var(--font-display);
     line-height: 1.1;
   }
   .post__desc {
-    color: var(--ink-2);
+    color: var(--slate-2);
     flex: 1;
   }
   .post__author {
@@ -98,6 +97,6 @@ const minutes = (body = '') => Math.max(2, Math.round(body.split(/\s+/).length /
     align-items: center;
     gap: 0.35rem;
     font-weight: 750;
-    color: var(--brick-strong);
+    color: var(--flag-ink);
   }
 </style>

@@ -18,7 +18,7 @@ const year = new Date().getFullYear();
       !minimal && (
         <div class="site-footer__grid">
           <div class="site-footer__brand">
-            <Logo tone="paper" />
+            <Logo tone="snow" />
             <p class="site-footer__category">{site.category}.</p>
             <address class="site-footer__address">
               {site.address.street}
@@ -104,6 +104,7 @@ const year = new Date().getFullYear();
           &copy; {year} {site.name}
         </span>
         <a href="/privacy">Privacy</a>
+        <span>Photos: {site.photoCredit}</span>
         {site.demo.enabled && (
           <button
             type="button"
@@ -123,13 +124,13 @@ const year = new Date().getFullYear();
 
 <style>
   .site-footer {
-    background: var(--ink);
-    color: var(--on-dark-muted);
+    background: var(--slate-deep);
+    color: var(--on-slate-muted);
     padding-block: clamp(48px, 7vw, 80px) 28px;
     font-size: 0.975rem;
   }
   .site-footer a {
-    color: var(--on-dark);
+    color: var(--on-slate);
     text-decoration: none;
   }
   .site-footer a:hover {
@@ -140,7 +141,7 @@ const year = new Date().getFullYear();
     gap: 36px 24px;
     grid-template-columns: 1fr 1fr;
     padding-bottom: 36px;
-    border-bottom: 1px solid rgb(244 239 230 / 0.14);
+    border-bottom: 1px solid rgb(242 244 245 / 0.14);
   }
   .site-footer__brand {
     grid-column: 1 / -1;
@@ -157,28 +158,29 @@ const year = new Date().getFullYear();
     }
   }
   .site-footer__category {
-    color: var(--on-dark);
-    font-weight: 700;
-    font-stretch: 110%;
+    color: var(--on-slate);
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 800;
   }
   .site-footer__address {
     font-style: normal;
     line-height: 1.55;
   }
   .site-footer__landmark {
-    color: var(--brick-on-dark);
+    color: var(--flag-on-slate);
   }
   .site-footer__hours span {
     display: inline-block;
     min-width: 6.5em;
-    color: var(--on-dark);
+    color: var(--on-slate);
   }
   .site-footer__heading {
     font-size: 0.8125rem;
     font-stretch: 112%;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--on-dark);
+    color: var(--on-slate);
     margin-bottom: 0.6rem;
   }
   .site-footer nav a,
@@ -192,7 +194,7 @@ const year = new Date().getFullYear();
     background: none;
     border: 0;
     padding: 0;
-    color: var(--on-dark);
+    color: var(--on-slate);
     text-align: left;
     font-size: inherit;
   }
@@ -211,15 +213,15 @@ const year = new Date().getFullYear();
     display: flex;
     gap: 0.5rem;
     align-items: flex-start;
-    color: var(--on-dark);
+    color: var(--on-slate);
     font-weight: 600;
   }
   .site-footer__demo :global(svg) {
     margin-top: 0.25em;
-    color: var(--brick-on-dark);
+    color: var(--flag-on-slate);
   }
   .site-footer__demo a {
-    color: var(--brick-on-dark);
+    color: var(--flag-on-slate);
     text-decoration: underline;
   }
   .site-footer__legal {
@@ -239,7 +241,7 @@ const year = new Date().getFullYear();
     background: none;
     border: 0;
     padding: 0;
-    color: var(--brick-on-dark);
+    color: var(--flag-on-slate);
     font-weight: 700;
     font-size: inherit;
     text-decoration: underline;

@@ -1,31 +1,48 @@
 ---
 // Slim bar above every page. Honest about the demo before anyone types a phone
 // number, and the switch that turns on the conversion notes for gym owners.
-import { site } from '../data/site.ts';
+import { site, ownerWhatsAppUrl } from '../data/site.ts';
 ---
 
 <div class="demo-strip no-print">
   <p class="demo-strip__text">
-    <span class="demo-strip__long">Demo site by <a href={site.demo.authorUrl}>{site.demo.author}</a>. Grounded Gym is not a real gym.</span>
-    <span class="demo-strip__short">Demo by <a href={site.demo.authorUrl}>{site.demo.author}</a></span>
+    <span class="demo-strip__long">Demo site by {site.demo.author}. Grounded Gym is not a real gym.</span>
+    <span class="demo-strip__short">Demo</span>
   </p>
+  {
+    ownerWhatsAppUrl && (
+      <a
+        class="demo-strip__wa"
+        href={ownerWhatsAppUrl}
+        target="_blank"
+        rel="noopener"
+        data-track="author_contact_click"
+        data-track-location="demo_strip"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3.5 20.5l1.3-4.6A8.5 8.5 0 1 1 8 19.3z" />
+        </svg>
+        WhatsApp {site.demo.author.split(' ')[0]}
+      </a>
+    )
+  }
   <button
     type="button"
     class="demo-strip__toggle"
     data-notes-toggle
-    data-label-off="See how it converts"
+    data-label-off="How it converts"
     data-label-on="Hide the notes"
     aria-pressed="false"
   >
     <span class="demo-strip__dot" aria-hidden="true"></span>
-    <span data-notes-label>See how it converts</span>
+    <span data-notes-label>How it converts</span>
   </button>
 </div>
 
 <style>
   .demo-strip {
-    background: var(--ink);
-    color: var(--on-dark-muted);
+    background: var(--slate);
+    color: var(--on-slate-muted);
     font-size: 0.8125rem;
     line-height: 1.3;
     display: flex;
@@ -37,7 +54,7 @@ import { site } from '../data/site.ts';
     min-height: 40px;
   }
   .demo-strip a {
-    color: var(--on-dark);
+    color: var(--on-slate);
     font-weight: 650;
   }
   .demo-strip__short {
@@ -46,6 +63,11 @@ import { site } from '../data/site.ts';
   @media (max-width: 560px) {
     .demo-strip {
       justify-content: space-between;
+      gap: 0.35rem 0.6rem;
+      flex-wrap: nowrap;
+    }
+    .demo-strip__toggle {
+      padding-inline: 0.6rem;
     }
     .demo-strip__long {
       display: none;
@@ -53,6 +75,17 @@ import { site } from '../data/site.ts';
     .demo-strip__short {
       display: inline;
     }
+  }
+  .demo-strip__wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 34px;
+    color: var(--on-slate);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--flag);
+    text-underline-offset: 0.2em;
   }
   .demo-strip__toggle {
     position: relative;
@@ -62,9 +95,9 @@ import { site } from '../data/site.ts';
     min-height: 34px;
     padding: 0.2rem 0.75rem;
     border-radius: 999px;
-    border: 1px solid rgb(244 239 230 / 0.35);
+    border: 1px solid rgb(242 244 245 / 0.35);
     background: transparent;
-    color: var(--on-dark);
+    color: var(--on-slate);
     font-size: 0.8125rem;
     font-weight: 700;
   }
@@ -75,20 +108,20 @@ import { site } from '../data/site.ts';
     inset: -5px -2px;
   }
   .demo-strip__toggle:hover {
-    border-color: var(--on-dark);
+    border-color: var(--on-slate);
   }
   .demo-strip__toggle[aria-pressed='true'] {
-    background: var(--brick-on-dark);
-    border-color: var(--brick-on-dark);
-    color: var(--ink);
+    background: var(--flag-on-slate);
+    border-color: var(--flag-on-slate);
+    color: var(--slate);
   }
   .demo-strip__dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--brick-on-dark);
+    background: var(--flag-on-slate);
   }
   .demo-strip__toggle[aria-pressed='true'] .demo-strip__dot {
-    background: var(--ink);
+    background: var(--slate);
   }
 </style>

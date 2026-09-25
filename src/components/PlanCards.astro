@@ -95,26 +95,26 @@ import { site } from '../data/site.ts';
     padding: 24px 22px 22px;
   }
   .plan--featured {
-    border: 2px solid var(--brick);
+    border: 2px solid var(--flag);
     box-shadow: var(--shadow);
   }
   .plan--trial {
-    background: var(--ink);
-    color: var(--on-dark);
-    border-color: var(--ink);
+    background: var(--slate);
+    color: var(--on-slate);
+    border-color: var(--slate);
   }
   .plan--trial .plan__role,
   .plan--trial .plan__per {
-    color: var(--on-dark-muted);
+    color: var(--on-slate-muted);
   }
   .plan--trial :global(.check-list svg) {
-    color: var(--brick-on-dark);
+    color: var(--flag-on-slate);
   }
   .plan__badge {
     position: absolute;
     top: -13px;
     left: 20px;
-    background: var(--brick);
+    background: var(--flag);
     color: #fff;
     font-size: 0.75rem;
     font-weight: 800;
@@ -125,10 +125,10 @@ import { site } from '../data/site.ts';
   }
   .plan__name {
     font-size: 1.45rem;
-    font-stretch: 116%;
+    font-family: var(--font-display);
   }
   .plan__role {
-    color: var(--stone);
+    color: var(--stone-ink);
     font-size: 0.95rem;
     line-height: 1.4;
   }
@@ -142,12 +142,12 @@ import { site } from '../data/site.ts';
     margin-bottom: 0.3rem;
   }
   .plan--trial .plan__price {
-    border-color: rgb(244 239 230 / 0.16);
+    border-color: rgb(242 244 245 / 0.16);
   }
   .plan__amount {
     font-size: 2rem;
     font-weight: 850;
-    font-stretch: 116%;
+    font-family: var(--font-display);
     letter-spacing: -0.02em;
     line-height: 1;
     font-variant-numeric: tabular-nums;
@@ -157,10 +157,10 @@ import { site } from '../data/site.ts';
     display: grid;
     gap: 0.15rem;
     font-size: 0.95rem;
-    color: var(--ink-2);
+    color: var(--slate-2);
   }
   .plan__save {
-    color: var(--brick-strong);
+    color: var(--flag-ink);
     font-weight: 750;
   }
   .plan__list {
@@ -170,7 +170,7 @@ import { site } from '../data/site.ts';
   }
   .plan__total {
     font-size: 0.875rem;
-    color: var(--stone);
+    color: var(--stone-ink);
   }
   .plan .btn {
     margin-top: 0.4rem;

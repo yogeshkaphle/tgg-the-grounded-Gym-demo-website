@@ -25,17 +25,15 @@ const share = `https://wa.me/?text=${encodeURIComponent(`${w.title} from ${site.
   ogImage={`/og/${w.slug}.png`}
 >
   <article>
-    <header class="w-hero has-contours">
-      <div class="contours" style="--contour-opacity:.14"></div>
+    <header class="w-hero">
       <div class="wrap w-hero__inner">
         <nav class="crumbs no-print" aria-label="Breadcrumb">
           <a href="/train-anywhere">Train Anywhere</a>
           <span aria-hidden="true">/</span>
           <span aria-current="page">{w.place}</span>
         </nav>
-        <p class="eyebrow">{w.place} · {w.minutes} minutes</p>
         <h1 class="h1 w-hero__title">{w.title}</h1>
-        <p class="lede">{w.when}</p>
+        <p class="lede">{w.minutes} minutes. {w.when}</p>
         <div class="w-kit">
           <p class="w-kit__label">You need</p>
           <ul role="list">
@@ -150,10 +148,10 @@ const share = `https://wa.me/?text=${encodeURIComponent(`${w.title} from ${site.
     align-items: center;
     font-size: 0.9rem;
     font-weight: 650;
-    color: var(--stone);
+    color: var(--stone-ink);
   }
   .crumbs a {
-    color: var(--ink-2);
+    color: var(--slate-2);
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -167,7 +165,7 @@ const share = `https://wa.me/?text=${encodeURIComponent(`${w.title} from ${site.
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--stone);
+    color: var(--stone-ink);
   }
   .w-kit ul {
     display: flex;
@@ -205,12 +203,12 @@ const share = `https://wa.me/?text=${encodeURIComponent(`${w.title} from ${site.
     justify-content: space-between;
     gap: 0.25rem 1rem;
     padding-bottom: 0.6rem;
-    border-bottom: 2px solid var(--ink);
+    border-bottom: 2px solid var(--slate);
     margin-bottom: 0.75rem;
   }
   .w-block__format {
     font-weight: 700;
-    color: var(--brick-strong);
+    color: var(--flag-ink);
     font-size: 0.95rem;
   }
   .w-list {
@@ -243,17 +241,17 @@ const share = `https://wa.me/?text=${encodeURIComponent(`${w.title} from ${site.
     white-space: nowrap;
   }
   .w-item__how {
-    color: var(--ink-2);
+    color: var(--slate-2);
     font-size: 0.95rem;
   }
   .w-item__scale {
     display: grid;
     gap: 0.15rem;
     font-size: 0.9rem;
-    color: var(--stone);
+    color: var(--stone-ink);
   }
   .w-item__scale strong {
-    color: var(--ink-2);
+    color: var(--slate-2);
   }
   .w-side {
     display: grid;
@@ -264,17 +262,17 @@ const share = `https://wa.me/?text=${encodeURIComponent(`${w.title} from ${site.
     gap: 0.5rem;
     padding: 20px;
     border-radius: var(--radius-lg);
-    background: var(--ink);
-    color: var(--on-dark);
+    background: var(--slate);
+    color: var(--on-slate);
   }
   .w-note--quiet {
-    background: var(--paper-2);
-    color: var(--ink);
+    background: var(--snow-2);
+    color: var(--slate);
   }
   .w-note--cta {
     background: var(--card);
-    color: var(--ink);
-    border: 2px solid var(--brick);
+    color: var(--slate);
+    border: 2px solid var(--flag);
   }
   .more-title {
     margin-bottom: 1.25rem;

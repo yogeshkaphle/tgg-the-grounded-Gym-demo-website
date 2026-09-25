@@ -11,12 +11,11 @@ const order: Pillar[] = ['move', 'perform', 'adapt'];
 
 <ol role="list" class="pillars">
   {
-    order.map((key, i) => {
+    order.map((key) => {
       const p = pillars[key];
       const inPillar = classes.filter((c) => c.pillar === key);
       return (
         <li class:list={['pillar', `pillar--${key}`]}>
-          <p class="pillar__num">0{i + 1}</p>
           <h3 class="pillar__name">{p.name}</h3>
           <p class="pillar__line">{p.line}</p>
           {detailed && <p class="pillar__detail">{p.detail}</p>}
@@ -65,23 +64,17 @@ const order: Pillar[] = ['move', 'perform', 'adapt'];
     top: 0;
     width: 100%;
     height: 5px;
-    background: var(--brick);
+    background: var(--flag);
   }
   .pillar--move::after {
-    background: var(--moss);
+    background: var(--stone);
   }
   .pillar--adapt::after {
-    background: var(--ink);
-  }
-  .pillar__num {
-    font-size: 0.8125rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    color: var(--stone);
+    background: var(--slate);
   }
   .pillar__name {
     font-size: clamp(2rem, 1.6rem + 1.6vw, 2.6rem);
-    font-stretch: 125%;
+    font-family: var(--font-display);
     letter-spacing: -0.03em;
   }
   .pillar__line {
@@ -89,7 +82,7 @@ const order: Pillar[] = ['move', 'perform', 'adapt'];
     line-height: 1.45;
   }
   .pillar__detail {
-    color: var(--ink-2);
+    color: var(--slate-2);
   }
   .pillar__life,
   .pillar__classes {
@@ -97,7 +90,7 @@ const order: Pillar[] = ['move', 'perform', 'adapt'];
     padding-top: 0.8rem;
     border-top: 1px solid var(--line);
     font-size: 0.95rem;
-    color: var(--ink-2);
+    color: var(--slate-2);
     line-height: 1.45;
   }
   .pillar__classes {
@@ -106,15 +99,13 @@ const order: Pillar[] = ['move', 'perform', 'adapt'];
   .pillar__life span,
   .pillar__classes span {
     display: block;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--brick-strong);
-    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+    font-weight: 750;
+    color: var(--flag-ink);
+    margin-bottom: 0.15rem;
   }
   .pillar__classes a {
-    color: var(--ink);
+    color: var(--slate);
     font-weight: 650;
   }
 </style>

@@ -71,8 +71,8 @@ const list: Result[] = ids ? results.filter((r) => ids.includes(r.id)) : results
     overflow: hidden;
   }
   :global(.section--dark) .result {
-    background: #2a2723;
-    border-color: rgb(244 239 230 / 0.12);
+    background: var(--slate-raised);
+    border-color: rgb(242 244 245 / 0.12);
   }
   .result__label {
     align-self: flex-start;
@@ -83,25 +83,25 @@ const list: Result[] = ids ? results.filter((r) => ids.includes(r.id)) : results
     padding: 0.25rem 0.55rem;
     border-radius: 6px;
     border: 1px dashed currentColor;
-    color: var(--brick-strong);
+    color: var(--flag-ink);
     margin-bottom: 0.6rem;
   }
   :global(.section--dark) .result__label {
-    color: var(--brick-on-dark);
+    color: var(--flag-on-slate);
   }
   .result__stat {
     font-size: clamp(2.4rem, 2rem + 2vw, 3.2rem);
     font-weight: 850;
-    font-stretch: 120%;
+    font-family: var(--font-display);
     line-height: 0.95;
     letter-spacing: -0.03em;
   }
   .result__stat-label {
     font-weight: 700;
-    color: var(--stone);
+    color: var(--stone-ink);
   }
   :global(.section--dark) .result__stat-label {
-    color: var(--on-dark-muted);
+    color: var(--on-slate-muted);
   }
   .result__quote {
     margin-top: 0.8rem;

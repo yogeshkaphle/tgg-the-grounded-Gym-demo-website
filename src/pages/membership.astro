@@ -22,7 +22,6 @@ const everyPlan = [
   description={`${site.name} membership prices: ${site.offer}, Starter Month, 3 Months and 12 Months. No joining fee. Everyone starts with a free week.`}
 >
   <PageHero
-    eyebrow="Membership"
     title="Simple plans. Start free."
     lede={`Everyone starts with a ${site.offer}. After that, pick the plan that fits your life, or walk away. The prices are all on this page.`}
   />
@@ -41,6 +40,9 @@ const everyPlan = [
       </DemoNote>
       <h2 class="sr-only">Plans and prices</h2>
       <PlanCards />
+      <p class="pay-line">
+        Pay at the front desk with <strong>eSewa</strong>, <strong>Khalti</strong>, Fonepay QR, cash or bank transfer.
+      </p>
       <DemoNote>
         <p>
           The Starter Month is the middle rung. In every funnel I walked there was nothing between "free" and a long,
@@ -56,7 +58,6 @@ const everyPlan = [
   <section class="section section--alt">
     <div class="wrap split">
       <div class="stack" style="--stack:1rem">
-        <p class="eyebrow">Every plan</p>
         <h2 class="h2">What you get, whichever you pick.</h2>
         <ul role="list" class="check-list">
           {
@@ -70,7 +71,6 @@ const everyPlan = [
         </ul>
       </div>
       <div class="stack" style="--stack:1rem">
-        <p class="eyebrow">Paying</p>
         <h2 class="h3">Pay however is easiest.</h2>
         <ul role="list" class="pay-list">
           {payments.map((p) => <li class="chip">{p}</li>)}
@@ -85,8 +85,12 @@ const everyPlan = [
 </Page>
 
 <style>
+  .pay-line {
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+  }
   .plans-note {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
   }
   .pay-list {
     display: flex;

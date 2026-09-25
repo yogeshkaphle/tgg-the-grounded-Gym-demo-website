@@ -22,10 +22,14 @@ export const site = {
     author: 'Yogesh Kaphle',
     authorRole: 'Growth Marketing for Coaches',
     authorUrl: 'https://yogeshkaphle.com.np',
-    // Your own WhatsApp number in international format without "+", e.g. '9779812345678'.
-    // Gym owners who test the demo reach you. Leave null until you add it.
-    authorWhatsApp: null as string | null,
+    // Owner-facing WhatsApp (demo strip, thank-you owner panel, conversion notes, demo dialog).
+    // International format without "+". The gym's own Call/WhatsApp buttons never use this.
+    authorWhatsApp: '85362830217' as string | null,
+    ownerMessage: "Hi Yogesh, I saw your Grounded Gym demo. Can you look at my gym's website too?",
   },
+
+  // Shown in the footer as "Photos: <credit>". Replace with the real source when photos are added.
+  photoCredit: '[source]',
 
   address: {
     street: '2nd floor, above the sports shop',
@@ -77,9 +81,11 @@ export const site = {
   },
 
   form: {
-    // Web3Forms free plan: 250 submissions a month, sends to the email the key
-    // is registered with. Get a key at web3forms.com. Empty = test mode (nothing is sent).
-    web3formsKey: '',
+    // Web3Forms free plan: 250 submissions a month, sent to the email the key is
+    // registered with. Set PUBLIC_WEB3FORMS_KEY in Vercel (or a local .env).
+    // The key is public by design: it only lets the form send to your inbox.
+    // Not set = test mode (nothing is sent, and the thank-you page says so).
+    web3formsKey: (import.meta.env?.PUBLIC_WEB3FORMS_KEY as string | undefined) ?? '',
     // The email field only appears when an auto-reply really goes out
     // (Web3Forms Pro or the client's GHL). No auto-reply, no promise of one.
     collectEmail: false,
@@ -90,6 +96,11 @@ export type Site = typeof site;
 
 export const whatsappLink = (text: string, number: string | null = site.contact.whatsapp) =>
   number ? `https://wa.me/${number}?text=${encodeURIComponent(text)}` : null;
+
+// The one owner-facing WhatsApp link, used everywhere a gym owner might want to reach the builder.
+export const ownerWhatsAppUrl = site.demo.authorWhatsApp
+  ? `https://wa.me/${site.demo.authorWhatsApp}?text=${encodeURIComponent(site.demo.ownerMessage)}`
+  : null;
 
 export const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.map.query)}`;
 export const mapsEmbed = `https://maps.google.com/maps?q=${encodeURIComponent(site.map.query)}&z=16&output=embed`;

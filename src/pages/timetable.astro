@@ -20,7 +20,6 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
   description={`This week's classes at ${site.name}, ${site.area}. ${hoursLine}. Try any class free during your ${site.offer}.`}
 >
   <PageHero
-    eyebrow="Timetable"
     title="This week at Grounded Gym"
     lede={`${hoursLine}. Saturday is short because it's the weekly holiday. Every class is included in your ${site.offer}.`}
   />
@@ -183,7 +182,7 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
     padding: 0.75rem 1rem;
     margin-bottom: 1.25rem;
     border-radius: var(--radius);
-    background: var(--brick-soft);
+    background: var(--flag-soft);
   }
   .tt-legend {
     display: flex;
@@ -204,7 +203,7 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
     gap: 4px;
     padding: 8px 0;
     margin-bottom: 0.75rem;
-    background: var(--paper);
+    background: var(--snow);
   }
   .tt-tabs button {
     display: grid;
@@ -220,19 +219,19 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
     line-height: 1.1;
   }
   .tt-tabs button[aria-selected='true'] {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: var(--on-dark);
+    background: var(--slate);
+    border-color: var(--slate);
+    color: var(--on-slate);
   }
   .tt-tabs__today {
     font-size: 0.62rem;
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--brick);
+    color: var(--flag);
   }
   .tt-tabs button[aria-selected='true'] .tt-tabs__today {
-    color: var(--brick-on-dark);
+    color: var(--flag-on-slate);
   }
   .tt-week {
     display: grid;
@@ -249,7 +248,7 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
     align-items: center;
     gap: 0.6rem;
     font-size: 1.35rem;
-    font-stretch: 114%;
+    font-family: var(--font-display);
   }
   :global(.js) .tt-day:not(.is-active) {
     display: none;
@@ -276,11 +275,11 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
       font-size: 1rem;
       flex-wrap: wrap;
       padding-bottom: 0.4rem;
-      border-bottom: 2px solid var(--ink);
+      border-bottom: 2px solid var(--slate);
     }
     .tt-day.is-today .tt-day__title {
-      border-color: var(--brick);
-      color: var(--brick-strong);
+      border-color: var(--flag);
+      color: var(--flag-ink);
     }
     .tt-day .class-row {
       grid-template-columns: 1fr;
@@ -311,6 +310,6 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
     margin-top: 2rem;
     padding: 1.25rem 1.5rem;
     border-radius: var(--radius-lg);
-    border: 2px solid var(--ink);
+    border: 2px solid var(--slate);
   }
 </style>

@@ -190,26 +190,26 @@ const reassure = `We don't share your number. We'll call or WhatsApp you ${callb
   }
   .trial-form__title {
     font-size: clamp(1.45rem, 1.25rem + 1vw, 1.9rem);
-    font-stretch: 114%;
+    font-family: var(--font-display);
   }
   .trial-form__progress {
     display: grid;
     gap: 0.4rem;
     font-size: 0.875rem;
     font-weight: 700;
-    color: var(--stone);
+    color: var(--stone-ink);
   }
   .trial-form__bar {
     height: 6px;
     border-radius: 99px;
-    background: var(--paper-3);
+    background: var(--snow-3);
     overflow: hidden;
   }
   .trial-form__bar span {
     display: block;
     height: 100%;
     width: 50%;
-    background: var(--brick);
+    background: var(--flag);
     border-radius: inherit;
     transition: width 0.3s ease;
   }
@@ -222,7 +222,7 @@ const reassure = `We don't share your number. We'll call or WhatsApp you ${callb
     line-height: 1.4;
     padding: 0.6rem 0.8rem;
     border-radius: 10px;
-    background: var(--paper-2);
+    background: var(--snow-2);
   }
   .choice-group {
     border: 0;
@@ -278,27 +278,27 @@ const reassure = `We don't share your number. We'll call or WhatsApp you ${callb
   .choice small {
     font-size: 0.78rem;
     font-weight: 600;
-    color: var(--stone);
+    color: var(--stone-ink);
     margin-top: 2px;
   }
   .choice:hover span {
-    border-color: var(--ink);
+    border-color: var(--slate);
   }
   .choice input:checked + span {
-    border-color: var(--brick);
-    background: var(--brick-soft);
-    box-shadow: inset 0 0 0 1px var(--brick);
+    border-color: var(--flag);
+    background: var(--flag-soft);
+    box-shadow: inset 0 0 0 1px var(--flag);
   }
   .choice input:focus-visible + span {
-    outline: 3px solid var(--ink);
+    outline: 3px solid var(--slate);
     outline-offset: 2px;
   }
   .choice-group[data-invalid] .choice span {
-    border-color: var(--brick-strong);
+    border-color: var(--flag-ink);
   }
   .trial-form__small {
     font-size: 0.875rem;
-    color: var(--stone);
+    color: var(--stone-ink);
     text-align: center;
     line-height: 1.45;
   }
@@ -312,7 +312,7 @@ const reassure = `We don't share your number. We'll call or WhatsApp you ${callb
     border: 0;
     background: none;
     font-weight: 700;
-    color: var(--ink-2);
+    color: var(--slate-2);
   }
   .trial-form__note {
     display: flex;
@@ -320,14 +320,14 @@ const reassure = `We don't share your number. We'll call or WhatsApp you ${callb
     align-items: flex-start;
     padding: 0.7rem 0.8rem;
     border-radius: 10px;
-    background: var(--paper-2);
+    background: var(--snow-2);
     font-size: 0.95rem;
     line-height: 1.4;
   }
   .trial-form__note :global(svg) {
     flex: none;
     margin-top: 0.1em;
-    color: var(--brick);
+    color: var(--flag);
   }
   .trial-form__trap {
     position: absolute;
@@ -339,8 +339,8 @@ const reassure = `We don't share your number. We'll call or WhatsApp you ${callb
   .trial-form__error {
     padding: 0.75rem 0.9rem;
     border-radius: 10px;
-    background: var(--brick-soft);
-    color: var(--brick-strong);
+    background: var(--flag-soft);
+    color: var(--flag-ink);
     font-weight: 650;
     font-size: 0.95rem;
   }
@@ -350,13 +350,13 @@ const reassure = `We don't share your number. We'll call or WhatsApp you ${callb
     align-items: flex-start;
     font-size: 0.8125rem;
     line-height: 1.45;
-    color: var(--stone);
+    color: var(--stone-ink);
     border-top: 1px dashed var(--line-strong);
     padding-top: 0.9rem;
   }
   .trial-form__demo :global(svg) {
     flex: none;
     margin-top: 0.15em;
-    color: var(--brick);
+    color: var(--flag);
   }
 </style>

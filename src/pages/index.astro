@@ -3,7 +3,8 @@
 import Page from '../layouts/Page.astro';
 import Icon from '../components/Icon.astro';
 import DemoNote from '../components/DemoNote.astro';
-import TrialTicket from '../components/TrialTicket.astro';
+import PhotoSlot from '../components/PhotoSlot.astro';
+import OfferList from '../components/OfferList.astro';
 import PillarCards from '../components/PillarCards.astro';
 import ClassesToday from '../components/ClassesToday.astro';
 import ResultCards from '../components/ResultCards.astro';
@@ -13,7 +14,6 @@ import FindUs from '../components/FindUs.astro';
 import Faq from '../components/Faq.astro';
 import FinalCta from '../components/FinalCta.astro';
 import { site } from '../data/site.ts';
-import { trialIncludes } from '../data/offer.ts';
 import { homeFaq } from '../data/faq.ts';
 
 const dayCodes = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
@@ -42,8 +42,7 @@ const jsonLd = {
   jsonLd={jsonLd}
 >
   <!-- 1. Hero -->
-  <section class="hero has-contours">
-    <div class="contours" style="--contour-opacity:.16"></div>
+  <section class="hero">
     <div class="wrap hero__inner">
       <div class="hero__text">
         <h1 class="hero__title">
@@ -71,17 +70,14 @@ const jsonLd = {
           </p>
         </DemoNote>
       </div>
-      <div class="hero__visual">
-        <TrialTicket />
-      </div>
+      <PhotoSlot name="hero" priority class="hero__photo" sizes="(min-width: 900px) 48vw, 90vw" />
     </div>
   </section>
 
   <!-- 2. Free Trial Week -->
-  <section class="section section--alt" aria-labelledby="ftw-title">
-    <div class="wrap split split--wide-left">
-      <div class="stack" style="--stack:1.1rem">
-        <p class="eyebrow">{site.offer}</p>
+  <section class="section section--alt ftw" aria-labelledby="ftw-title">
+    <div class="wrap split">
+      <div class="stack ftw__intro" style="--stack:1.1rem">
         <h2 id="ftw-title" class="h2">Try a full week before you pay anything.</h2>
         <p class="lede">
           For first-timers, people coming back after a long break, and anyone who wants to see how we coach before they
@@ -90,6 +86,7 @@ const jsonLd = {
         <a class="btn btn--primary" href="/trial" data-track="trial_cta_click" data-track-location="home_offer">
           Book {site.offer} <Icon name="arrow" />
         </a>
+        <PhotoSlot name="class-from-behind" class="ftw__photo" sizes="(min-width: 900px) 540px, 92vw" />
         <DemoNote>
           <p>
             One name for the offer, everywhere: button, form, thank-you page, WhatsApp message. One coaching funnel I
@@ -97,21 +94,9 @@ const jsonLd = {
           </p>
         </DemoNote>
       </div>
-      <ul role="list" class="offer-list">
-        {
-          trialIncludes.map((item) => (
-            <li>
-              <span class="offer-list__icon">
-                <Icon name={item.icon} size={22} />
-              </span>
-              <div>
-                <p class="h4">{item.title}</p>
-                <p class="small muted">{item.text}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
+      <div class="ftw__list">
+        <OfferList />
+      </div>
     </div>
   </section>
 
@@ -119,7 +104,6 @@ const jsonLd = {
   <section class="section" aria-labelledby="pillars-title">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">How we train</p>
         <h2 id="pillars-title" class="h2">Strength you can use outside the gym.</h2>
         <p class="lede">
           Your body isn't built only for mirrors or machines. It's built to move, lift, run, climb, carry, play, recover
@@ -137,7 +121,6 @@ const jsonLd = {
   <section class="section section--alt" aria-labelledby="today-title">
     <div class="wrap split">
       <div class="stack" style="--stack:1rem">
-        <p class="eyebrow">Classes today</p>
         <h2 id="today-title" class="h2">Pick one. It's free this week.</h2>
         <p class="lede">
           Every class on the timetable is included in your {site.offer}. Beginner-friendly classes are marked, and the
@@ -159,7 +142,6 @@ const jsonLd = {
   <section class="section section--dark" aria-labelledby="results-title">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">Results</p>
         <h2 id="results-title" class="h2">Progress you notice on the stairs.</h2>
         <p class="lede">We measure what you can do, not just what you weigh. The mirror usually follows.</p>
       </div>
@@ -178,7 +160,6 @@ const jsonLd = {
     <div class="wrap">
       <div class="section-head section-head--row">
         <div class="stack" style="--stack:.85rem">
-          <p class="eyebrow">Train Anywhere</p>
           <h2 id="anywhere-title" class="h2">When you can't get here, you still know what to do.</h2>
           <p class="lede">Four free sessions from our coaches for the park, a hotel room, home and any gym. No app, no sign-up.</p>
         </div>
@@ -200,7 +181,6 @@ const jsonLd = {
     <div class="wrap">
       <div class="section-head section-head--row">
         <div class="stack" style="--stack:.85rem">
-          <p class="eyebrow">Coaches</p>
           <h2 id="coaches-title" class="h2">Coaches who learn your name in the first week.</h2>
         </div>
         <a class="arrow-link" href="/coaches">Meet the coaches <Icon name="arrow" size={18} /></a>
@@ -220,7 +200,6 @@ const jsonLd = {
   <section class="section section--alt" aria-labelledby="faq-title">
     <div class="wrap faq-wrap">
       <div class="stack" style="--stack:1rem">
-        <p class="eyebrow">Questions</p>
         <h2 id="faq-title" class="h2">Before your first visit</h2>
         <p class="muted">Anything else? Ask us on WhatsApp, or ask your coach on day one.</p>
       </div>
@@ -233,20 +212,15 @@ const jsonLd = {
 </Page>
 
 <style>
+  /* The one asymmetric moment: the photo bleeds off the right edge and hangs into the next section. */
   .hero {
-    padding-block: clamp(40px, 7vw, 96px) clamp(48px, 7vw, 104px);
-    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    padding-top: clamp(32px, 6vw, 80px);
   }
   .hero__inner {
     display: grid;
-    gap: 40px;
-    align-items: center;
-  }
-  @media (min-width: 900px) {
-    .hero__inner {
-      grid-template-columns: 1.35fr 0.65fr;
-      gap: 56px;
-    }
+    gap: 32px;
   }
   .hero__text {
     display: grid;
@@ -256,18 +230,17 @@ const jsonLd = {
   .hero__title {
     display: grid;
     gap: 0.9rem;
+    font-family: var(--font);
     font-weight: inherit;
-    font-stretch: inherit;
     letter-spacing: normal;
     line-height: normal;
   }
   .hero__line {
     display: block;
     font-weight: 850;
-    font-stretch: 120%;
-    line-height: 0.96;
-    letter-spacing: -0.03em;
-    font-size: clamp(2.9rem, 1.7rem + 6vw, 6.2rem);
+    line-height: 0.86;
+    letter-spacing: -0.01em;
+    font-size: clamp(4rem, 2.2rem + 8.5vw, 9rem);
   }
   .hero__actions {
     gap: 1rem 1.5rem;
@@ -277,7 +250,7 @@ const jsonLd = {
     flex-wrap: wrap;
     gap: 0.4rem 1.25rem;
     font-weight: 650;
-    color: var(--ink-2);
+    color: var(--slate-2);
     font-size: 0.975rem;
   }
   .hero__meta li {
@@ -286,39 +259,42 @@ const jsonLd = {
     gap: 0.4rem;
   }
   .hero__meta :global(svg) {
-    color: var(--brick);
+    color: var(--flag);
   }
-  .hero__visual {
-    display: none;
-    justify-self: center;
+  .hero :global(.hero__photo) {
+    aspect-ratio: 5 / 4;
+    margin-left: calc(var(--gutter) * 2.5);
+    margin-right: calc(var(--gutter) * -1);
+    margin-bottom: -56px;
+    border-radius: var(--radius) 0 0 var(--radius);
   }
-  @media (min-width: 720px) {
-    .hero__visual {
-      display: block;
+  @media (min-width: 900px) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 56px;
+      align-items: start;
+    }
+    .hero__text {
+      padding-block: 24px clamp(56px, 7vw, 104px);
+    }
+    .hero :global(.hero__photo) {
+      aspect-ratio: 4 / 5;
+      margin-left: 0;
+      /* from the column edge to the viewport edge */
+      margin-right: calc((min(100vw - 2 * var(--gutter), var(--wrap)) - 100vw) / 2);
+      margin-bottom: -88px;
     }
   }
-  .offer-list {
-    display: grid;
-    gap: 12px;
+  .ftw {
+    padding-top: clamp(96px, 10vw, 150px);
   }
-  .offer-list li {
-    display: grid;
-    grid-template-columns: 44px 1fr;
-    gap: 14px;
-    align-items: start;
-    padding: 16px;
-    border-radius: var(--radius);
-    background: var(--card);
-    border: 1px solid var(--line);
+  .ftw :global(.ftw__photo) {
+    margin-top: 0.8rem;
   }
-  .offer-list__icon {
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: var(--brick-soft);
-    color: var(--brick-strong);
+  @media (min-width: 900px) {
+    .ftw__list {
+      padding-top: clamp(40px, 6vw, 96px);
+    }
   }
   .after-grid {
     margin-top: 1.2rem;

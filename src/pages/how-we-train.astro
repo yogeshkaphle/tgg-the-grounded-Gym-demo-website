@@ -7,9 +7,11 @@ import PillarCards from '../components/PillarCards.astro';
 import FinalCta from '../components/FinalCta.astro';
 import DemoNote from '../components/DemoNote.astro';
 import Icon from '../components/Icon.astro';
+import PhotoSlot from '../components/PhotoSlot.astro';
+import type { PhotoSlotName } from '../data/photos.ts';
 import { site } from '../data/site.ts';
 import { methods } from '../data/methods.ts';
-import { classById, pillars } from '../data/classes.ts';
+import { classById } from '../data/classes.ts';
 import { sessions } from '../data/timetable.ts';
 
 const ready = [
@@ -40,6 +42,13 @@ const notForYou = [
   'You want to train alone with headphones and never talk to a coach.',
 ];
 
+const photoFor: Record<string, PhotoSlotName> = {
+  calisthenics: 'space-bars',
+  kettlebells: 'space-kettlebells',
+  barbell: 'space-barbell',
+  mobility: 'space-mobility',
+};
+
 const perWeek = (ids: string[]) => sessions.filter((s) => ids.includes(s.classId)).length;
 
 const month = [
@@ -66,7 +75,6 @@ const month = [
   description={`${site.category}. What "ready" means at ${site.name}, the three pillars (Move, Perform, Adapt) and the four methods we use to get you there.`}
 >
   <PageHero
-    eyebrow="How we train"
     title="Training for the life you actually live."
     lede="Every session here has one aim: to make you ready. Ready for the stairs, the trek, the match, and the long day at work. Here is what that means and how we get you there."
   />
@@ -74,7 +82,6 @@ const month = [
   <section class="section" id="ready" aria-labelledby="ready-title">
     <div class="wrap split">
       <div class="stack" style="--stack:1rem">
-        <p class="eyebrow">The outcome</p>
         <h2 id="ready-title" class="h2">What "ready" looks like.</h2>
         <p class="lede">
           Your body is not built only for mirrors or machines. It is built to move, lift, run, climb, carry, play,
@@ -107,7 +114,6 @@ const month = [
   <section class="section section--dark" aria-labelledby="compare-title">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">The difference</p>
         <h2 id="compare-title" class="h2">Same sweat. Different promise.</h2>
       </div>
       <div class="compare" role="table" aria-label="The usual gym promise compared with Grounded Gym">
@@ -134,7 +140,6 @@ const month = [
   <section class="section" id="pillars" aria-labelledby="pillars-title">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">Three pillars</p>
         <h2 id="pillars-title" class="h2">Move. Perform. Adapt.</h2>
         <p class="lede">Every week of training touches all three. The balance changes with your goal.</p>
       </div>
@@ -145,7 +150,6 @@ const month = [
   <section class="section section--alt" id="methods" aria-labelledby="methods-title">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">Four methods</p>
         <h2 id="methods-title" class="h2">Tools, not tribes.</h2>
         <p class="lede">
           Some gyms are a calisthenics gym, a kettlebell gym or a powerlifting gym. We use all four, because each is good
@@ -156,8 +160,8 @@ const month = [
         {
           methods.map((m) => (
             <article class="method" id={m.id} aria-labelledby={`method-${m.id}`}>
+              <PhotoSlot name={photoFor[m.id]} sizes="(min-width: 900px) 540px, 92vw" />
               <div class="method__head">
-                <p class="method__pillar">{pillars[m.pillar].name}</p>
                 <h3 id={`method-${m.id}`} class="method__name">
                   {m.name}
                 </h3>
@@ -179,12 +183,7 @@ const month = [
                 <div>
                   <dt>Where you'll find it</dt>
                   <dd>
-                    {m.classes.map((id, i) => (
-                      <>
-                        {i > 0 && ', '}
-                        <a href={classById(id).href === `/how-we-train#${m.id}` ? '/timetable' : classById(id).href}>{classById(id).name}</a>
-                      </>
-                    ))}
+                    {m.classes.map((id, i) => (<>{i > 0 && ', '}<a href={classById(id).href === `/how-we-train#${m.id}` ? '/timetable' : classById(id).href}>{classById(id).name}</a></>))}
                     <span class="muted"> · {perWeek(m.classes)} sessions a week</span>
                   </dd>
                 </div>
@@ -202,7 +201,6 @@ const month = [
   <section class="section" id="who" aria-labelledby="who-title">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">Who it's for</p>
         <h2 id="who-title" class="h2">Everyday people. Real lives.</h2>
       </div>
       <div class="who">
@@ -245,7 +243,6 @@ const month = [
   <section class="section section--alt" id="first-month" aria-labelledby="month-title">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">Your first month</p>
         <h2 id="month-title" class="h2">How it starts.</h2>
       </div>
       <ol role="list" class="month">
@@ -283,19 +280,19 @@ const month = [
     font-weight: 600;
   }
   .ready-list :global(svg) {
-    color: var(--brick);
+    color: var(--flag);
     margin-top: 0.15em;
   }
   .compare {
     display: grid;
-    border-top: 1px solid rgb(244 239 230 / 0.2);
+    border-top: 1px solid rgb(242 244 245 / 0.2);
   }
   .compare__row {
     display: grid;
     grid-template-columns: 1fr 1.3fr;
     gap: 1rem;
     padding: 1rem 0;
-    border-bottom: 1px solid rgb(244 239 230 / 0.14);
+    border-bottom: 1px solid rgb(242 244 245 / 0.14);
     align-items: baseline;
   }
   .compare__row--head {
@@ -303,15 +300,15 @@ const month = [
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--on-dark-muted);
+    color: var(--on-slate-muted);
   }
   .compare__row--head span:last-child {
-    color: var(--brick-on-dark);
+    color: var(--flag-on-slate);
   }
   .compare__usual {
-    color: var(--on-dark-muted);
+    color: var(--on-slate-muted);
     text-decoration: line-through;
-    text-decoration-color: rgb(236 138 115 / 0.7);
+    text-decoration-color: rgb(245 154 126 / 0.7);
     text-decoration-thickness: 2px;
   }
   .compare__ours {
@@ -321,38 +318,28 @@ const month = [
   }
   .methods {
     display: grid;
-    gap: 16px;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 48px 32px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
   }
   .method {
     display: grid;
     gap: 1rem;
     align-content: start;
-    padding: 24px;
-    border-radius: var(--radius-lg);
-    background: var(--card);
-    border: 1px solid var(--line);
     scroll-margin-top: 96px;
   }
-  .method:target {
-    border-color: var(--brick);
-    box-shadow: 0 0 0 2px var(--brick);
-  }
-  .method__pillar {
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--brick-strong);
+  .method:target .method__name {
+    text-decoration: underline;
+    text-decoration-color: var(--flag);
+    text-decoration-thickness: 4px;
   }
   .method__name {
     font-size: 1.7rem;
-    font-stretch: 118%;
+    font-family: var(--font-display);
     margin-top: 0.2rem;
   }
   .method__tagline {
     font-weight: 700;
-    color: var(--ink-2);
+    color: var(--slate-2);
     margin-top: 0.2rem;
   }
   .method__facts {
@@ -360,11 +347,9 @@ const month = [
     gap: 0.8rem;
   }
   .method__facts dt {
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--stone);
+    font-size: 0.9rem;
+    font-weight: 750;
+    color: var(--stone-ink);
   }
   .method__facts dd {
     margin: 0.15rem 0 0;
@@ -396,7 +381,7 @@ const month = [
     border-color: var(--line-strong);
   }
   .who__col--not :global(svg) {
-    color: var(--stone);
+    color: var(--stone-ink);
   }
   .month {
     display: grid;
@@ -418,8 +403,8 @@ const month = [
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: var(--ink);
-    color: var(--on-dark);
+    background: var(--slate);
+    color: var(--on-slate);
     font-weight: 800;
   }
   .month__when {
@@ -427,7 +412,7 @@ const month = [
     font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--brick-strong);
+    color: var(--flag-ink);
     margin-top: 0.4rem;
   }
   @media (max-width: 560px) {

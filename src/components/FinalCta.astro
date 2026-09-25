@@ -17,13 +17,12 @@ const {
 } = Astro.props;
 ---
 
-<section class="final-cta section has-contours" aria-labelledby={`cta-${location}`}>
-  <div class="contours" style="--contour-color: #fff; --contour-opacity: .14"></div>
+<section class="final-cta section" aria-labelledby={`cta-${location}`}>
   <div class="wrap"><div class="final-cta__inner">
     <h2 id={`cta-${location}`} class="h2">{title}</h2>
     <p class="lede">{text}</p>
     <div class="cluster">
-      <a class="btn btn--light" href={href} data-track="trial_cta_click" data-track-location={location}>
+      <a class="btn btn--primary" href={href} data-track="trial_cta_click" data-track-location={location}>
         Book {site.offer}
         <Icon name="arrow" />
       </a>
@@ -36,15 +35,17 @@ const {
 </section>
 
 <style>
+  /* Slate band above the deeper slate footer; the orange lives in the button. */
   .final-cta {
-    background: var(--brick);
-    color: #fff;
+    background: var(--slate);
+    color: var(--on-slate);
+    border-bottom: 6px solid var(--flag);
   }
   .final-cta :global(.lede) {
-    color: rgb(255 255 255 / 0.92);
+    color: var(--on-slate-muted);
   }
   .final-cta :global(:focus-visible) {
-    outline-color: #fff;
+    outline-color: var(--on-slate);
   }
   .final-cta__inner {
     display: grid;
@@ -56,7 +57,7 @@ const {
     display: inline-flex;
     gap: 0.4rem;
     align-items: center;
-    color: rgb(255 255 255 / 0.92);
+    color: var(--on-slate-muted);
     font-size: 0.95rem;
     font-weight: 600;
   }

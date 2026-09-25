@@ -1,0 +1,38 @@
+---
+// What the Free Trial Week includes, as plain text. Not numbered: it isn't a sequence.
+import { trialIncludes } from '../data/offer.ts';
+---
+
+<ul role="list" class="offer-list">
+  {
+    trialIncludes.map((item) => (
+      <li>
+        <h3 class="offer-list__title">{item.title}</h3>
+        <p>{item.text}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .offer-list {
+    display: grid;
+  }
+  .offer-list li {
+    display: grid;
+    gap: 0.3rem;
+    padding-block: 1.1rem;
+    border-top: 2px solid var(--stone);
+  }
+  .offer-list li:last-child {
+    border-bottom: 2px solid var(--stone);
+  }
+  .offer-list__title {
+    font-size: clamp(1.45rem, 1.3rem + 0.6vw, 1.75rem);
+    line-height: 1;
+  }
+  .offer-list p {
+    color: var(--slate-2);
+    max-width: 46ch;
+  }
+</style>

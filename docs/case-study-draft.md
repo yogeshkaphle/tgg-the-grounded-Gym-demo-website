@@ -6,13 +6,13 @@ For the portfolio at yogeshkaphle.com.np. A first draft to edit, not final copy.
 
 "How I designed Grounded Gym" sells design, which is the opposite of the positioning. Lead with the diagnosis:
 
-1. **I walked six fitness funnels as a customer and found 15 leaks. Then I built a gym site with every one closed.**
-2. **A gym website built backwards from the leaks: 15 problems from real fitness funnels, fixed before launch.**
+1. **I walked six fitness websites as a customer and found 15 leaks. Then I built a gym site with every one closed.**
+2. **A gym website built backwards from the leaks: 15 problems from real fitness websites, fixed before launch.**
 3. **Grounded Gym: a concept site that turns people near Baneshwor into Free Trial Week bookings.** (safe option)
 
 Sub-line: *Concept build for a fictional Kathmandu gym. No invented results: this shows the mechanism, not the numbers.*
 
-## The funnel
+## The booking path
 
 ```
 Ad or Instagram post (Train Anywhere content, trial offer)
@@ -37,14 +37,14 @@ Keep the businesses anonymous in public. Naming them reads as a takedown, and gy
 | Confirmation only repeated the details back | Thank-you page says what happens next, when, and what to bring |
 | Promised emails never arrived (two coaches) | No email promised unless an auto-reply really sends |
 | Dead link in a bio; a bio keyword that fired nothing | No link-in-bio tools; every link crawled before launch |
-| Free content sent to Drive or YouTube (three funnels) | Train Anywhere sessions live on the domain, inside the pixel's reach |
+| Free content sent to Drive or YouTube (three websites) | Train Anywhere sessions live on the domain, inside the pixel's reach |
 | Pixel on a page no ad reached | `/trial` is the ad landing page and carries the pixel; Lead fires on `/thank-you` |
 | One call with four names | One name everywhere: Free Trial Week |
 | Price hidden behind a keyword | Prices on `/membership` |
 | Savings maths wrong on two sales pages | Savings calculated in code from the price list |
 | Nothing between free and high-ticket | Starter Month |
 | A diagnosis question, then one generic answer | The goal picked changes the recommended classes |
-| The audience changed mid-funnel | Same audience words on every page |
+| The audience changed partway along the booking path | Same audience words on every page |
 | "Guaranteed results" with nothing behind it | No guarantees; sample results labelled |
 | Form and DM leads in different places | Real build: form and WhatsApp land in one GHL inbox |
 | A "personal" touch that was automated | Only promise a call the gym really makes |

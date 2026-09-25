@@ -28,7 +28,8 @@ Every fact is typed once, in `src/data/`. Pages read from these files.
 
 | File | Holds |
 | --- | --- |
-| `site.ts` | Name, address, landmark directions, hours, contact numbers, callback promise, tracking IDs, form key, demo settings |
+| `site.ts` | Name, address, landmark directions, hours, contact numbers, callback promise, tracking IDs, form settings, demo settings, photo credit |
+| `photos.ts` | Every photo slot: shape, alt text, placeholder text |
 | `timetable.ts` | The week of classes. Feeds `/timetable`, "Classes today", coach cards and the thank-you recommendations |
 | `classes.ts` | Class types and the three pillars |
 | `plans.ts` | Prices only. Per-month figures and savings are calculated in `src/lib/pricing.ts` |
@@ -41,13 +42,13 @@ has fewer than three classes to recommend, or a longer plan costs more per month
 
 ## Before launch
 
-- [ ] **Domain.** The brief says `yogeshkaphle.com`; the hub is `yogeshkaphle.com.np`. Set the one you own in `astro.config.mjs` (`SITE_URL`).
-- [ ] **Form key.** Create a free Web3Forms key with the email that should receive bookings and paste it into `site.form.web3formsKey`. Until then the form runs in test mode and says so on the thank-you page. Confirm the free plan on web3forms.com/pricing first: it was checked from third-party 2026 sources, because the sandbox this was built in could not reach the site.
-- [ ] **Your WhatsApp.** Set `site.demo.authorWhatsApp`. Gym owners who test the demo then reach you from the thank-you page and every demo contact button.
-- [ ] **Deletion promise.** `/privacy` says demo bookings are deleted within 30 days. Keep that promise or change the page.
+- [x] **Domain.** `groundedgym.yogeshkaphle.com` (set in `astro.config.mjs`, `SITE_URL`).
+- [ ] **Form key.** Create a free Web3Forms key with the email that should receive bookings and add it in Vercel as the environment variable `PUBLIC_WEB3FORMS_KEY`, then redeploy (the key is read at build time). Until then the form runs in test mode and says so on the thank-you page. For local testing, put it in a `.env` file (git-ignored).
+- [x] **Your WhatsApp.** Owner-facing buttons (demo strip, thank-you owner panel, conversion notes, demo dialog) open `site.demo.authorWhatsApp` with a prefilled message. The gym's own Call/WhatsApp buttons still explain the demo.
+- [ ] **Photo credit.** Replace `[source]` in `site.photoCredit` once photos are in.
 - [ ] **Tracking.** Add `site.tracking.metaPixelId` and `ga4Id` if you want live events. Nothing loads while they are empty.
 - [ ] **Photos.** See `src/assets/photos/README.md`.
-- [ ] **Deploy.** Cloudflare Pages or Netlify: build command `npm run build`, output folder `dist`, Node 22. Point a subdomain at it.
+- [ ] **Deploy.** Vercel, from `main`. `vercel.json` sets clean URLs (no `.html`, no trailing slash) and cache headers. Node 22.12 or newer.
 
 ### The brief's "done when" list
 

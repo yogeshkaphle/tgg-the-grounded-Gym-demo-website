@@ -1,18 +1,15 @@
 ---
 // Header block for inside pages.
 interface Props {
-  eyebrow: string;
   title: string;
   lede?: string;
   narrow?: boolean;
 }
-const { eyebrow, title, lede, narrow = false } = Astro.props;
+const { title, lede, narrow = false } = Astro.props;
 ---
 
-<section class="page-hero has-contours">
-  <div class="contours" style="--contour-opacity:.14"></div>
+<section class="page-hero">
   <div class:list={[narrow ? 'wrap--narrow' : 'wrap', 'page-hero__inner']}>
-    <p class="eyebrow">{eyebrow}</p>
     <h1 class="h1 page-hero__title">{title}</h1>
     {lede && <p class="lede">{lede}</p>}
     <slot />

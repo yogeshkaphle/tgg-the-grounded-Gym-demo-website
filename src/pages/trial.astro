@@ -10,10 +10,9 @@ import Faq from '../components/Faq.astro';
 import FindUs from '../components/FindUs.astro';
 import DemoNote from '../components/DemoNote.astro';
 import { site } from '../data/site.ts';
-import { trialIncludes } from '../data/offer.ts';
+import OfferList from '../components/OfferList.astro';
 import { trialFaq } from '../data/faq.ts';
 
-const includes = trialIncludes;
 ---
 
 <Landing
@@ -21,8 +20,7 @@ const includes = trialIncludes;
   description={`Try any class at ${site.name}, ${site.area}, free for a week. ${site.openingLine}. Book in 30 seconds.`}
   bodyClass="page-trial"
 >
-  <section class="trial-hero has-contours">
-    <div class="contours" style="--contour-opacity:.13"></div>
+  <section class="trial-hero">
     <div class="wrap trial-layout">
       <div class="trial-pitch">
         <p class="eyebrow">{site.category}</p>
@@ -47,21 +45,7 @@ const includes = trialIncludes;
         </DemoNote>
 
         <h2 class="h3 trial-section-title">What your week includes</h2>
-        <ul role="list" class="includes">
-          {
-            includes.map((item) => (
-              <li class="includes__item">
-                <span class="includes__icon">
-                  <Icon name={item.icon} size={22} />
-                </span>
-                <div>
-                  <p class="h4">{item.title}</p>
-                  <p class="small muted">{item.text}</p>
-                </div>
-              </li>
-            ))
-          }
-        </ul>
+        <OfferList />
 
         <h2 class="h3 trial-section-title">What a few months can look like</h2>
         <ResultCards ids={['push-ups']} single />
@@ -150,7 +134,7 @@ const includes = trialIncludes;
     flex-wrap: wrap;
     gap: 0.4rem 1.2rem;
     font-weight: 650;
-    color: var(--ink-2);
+    color: var(--slate-2);
   }
   .trial-pitch__facts li {
     display: inline-flex;
@@ -158,36 +142,13 @@ const includes = trialIncludes;
     gap: 0.4rem;
   }
   .trial-pitch__facts :global(svg) {
-    color: var(--brick);
+    color: var(--flag);
   }
   .trial-pitch__jump {
     justify-self: start;
   }
   .trial-section-title {
     margin-top: 1.4rem;
-  }
-  .includes {
-    display: grid;
-    gap: 12px;
-  }
-  .includes__item {
-    display: grid;
-    grid-template-columns: 44px 1fr;
-    gap: 14px;
-    align-items: start;
-    padding: 14px 16px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-  }
-  .includes__icon {
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: var(--brick-soft);
-    color: var(--brick-strong);
   }
   .trial-form-col {
     scroll-margin-top: 16px;
@@ -202,7 +163,7 @@ const includes = trialIncludes;
     inset: auto 0 0 0;
     z-index: 50;
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-    background: rgb(244 239 230 / 0.96);
+    background: rgb(242 244 245 / 0.96);
     backdrop-filter: blur(10px);
     border-top: 1px solid var(--line-strong);
   }

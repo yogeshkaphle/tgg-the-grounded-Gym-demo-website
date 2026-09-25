@@ -1,9 +1,11 @@
 ---
-// Uses a real photo when src/assets/photos/<coach-id>.(jpg|png|webp) exists.
-// Until then, a clearly marked placeholder. Never a stock face passed off as a named coach.
-import { Picture } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
+// Coach photo slot. Cropped or back shots only: the coaches are fictional, so a
+// face would present a real person as someone they are not. Labelled "Sample coach"
+// on the demo. Add photos as src/assets/photos/<coach-id>.jpg
+import PhotoSlot from './PhotoSlot.astro';
 import type { Coach } from '../data/coaches.ts';
+import type { PhotoSlotName } from '../data/photos.ts';
+import { site } from '../data/site.ts';
 
 interface Props {
   coach: Coach;
@@ -11,84 +13,18 @@ interface Props {
   small?: boolean;
 }
 const { coach, sizes = '(min-width: 900px) 360px, 92vw', small = false } = Astro.props;
-const photos = import.meta.glob<{ default: ImageMetadata }>('../assets/photos/*.{jpg,jpeg,png,webp,avif}', {
-  eager: true,
-});
-const match = Object.entries(photos).find(([file]) => file.split('/').pop()?.startsWith(`${coach.id}.`));
 ---
 
-{
-  match ? (
-    <Picture
-      class:list={['portrait', { 'portrait--sm': small }]}
-      src={match[1].default}
-      formats={['avif', 'webp']}
-      widths={[360, 720]}
-      sizes={sizes}
-      alt={`${coach.name}, ${coach.role.toLowerCase()} at Grounded Gym`}
-    />
-  ) : (
-    <div
-      class:list={['portrait', 'portrait--placeholder', { 'portrait--sm': small }]}
-      role="img"
-      aria-label={`Photo of ${coach.name} coming soon`}
-    >
-      <span class="portrait__initials">{coach.initials}</span>
-      {!small && <span class="portrait__note">Photo of {coach.firstName} goes here</span>}
-    </div>
-  )
-}
+<PhotoSlot
+  name={coach.id as PhotoSlotName}
+  sizes={sizes}
+  compact={small}
+  class={small ? 'portrait portrait--sm' : 'portrait'}
+  label={site.demo.enabled && !small ? 'Sample coach' : undefined}
+/>
 
 <style>
-  .portrait {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    border-radius: var(--radius);
-    background: var(--paper-3);
-  }
-  .portrait--placeholder {
-    position: relative;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    background: var(--ink);
-    color: var(--on-dark);
-    isolation: isolate;
-  }
-  .portrait--placeholder::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--brick-on-dark);
-    opacity: 0.22;
-    -webkit-mask: url('/contours.svg') center / cover no-repeat;
-    mask: url('/contours.svg') center / cover no-repeat;
-  }
-  .portrait__initials {
-    font-weight: 850;
-    font-stretch: 125%;
-    font-size: clamp(3.2rem, 2.4rem + 3vw, 4.6rem);
-    letter-spacing: -0.03em;
-  }
-  .portrait--sm {
-    aspect-ratio: 1 / 1;
-    border-radius: 18px;
-  }
-  .portrait--sm .portrait__initials {
-    font-size: 1.6rem;
-  }
-  .portrait__note {
-    position: absolute;
-    left: 12px;
-    bottom: 12px;
-    font-size: 0.75rem;
-    font-weight: 650;
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-    border: 1px dashed rgb(244 239 230 / 0.5);
-    color: var(--on-dark-muted);
+  :global(.portrait--sm) {
+    aspect-ratio: 1 / 1 !important;
   }
 </style>

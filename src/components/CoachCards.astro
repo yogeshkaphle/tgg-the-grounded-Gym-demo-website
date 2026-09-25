@@ -6,6 +6,7 @@ import Icon from './Icon.astro';
 import { coaches } from '../data/coaches.ts';
 import { classById } from '../data/classes.ts';
 import { sessions } from '../data/timetable.ts';
+import { site } from '../data/site.ts';
 
 interface Props {
   compact?: boolean;
@@ -24,8 +25,11 @@ const runs = (coachId: string) => {
       <li class="coach" id={compact ? undefined : c.id}>
         <CoachPortrait coach={c} small={compact} sizes={compact ? '104px' : undefined} />
         <div class="coach__body">
-          <p class="coach__role">{c.role}</p>
           <h3 class="coach__name">{c.name}</h3>
+          <p class="coach__role">
+            {c.role}
+            {compact && site.demo.enabled && <span class="coach__sample">Sample coach</span>}
+          </p>
           <p class="coach__coaches">{c.coaches}</p>
           {!compact && <p class="coach__bio">{c.bio}</p>}
           {!compact && (
@@ -93,22 +97,31 @@ const runs = (coachId: string) => {
     align-content: start;
   }
   .coach__role {
-    font-size: 0.8125rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--brick-strong);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 650;
+    color: var(--flag-ink);
+  }
+  .coach__sample {
+    padding: 0.1rem 0.45rem;
+    border-radius: 5px;
+    background: var(--slate);
+    color: var(--on-slate);
+    font-size: 0.78rem;
+    font-weight: 700;
   }
   .coach__name {
     font-size: 1.6rem;
-    font-stretch: 116%;
+    font-family: var(--font-display);
   }
   .coach__coaches {
     font-weight: 650;
-    color: var(--ink-2);
+    color: var(--slate-2);
   }
   .coach__bio {
-    color: var(--ink-2);
+    color: var(--slate-2);
   }
   .coach__tags {
     display: flex;
@@ -129,7 +142,7 @@ const runs = (coachId: string) => {
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--stone);
+    color: var(--stone-ink);
     margin-bottom: 0.35rem;
   }
   .coach__runs ul {

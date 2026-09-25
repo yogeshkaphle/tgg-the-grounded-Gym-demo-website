@@ -1,7 +1,8 @@
 ---
 import '../styles/global.css';
 import fontUrl from '../assets/fonts/archivo-subset.woff2?url';
-import { site } from '../data/site.ts';
+import displayFontUrl from '../assets/fonts/big-shoulders-subset.woff2?url';
+import { site, ownerWhatsAppUrl } from '../data/site.ts';
 import { validateData } from '../lib/validate.ts';
 import { cleanPath } from '../lib/url.ts';
 import DemoStrip from '../components/DemoStrip.astro';
@@ -26,7 +27,7 @@ const fullTitle = path === '/' ? title : `${title} | ${site.name}, ${site.area}`
 const robots = noindex || !site.indexable ? 'noindex, nofollow' : 'index, follow';
 const ogUrl = new URL(ogImage, Astro.site).href;
 
-const fontFace = `@font-face{font-family:'Archivo';font-style:normal;font-display:swap;font-weight:100 900;font-stretch:62% 125%;src:url(${fontUrl}) format('woff2');}`;
+const fontFace = `@font-face{font-family:'Archivo';font-style:normal;font-display:swap;font-weight:100 900;src:url(${fontUrl}) format('woff2');}@font-face{font-family:'Big Shoulders';font-style:normal;font-display:swap;font-weight:100 900;src:url(${displayFontUrl}) format('woff2');}`;
 
 const { metaPixelId, ga4Id } = site.tracking;
 ---
@@ -40,7 +41,7 @@ const { metaPixelId, ga4Id } = site.tracking;
     <meta name="description" content={description} />
     <meta name="robots" content={robots} />
     <link rel="canonical" href={canonical.href} />
-    <meta name="theme-color" content="#f4efe6" />
+    <meta name="theme-color" content="#f2f4f5" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
@@ -54,6 +55,7 @@ const { metaPixelId, ga4Id } = site.tracking;
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <link rel="preload" href={displayFontUrl} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
     <style is:inline set:html={fontFace} />
 
@@ -130,7 +132,6 @@ const { metaPixelId, ga4Id } = site.tracking;
         <>
           <dialog id="demo-contact" class="demo-dialog" aria-labelledby="demo-contact-title">
             <div class="demo-dialog__inner">
-              <p class="eyebrow">Demo site</p>
               <h2 id="demo-contact-title" class="h3">Grounded Gym isn't a real gym.</h2>
               <p>
                 In a live build, <span data-demo-channel>this button rings the front desk.</span> Here it doesn't, so you
@@ -140,10 +141,10 @@ const { metaPixelId, ga4Id } = site.tracking;
                 Built by {site.demo.author}, {site.demo.authorRole}. Want this funnel for your gym?
               </p>
               <div class="cluster">
-                {site.demo.authorWhatsApp ? (
+                {ownerWhatsAppUrl ? (
                   <a
                     class="btn btn--whatsapp btn--sm"
-                    href={`https://wa.me/${site.demo.authorWhatsApp}?text=${encodeURIComponent('Hi Yogesh, I saw the Grounded Gym demo and want to talk about my gym.')}`}
+                    href={ownerWhatsAppUrl}
                     data-track="author_contact_click"
                     data-track-location="demo_dialog"
                   >
@@ -184,11 +185,11 @@ const { metaPixelId, ga4Id } = site.tracking;
     border-radius: var(--radius-lg);
     max-width: min(460px, calc(100% - 32px));
     background: var(--card);
-    color: var(--ink);
+    color: var(--slate);
     box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.45);
   }
   .demo-dialog::backdrop {
-    background: rgb(29 27 24 / 0.55);
+    background: rgb(30 52 70 / 0.55);
   }
   .demo-dialog__inner {
     padding: 24px;
@@ -208,9 +209,9 @@ const { metaPixelId, ga4Id } = site.tracking;
     max-width: calc(100% - 24px);
   }
   .event-log li {
-    background: var(--ink);
-    color: var(--on-dark);
-    border-left: 4px solid var(--brick-on-dark);
+    background: var(--slate);
+    color: var(--on-slate);
+    border-left: 4px solid var(--flag-on-slate);
     border-radius: 8px;
     padding: 0.5rem 0.75rem;
     font-size: 0.8125rem;
@@ -223,6 +224,6 @@ const { metaPixelId, ga4Id } = site.tracking;
   }
   .event-log code {
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    color: var(--brick-on-dark);
+    color: var(--flag-on-slate);
   }
 </style>

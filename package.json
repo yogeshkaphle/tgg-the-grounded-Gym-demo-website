@@ -15,14 +15,15 @@
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
-    "astro": "^7.3.5",
-    "d3-array": "^3.2.4",
-    "d3-contour": "^4.0.2"
+    "astro": "^7.3.5"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@types/d3-contour": "^3.0.6",
+    "@fontsource-variable/big-shoulders-display": "^5.3.0",
     "playwright-core": "1.56",
     "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.12"
   }
 }

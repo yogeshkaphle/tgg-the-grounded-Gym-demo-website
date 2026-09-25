@@ -22,7 +22,7 @@ import { site } from '../data/site.ts';
     grid-template-columns: 1fr 1fr 1.9fr;
     gap: 8px;
     padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
-    background: rgb(244 239 230 / 0.96);
+    background: rgb(242 244 245 / 0.96);
     backdrop-filter: blur(10px);
     border-top: 1px solid var(--line-strong);
   }
@@ -44,11 +44,11 @@ import { site } from '../data/site.ts';
     font-size: 0.8125rem;
     font-weight: 700;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--slate);
   }
   .mobile-bar__cta {
     min-height: 52px;
     padding-inline: 0.5rem;
-    font-size: 1rem;
+    font-size: 1.2rem; /* 19.2px bold: large text, so white on orange (3.7:1) passes */
   }
 </style>

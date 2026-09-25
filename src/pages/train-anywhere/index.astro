@@ -27,7 +27,6 @@ const steps = [
   description={`Free workouts from the coaches at ${site.name}: a park session, a hotel room session, a home session and an any-gym session. No app, no sign-up.`}
 >
   <PageHero
-    eyebrow="Train Anywhere"
     title="Your training shouldn't stop when you can't get here."
     lede="Four free sessions from our coaches, for the park, the hotel room, home and any gym. No app, no sign-up, no equipment you don't already have."
   />
@@ -45,11 +44,9 @@ const steps = [
     </div>
   </section>
 
-  <section class="section section--dark has-contours" aria-labelledby="basecamp-title">
-    <div class="contours" style="--contour-color: var(--brick-on-dark); --contour-opacity:.14"></div>
+  <section class="section section--dark" aria-labelledby="basecamp-title">
     <div class="wrap split">
       <div class="stack" style="--stack:1rem">
-        <p class="eyebrow">Why a gym teaches this</p>
         <h2 id="basecamp-title" class="h2">Think of us as base camp.</h2>
       </div>
       <div class="stack" style="--stack:1rem">
@@ -71,7 +68,6 @@ const steps = [
   <section class="section" aria-labelledby="how-title">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">How to use them</p>
         <h2 id="how-title" class="h2">Simple rules, every session.</h2>
       </div>
       <ol role="list" class="rules">
@@ -91,7 +87,6 @@ const steps = [
   <section class="section section--alt" aria-labelledby="circuit-title">
     <div class="wrap split">
       <div class="stack" style="--stack:1rem">
-        <p class="eyebrow">Learn them with a coach</p>
         <h2 id="circuit-title" class="h2">{circuit.name}</h2>
         <p class="lede">{circuit.summary} Your coach fixes your form here, so the first split squat off a hotel bed isn't your first split squat.</p>
         <a class="btn btn--primary" href="/trial?interest=anywhere" data-track="trial_cta_click" data-track-location="anywhere_circuit">
@@ -149,7 +144,7 @@ const steps = [
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: var(--brick);
+    background: var(--flag);
     color: #fff;
     font-weight: 800;
     margin-bottom: 0.3rem;

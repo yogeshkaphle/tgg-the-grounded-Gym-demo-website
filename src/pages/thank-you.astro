@@ -3,7 +3,7 @@ import Landing from '../layouts/Landing.astro';
 import Icon from '../components/Icon.astro';
 import FindUs from '../components/FindUs.astro';
 import ContactLink from '../components/ContactLink.astro';
-import { site } from '../data/site.ts';
+import { site, ownerWhatsAppUrl } from '../data/site.ts';
 
 const { callback } = site;
 const next = [
@@ -49,8 +49,7 @@ const bring = [
     } catch (e) {}
   </script>
 
-  <section class="section section--tight ty-hero has-contours">
-    <div class="contours" style="--contour-opacity:.12"></div>
+  <section class="section section--tight ty-hero">
     <div class="wrap"><div class="ty-hero__inner">
       <p class="chip chip--demo" data-ty-preview hidden>Preview: no booking was made</p>
       <p class="ty-hero__tick"><Icon name="check" size={28} /></p>
@@ -107,7 +106,7 @@ const bring = [
       <div class="ty-block">
         <h2 class="h3">Classes we'd pick for you</h2>
         <p class="small">
-          <span class="chip chip--brick" data-ty-goal>Your goal</span>
+          <span class="chip chip--flag" data-ty-goal>Your goal</span>
         </p>
         <p data-ty-plan>We picked these from your answers.</p>
         <ol class="class-list" data-ty-recs aria-live="polite">
@@ -148,7 +147,7 @@ const bring = [
 
   <section class="section section--tight">
     <div class="wrap">
-      <FindUs eyebrow="How to find us" id="ty-find-us" />
+      <FindUs heading={`How to find us: ${site.walkMinutes} minutes from ${site.landmark}.`} id="ty-find-us" />
     </div>
   </section>
 
@@ -157,9 +156,8 @@ const bring = [
       <section class="section section--tight" aria-labelledby="owner-panel">
         <div class="wrap">
           <div class="owner-panel">
-            <p class="eyebrow">For gym owners testing this demo</p>
             <h2 id="owner-panel" class="h3">
-              You just walked the funnel your members would walk.
+              For gym owners: you just walked the booking path your members would walk.
             </h2>
             <div class="owner-panel__grid">
               <div>
@@ -206,10 +204,10 @@ const bring = [
               </div>
             </div>
             <div class="cluster">
-              {site.demo.authorWhatsApp ? (
+              {ownerWhatsAppUrl ? (
                 <a
                   class="btn btn--whatsapp"
-                  href={`https://wa.me/${site.demo.authorWhatsApp}?text=${encodeURIComponent('Hi Yogesh, I just tested the Grounded Gym demo. I want this for my gym.')}`}
+                  href={ownerWhatsAppUrl}
                   data-track="author_contact_click"
                   data-track-location="thank_you_owner_panel"
                 >
@@ -250,7 +248,7 @@ const bring = [
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background: var(--brick);
+    background: var(--flag);
     color: #fff;
   }
   .ty-hero__title {
@@ -262,14 +260,14 @@ const bring = [
     align-items: flex-start;
     padding: 0.75rem 0.9rem;
     border-radius: 12px;
-    background: var(--paper-2);
+    background: var(--snow-2);
     max-width: 44rem;
     font-size: 0.975rem;
   }
   .ty-flag :global(svg) {
     flex: none;
     margin-top: 0.15em;
-    color: var(--brick);
+    color: var(--flag);
   }
   .ty-block {
     display: grid;
@@ -303,8 +301,8 @@ const bring = [
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: var(--ink);
-    color: var(--on-dark);
+    background: var(--slate);
+    color: var(--on-slate);
     font-weight: 800;
   }
   .timeline__when {
@@ -334,15 +332,15 @@ const bring = [
     padding: 16px;
   }
   .bring__item :global(svg) {
-    color: var(--brick);
+    color: var(--flag);
   }
   .owner-panel {
     display: grid;
     gap: 1.2rem;
-    border: 2px dashed var(--brick);
+    border: 2px dashed var(--flag);
     border-radius: var(--radius-lg);
     padding: clamp(20px, 3vw, 32px);
-    background: #fff6f0;
+    background: #fff4ef;
   }
   .owner-panel__grid {
     display: grid;

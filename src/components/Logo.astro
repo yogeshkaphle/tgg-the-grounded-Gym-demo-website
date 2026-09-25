@@ -2,10 +2,10 @@
 // Mark: a kettlebell standing on the ground line. Grounded, and obviously a gym.
 interface Props {
   href?: string | null;
-  tone?: 'ink' | 'paper';
+  tone?: 'slate' | 'snow';
   size?: 'md' | 'lg';
 }
-const { href = '/', tone = 'ink', size = 'md' } = Astro.props;
+const { href = '/', tone = 'slate', size = 'md' } = Astro.props;
 const Tag = href ? 'a' : 'span';
 ---
 
@@ -24,12 +24,12 @@ const Tag = href ? 'a' : 'span';
     align-items: center;
     gap: 0.55rem;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--slate);
     line-height: 1;
     min-height: 44px;
   }
-  .logo--paper {
-    color: var(--on-dark);
+  .logo--snow {
+    color: var(--on-slate);
   }
   .logo__mark {
     width: 34px;
@@ -37,29 +37,29 @@ const Tag = href ? 'a' : 'span';
     flex: none;
   }
   .logo__ground {
-    fill: var(--brick);
+    fill: var(--flag);
   }
-  .logo--paper .logo__ground {
-    fill: var(--brick-on-dark);
+  .logo--snow .logo__ground {
+    fill: var(--flag-on-slate);
   }
   .logo__word {
     font-weight: 850;
-    font-stretch: 122%;
-    font-size: 1.2rem;
+    font-family: var(--font-display);
+    font-size: 1.65rem;
     letter-spacing: -0.02em;
     white-space: nowrap;
   }
   .logo__gym {
-    color: var(--brick);
+    color: var(--flag);
   }
-  .logo--paper .logo__gym {
-    color: var(--brick-on-dark);
+  .logo--snow .logo__gym {
+    color: var(--flag-on-slate);
   }
   .logo--lg .logo__mark {
     width: 44px;
     height: 44px;
   }
   .logo--lg .logo__word {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
 </style>

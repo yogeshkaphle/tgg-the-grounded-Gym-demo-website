@@ -1,0 +1,50 @@
+---
+// Shown only while the conversion notes are on: the reader is a gym owner
+// studying the build, so end the page with a way to reach the builder.
+import { site, ownerWhatsAppUrl } from '../data/site.ts';
+---
+
+{
+  site.demo.enabled && ownerWhatsAppUrl && (
+    <aside class="notes-cta" aria-label="Talk to the builder">
+      <div class="wrap notes-cta__inner">
+        <p>
+          <strong>You have been reading the conversion notes.</strong> Want the same thinking applied to your gym's
+          website?
+        </p>
+        <a
+          class="btn btn--primary btn--sm"
+          href={ownerWhatsAppUrl}
+          target="_blank"
+          rel="noopener"
+          data-track="author_contact_click"
+          data-track-location="notes_mode"
+        >
+          WhatsApp {site.demo.author.split(' ')[0]}
+        </a>
+      </div>
+    </aside>
+  )
+}
+
+<style>
+  .notes-cta {
+    display: none;
+    background: #fff4ef;
+    border-top: 2px dashed var(--flag);
+    padding-block: 1.25rem;
+  }
+  :global(html[data-notes='on']) .notes-cta {
+    display: block;
+  }
+  .notes-cta__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.9rem 1.5rem;
+  }
+  .notes-cta p {
+    max-width: 52ch;
+  }
+</style>

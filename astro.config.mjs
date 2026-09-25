@@ -2,7 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 // Change this to the live subdomain before launch (see README, "Before launch").
-const SITE_URL = 'https://groundedgym.yogeshkaphle.com.np';
+const SITE_URL = 'https://groundedgym.yogeshkaphle.com';
 
 export default defineConfig({
   site: SITE_URL,
