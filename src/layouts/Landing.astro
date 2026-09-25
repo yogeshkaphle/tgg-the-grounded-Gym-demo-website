@@ -46,5 +46,11 @@ const props = Astro.props;
     font-size: 0.875rem;
     font-weight: 650;
     color: var(--stone);
+    white-space: nowrap;
+  }
+  @media (max-width: 420px) {
+    .landing-header__meta {
+      display: none;
+    }
   }
 </style>

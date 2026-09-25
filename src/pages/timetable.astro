@@ -39,7 +39,7 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
         <span class="small muted">Good first classes. Everything else is marked {levelLabel.all.toLowerCase()}.</span>
       </div>
 
-      <div class="tt-tabs" role="tablist" aria-label="Day" data-tabs hidden>
+      <div class="tt-tabs" role="tablist" aria-label="Day" data-tabs>
         {
           days.map((d) => (
             <button type="button" role="tab" id={`tab-${d.index}`} aria-controls={`day-${d.index}`} aria-selected="false" data-day={d.index}>
@@ -90,6 +90,20 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
         }
       </div>
 
+      <script is:inline>
+        // Pick today's day (Kathmandu time) before first paint, so the page doesn't jump.
+        (function () {
+          var d = 0;
+          try {
+            var w = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kathmandu', weekday: 'short' }).format(new Date());
+            d = Math.max(0, ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(w));
+          } catch (e) {}
+          var panel = document.getElementById('day-' + d);
+          if (panel) panel.classList.add('is-active', 'is-today');
+          document.documentElement.dataset.ttToday = String(d);
+        })();
+      </script>
+
       <DemoNote>
         <p>
           One data file feeds this page, "Classes today" on the home page and the thank-you recommendations. Change a
@@ -116,7 +130,7 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
   const tabs = document.querySelector<HTMLElement>('[data-tabs]');
   const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-tabs] [role="tab"]'));
   const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-day-panel]'));
-  const today = ktmNow().day;
+  const today = Number(document.documentElement.dataset.ttToday ?? ktmNow().day);
 
   const select = (day: number, focus = false) => {
     buttons.forEach((b) => {
@@ -129,8 +143,6 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
   };
 
   if (tabs) {
-    tabs.hidden = false;
-    document.documentElement.classList.add('tt-tabs-ready');
     buttons[today]?.querySelector<HTMLElement>('[data-today-label]')?.removeAttribute('hidden');
     buttons.forEach((b) => b.addEventListener('click', () => select(Number(b.dataset.day))));
     tabs.addEventListener('keydown', (e) => {
@@ -143,7 +155,6 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
       p.setAttribute('aria-labelledby', `tab-${p.dataset.dayPanel}`);
     });
     select(today);
-    document.getElementById(`day-${today}`)?.classList.add('is-today');
   }
 
   // /timetable?coach=pema-tamang highlights one coach's classes.
@@ -182,6 +193,9 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
     margin-bottom: 1.25rem;
   }
   .tt-tabs {
+    display: none;
+  }
+  :global(.js) .tt-tabs {
     position: sticky;
     top: 0;
     z-index: 5;
@@ -237,10 +251,10 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
     font-size: 1.35rem;
     font-stretch: 114%;
   }
-  :global(.tt-tabs-ready) .tt-day:not(.is-active) {
+  :global(.js) .tt-day:not(.is-active) {
     display: none;
   }
-  :global(.tt-tabs-ready) .tt-day__title {
+  :global(.js) .tt-day__title {
     display: none;
   }
   @media (min-width: 1100px) {
@@ -251,11 +265,11 @@ const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).joi
       grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 10px;
     }
-    :global(.tt-tabs-ready) .tt-day:not(.is-active),
-    :global(.tt-tabs-ready) .tt-day__title {
+    :global(.js) .tt-day:not(.is-active),
+    :global(.js) .tt-day__title {
       display: flex;
     }
-    :global(.tt-tabs-ready) .tt-day:not(.is-active) {
+    :global(.js) .tt-day:not(.is-active) {
       display: grid;
     }
     .tt-day__title {

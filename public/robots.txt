@@ -1,0 +1,4 @@
+# Crawling is allowed so search engines can read the noindex tag on every page.
+# The demo stays out of search results through that tag (site.indexable in src/data/site.ts).
+User-agent: *
+Allow: /
