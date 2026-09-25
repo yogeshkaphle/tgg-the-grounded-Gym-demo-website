@@ -1,62 +1,74 @@
 // Every photo slot on the site. Drop a file named after the slot into
-// src/assets/photos/ (for example hero.jpg) and it replaces the placeholder.
-// Credit the source in site.photoCredit.
+// src/assets/photos/ (for example hero.jpg) and it replaces the placeholder,
+// graded, resized and served as AVIF/WebP. Credit sources in site.photoCredit.
 
 export const photoSlots = {
   hero: {
     ratio: '4 / 5',
     widths: [480, 800, 1200],
-    alt: 'Members training at Grounded Gym, seen from behind',
-    placeholder: 'Hero photo: members mid-session, shot from behind or cropped, no faces',
+    alt: 'A group class training together at Grounded Gym',
+    placeholder: 'Hero photo: a group class in session',
   },
-  'class-from-behind': {
+  hall: {
     ratio: '4 / 3',
     widths: [480, 900],
-    alt: 'A class at Grounded Gym, seen from the back of the room',
-    placeholder: 'A class in progress, shot from the back of the room',
+    alt: 'The main training hall at Grounded Gym',
+    placeholder: 'The training hall',
   },
-  'space-kettlebells': {
+  rig: {
     ratio: '4 / 3',
     widths: [400, 800],
-    alt: 'A row of kettlebells on the gym floor',
-    placeholder: 'Kettlebells lined up on the floor',
+    alt: 'The pull-up rig with bars and rings',
+    placeholder: 'The rig: pull-up bars and rings',
   },
-  'space-barbell': {
+  floor: {
     ratio: '4 / 3',
     widths: [400, 800],
-    alt: 'A loaded barbell on a lifting platform',
-    placeholder: 'A barbell on the platform, plates loaded',
+    alt: 'The open training floor',
+    placeholder: 'The training floor',
   },
-  'space-bars': {
+  rowers: {
     ratio: '4 / 3',
     widths: [400, 800],
-    alt: 'Pull-up bars and rings',
-    placeholder: 'Pull-up bars or rings',
+    alt: 'A row of rowing machines',
+    placeholder: 'The rowers',
   },
-  'space-mobility': {
+  'find-us': {
+    ratio: '3 / 2',
+    widths: [400, 800],
+    alt: 'A street in Kathmandu near New Baneshwor',
+    placeholder: 'Street view: the walk from the Chowk',
+  },
+  'anywhere-park': {
     ratio: '4 / 3',
     widths: [400, 800],
-    alt: 'Mats and foam rollers in the mobility corner',
-    placeholder: 'The mobility corner: mats, rollers, bands',
+    alt: 'A park bench and bar, ready for the Park Session',
+    placeholder: 'A park with a bench and a bar',
+  },
+  'anywhere-home': {
+    ratio: '4 / 3',
+    widths: [400, 800],
+    alt: 'A backpack and a staircase at home, ready for the Monsoon Evening Session',
+    placeholder: 'Home: a backpack and a staircase',
   },
   // Coaches: cropped or back shots only, never a face presented as a named coach.
-  'anish-shrestha': {
+  'coach-1': {
     ratio: '4 / 5',
     widths: [360, 720],
-    alt: 'Sample coach Anish, strength coach, photographed from behind',
-    placeholder: 'Coach photo to come: cropped or from behind',
+    alt: 'Sample coach, photographed from behind',
+    placeholder: 'Coach photo: cropped or from behind',
   },
-  'pema-tamang': {
+  'coach-2': {
     ratio: '4 / 5',
     widths: [360, 720],
-    alt: 'Sample coach Pema, conditioning coach, photographed from behind',
-    placeholder: 'Coach photo to come: cropped or from behind',
+    alt: 'Sample coach, photographed from behind',
+    placeholder: 'Coach photo: cropped or from behind',
   },
-  'rohan-maharjan': {
+  'coach-3': {
     ratio: '4 / 5',
     widths: [360, 720],
-    alt: 'Sample coach Rohan, movement coach, photographed from behind',
-    placeholder: 'Coach photo to come: cropped or from behind',
+    alt: 'Sample coach, photographed from behind',
+    placeholder: 'Coach photo: cropped or from behind',
   },
 } as const;
 

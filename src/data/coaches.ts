@@ -1,7 +1,9 @@
 import type { ClassId } from './classes.ts';
+import type { PhotoSlotName } from './photos.ts';
 
-// Fictional coaches for the demo. For a real client, swap in the real team
-// and add their photos to src/assets/photos/ named after the id (e.g. anish-shrestha.jpg).
+// Fictional coaches for the demo ("Sample coach" on the page). For a real client,
+// swap in the real team. Photos: src/assets/photos/coach-1.jpg and so on,
+// cropped or from behind, never a face presented as a named coach.
 
 export interface Coach {
   id: string;
@@ -12,6 +14,7 @@ export interface Coach {
   bio: string;
   specialities: string[];
   initials: string;
+  photo: PhotoSlotName;
 }
 
 export const coaches: Coach[] = [
@@ -24,6 +27,7 @@ export const coaches: Coach[] = [
     bio: 'Anish competed in powerlifting for six years before he started coaching. He cares more about how you move than how much you lift, and he will tell you when to stop adding weight.',
     specialities: ['Squat, bench, deadlift', 'First-timers', 'Back-friendly lifting'],
     initials: 'AS',
+    photo: 'coach-1',
   },
   {
     id: 'pema-tamang',
@@ -34,6 +38,7 @@ export const coaches: Coach[] = [
     bio: 'Pema grew up walking the trails of Rasuwa and guided treks for three seasons. Now she builds stamina for people with desk jobs. Her classes are hard, and she will make you laugh through them.',
     specialities: ['Kettlebells', 'Trek and hike prep', 'Stamina'],
     initials: 'PT',
+    photo: 'coach-2',
   },
   {
     id: 'rohan-maharjan',
@@ -44,6 +49,7 @@ export const coaches: Coach[] = [
     bio: 'Rohan learned his first muscle-up on a bar in a Patan park. He teaches calisthenics and mobility in small steps, and wrote most of our Train Anywhere sessions.',
     specialities: ['Pull-ups and handstands', 'Mobility', 'Training without equipment'],
     initials: 'RM',
+    photo: 'coach-3',
   },
 ];
 

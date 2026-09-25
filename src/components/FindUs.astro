@@ -4,6 +4,7 @@
 // Loading Google Maps up front would cost mobile visitors about a megabyte.
 import Icon from './Icon.astro';
 import DemoNote from './DemoNote.astro';
+import PhotoSlot from './PhotoSlot.astro';
 import { site, mapsLink, mapsEmbed } from '../data/site.ts';
 
 interface Props {
@@ -23,6 +24,7 @@ const H = headingLevel;
   <div class="find-us__text">
     <H class={headingLevel === 'h2' ? 'h2' : 'h3'}>{heading}</H>
     <p class="find-us__directions">{site.directions}</p>
+    <PhotoSlot name="find-us" sizes="(min-width: 900px) 520px, 92vw" />
     <ul role="list" class="find-us__facts">
       <li>
         <Icon name="pin" />
@@ -83,11 +85,10 @@ const H = headingLevel;
       <path d="M150 190 C 190 176, 250 176, 330 178 L 352 178" fill="none" stroke="#e4572e" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 10"></path>
       <!-- gym building -->
       <rect x="330" y="104" width="92" height="66" rx="8" fill="#1e3446"></rect>
-      <g transform="translate(360 108) scale(.8)">
-        <path d="M11.4 22C9.4 15 11.8 8.6 20 8.6S30.6 15 28.6 22" fill="none" stroke="#f2f4f5" stroke-width="3.6" stroke-linecap="round"></path>
-        <path d="M14.4 33.6A10 10 0 1 1 25.6 33.6Z" fill="#f2f4f5"></path>
+      <g transform="translate(356 108) scale(.625)">
+        <path d="M52 12.5 L12.5 12.5 L12.5 42.5 L47.5 42.5 L47.5 28 L32 28" fill="none" stroke="#f2f4f5" stroke-width="9" stroke-linejoin="miter"></path>
+        <rect x="4" y="50" width="56" height="7" fill="#e4572e"></rect>
       </g>
-      <rect x="330" y="160" width="92" height="10" rx="3" fill="#e4572e"></rect>
       <!-- labels -->
       <g font-family="Archivo, sans-serif" fill="#1e3446">
         <text x="150" y="272" text-anchor="middle" font-size="15" font-weight="800">{site.landmark}</text>

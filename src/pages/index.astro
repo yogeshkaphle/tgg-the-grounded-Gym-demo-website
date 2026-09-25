@@ -15,6 +15,17 @@ import Faq from '../components/Faq.astro';
 import FinalCta from '../components/FinalCta.astro';
 import { site } from '../data/site.ts';
 import { homeFaq } from '../data/faq.ts';
+import { getImage } from 'astro:assets';
+import { findPhoto } from '../lib/photos.ts';
+import { photoSlots } from '../data/photos.ts';
+
+// Preload the hero photo (when one has been added) with the same options the
+// <Picture> uses, so the browser fetches it once, early, as AVIF.
+const heroSizes = '(min-width: 900px) 48vw, 90vw';
+const heroFile = findPhoto('hero');
+const heroPreload = heroFile
+  ? await getImage({ src: heroFile, widths: [...photoSlots.hero.widths], format: 'avif', quality: 62 })
+  : null;
 
 const dayCodes = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 const pad = (t: string) => t.padStart(5, '0');
@@ -41,6 +52,19 @@ const jsonLd = {
   description={`Strength, stamina and mobility training in ${site.area}, ${site.city}. ${site.openingLine}. Try any class free for a week.`}
   jsonLd={jsonLd}
 >
+  {
+    heroPreload && (
+      <link
+        slot="head"
+        rel="preload"
+        as="image"
+        type="image/avif"
+        imagesrcset={heroPreload.srcSet.attribute}
+        imagesizes={heroSizes}
+        fetchpriority="high"
+      />
+    )
+  }
   <!-- 1. Hero -->
   <section class="hero">
     <div class="wrap hero__inner">
@@ -70,7 +94,7 @@ const jsonLd = {
           </p>
         </DemoNote>
       </div>
-      <PhotoSlot name="hero" priority class="hero__photo" sizes="(min-width: 900px) 48vw, 90vw" />
+      <PhotoSlot name="hero" priority class="hero__photo" sizes={heroSizes} />
     </div>
   </section>
 
@@ -86,7 +110,7 @@ const jsonLd = {
         <a class="btn btn--primary" href="/trial" data-track="trial_cta_click" data-track-location="home_offer">
           Book {site.offer} <Icon name="arrow" />
         </a>
-        <PhotoSlot name="class-from-behind" class="ftw__photo" sizes="(min-width: 900px) 540px, 92vw" />
+        <PhotoSlot name="hall" class="ftw__photo" sizes="(min-width: 900px) 540px, 92vw" />
         <DemoNote>
           <p>
             One name for the offer, everywhere: button, form, thank-you page, WhatsApp message. One coaching funnel I

@@ -1,10 +1,9 @@
 ---
 // Coach photo slot. Cropped or back shots only: the coaches are fictional, so a
 // face would present a real person as someone they are not. Labelled "Sample coach"
-// on the demo. Add photos as src/assets/photos/<coach-id>.jpg
+// on the demo. Add photos as src/assets/photos/coach-1.jpg, coach-2.jpg ...
 import PhotoSlot from './PhotoSlot.astro';
 import type { Coach } from '../data/coaches.ts';
-import type { PhotoSlotName } from '../data/photos.ts';
 import { site } from '../data/site.ts';
 
 interface Props {
@@ -16,7 +15,8 @@ const { coach, sizes = '(min-width: 900px) 360px, 92vw', small = false } = Astro
 ---
 
 <PhotoSlot
-  name={coach.id as PhotoSlotName}
+  name={coach.photo}
+  alt={`Sample coach ${coach.firstName}, ${coach.role.toLowerCase()}, photographed from behind`}
   sizes={sizes}
   compact={small}
   class={small ? 'portrait portrait--sm' : 'portrait'}

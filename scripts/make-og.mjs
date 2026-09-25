@@ -11,8 +11,8 @@ import { site } from '../src/data/site.ts';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const body = readFileSync(`${root}src/assets/fonts/archivo-subset.woff2`).toString('base64');
 const display = readFileSync(`${root}src/assets/fonts/big-shoulders-subset.woff2`).toString('base64');
-const mark = (fill, ground) =>
-  `<svg viewBox="0 0 40 40" width="64" height="64"><path d="M11.4 22C9.4 15 11.8 8.6 20 8.6S30.6 15 28.6 22" fill="none" stroke="${fill}" stroke-width="3.6" stroke-linecap="round"/><path d="M14.4 33.6A10 10 0 1 1 25.6 33.6Z" fill="${fill}"/><rect x="2" y="35.4" width="36" height="2.6" rx="1.3" fill="${ground}"/></svg>`;
+const mark = (stroke, size = 64) =>
+  `<svg viewBox="0 0 64 64" width="${size}" height="${size}"><path d="M52 12.5 L12.5 12.5 L12.5 42.5 L47.5 42.5 L47.5 28 L32 28" fill="none" stroke="${stroke}" stroke-width="9" stroke-linejoin="miter"/><rect x="4" y="50" width="56" height="7" fill="#E4572E"/></svg>`;
 
 const page = (inner) => `<!doctype html><html><head><style>
 @font-face{font-family:B;src:url(data:font/woff2;base64,${body}) format('woff2');font-weight:100 900}
@@ -28,7 +28,7 @@ h1{margin-top:10px;font-family:D;font-size:132px;line-height:.86;font-weight:850
 .row{margin-top:26px;display:flex;gap:16px;align-items:center;font-size:26px;font-weight:650;color:#b7bcc1}
 .pill{background:#e4572e;color:#fff;padding:8px 20px;border-radius:8px;font-family:D;font-weight:800;font-size:32px}
 </style></head><body><div class="in">
-<div class="logo">${mark('#f2f4f5', '#e4572e')}<span>Grounded <b>Gym</b></span></div>${inner}</div></body></html>`;
+<div class="logo">${mark('#F2F4F5')}<span>Grounded <b>Gym</b></span></div>${inner}</div></body></html>`;
 
 const cards = [
   {
@@ -53,10 +53,10 @@ for (const card of cards) {
   console.log('wrote', card.file);
 }
 
-// 180x180 home-screen icon
+// 180x180 home-screen icon: same as the favicon (snow mark on slate, scaled 0.82)
 const icon = await browser.newPage({ viewport: { width: 180, height: 180 } });
 await icon.setContent(
-  `<body style="margin:0;background:#1e3446;display:grid;place-items:center;height:180px">${mark('#f2f4f5', '#e4572e').replace('width="64" height="64"', 'width="128" height="128"')}</body>`,
+  `<body style="margin:0;background:#1E3446;display:grid;place-items:center;width:180px;height:180px">${mark('#F2F4F5', 148)}</body>`,
 );
 await icon.screenshot({ path: `${root}public/apple-touch-icon.png` });
 console.log('wrote public/apple-touch-icon.png');

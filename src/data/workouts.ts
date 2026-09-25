@@ -15,6 +15,8 @@ export interface Block {
   items: Exercise[];
 }
 
+import type { PhotoSlotName } from './photos.ts';
+
 export interface Workout {
   slug: 'park' | 'hotel-room' | 'home' | 'gym';
   place: string;
@@ -25,6 +27,7 @@ export interface Workout {
   kitShort: string;
   summary: string;
   blocks: Block[];
+  photo?: PhotoSlotName;
 }
 
 export const PROGRESSION_RULE =
@@ -54,6 +57,7 @@ export const workouts: Workout[] = [
     when: 'For Saturday mornings, sunny evenings, and any park with a bench and a bar.',
     kit: ['A bench', 'A bar you can hang from', 'Water'],
     kitShort: 'A bench and a bar',
+    photo: 'anywhere-park',
     summary: 'Push, step, hang and lunge, then a few short sprints up a slope or a flight of steps.',
     blocks: [
       {
@@ -197,6 +201,7 @@ export const workouts: Workout[] = [
     when: "For monsoon evenings when you won't ride through the rain, and every other night you can't get here.",
     kit: ['A backpack with a 5 kg bag of rice (or books) inside', 'A staircase or a sturdy step'],
     kitShort: 'A backpack and stairs',
+    photo: 'anywhere-home',
     summary: 'A loaded backpack becomes your kettlebell. Ends with our version of the gas cylinder test.',
     blocks: [
       {

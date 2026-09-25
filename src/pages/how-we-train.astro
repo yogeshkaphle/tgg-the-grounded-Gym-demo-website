@@ -42,12 +42,11 @@ const notForYou = [
   'You want to train alone with headphones and never talk to a coach.',
 ];
 
-const photoFor: Record<string, PhotoSlotName> = {
-  calisthenics: 'space-bars',
-  kettlebells: 'space-kettlebells',
-  barbell: 'space-barbell',
-  mobility: 'space-mobility',
-};
+const room: { name: PhotoSlotName; caption: string }[] = [
+  { name: 'rig', caption: 'The rig, for calisthenics' },
+  { name: 'floor', caption: 'The floor, for strength and mobility' },
+  { name: 'rowers', caption: 'The rowers, for Engine' },
+];
 
 const perWeek = (ids: string[]) => sessions.filter((s) => ids.includes(s.classId)).length;
 
@@ -156,11 +155,20 @@ const month = [
           at something different. Your goal decides the mix.
         </p>
       </div>
+      <ul role="list" class="room">
+        {
+          room.map((r) => (
+            <li>
+              <PhotoSlot name={r.name} sizes="(min-width: 900px) 380px, 92vw" />
+              <p class="room__caption">{r.caption}</p>
+            </li>
+          ))
+        }
+      </ul>
       <div class="methods">
         {
           methods.map((m) => (
             <article class="method" id={m.id} aria-labelledby={`method-${m.id}`}>
-              <PhotoSlot name={photoFor[m.id]} sizes="(min-width: 900px) 540px, 92vw" />
               <div class="method__head">
                 <h3 id={`method-${m.id}`} class="method__name">
                   {m.name}
@@ -315,6 +323,17 @@ const month = [
     font-weight: 700;
     font-size: 1.08rem;
     font-stretch: 104%;
+  }
+  .room {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    margin-bottom: clamp(40px, 5vw, 64px);
+  }
+  .room__caption {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--stone-ink);
   }
   .methods {
     display: grid;

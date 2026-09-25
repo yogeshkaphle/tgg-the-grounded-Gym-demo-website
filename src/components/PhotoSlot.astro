@@ -3,8 +3,8 @@
 // resized and served as AVIF/WebP; until then a plain, labelled placeholder holds
 // the space at the same size, so adding a photo never moves the layout.
 import { Picture } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
 import { photoSlots, type PhotoSlotName } from '../data/photos.ts';
+import { findPhoto } from '../lib/photos.ts';
 
 interface Props {
   name: PhotoSlotName;
@@ -13,28 +13,29 @@ interface Props {
   priority?: boolean; // the hero: load first, no lazy loading
   label?: string; // small overlay label, e.g. "Sample coach"
   compact?: boolean; // tiny slots (avatars): icon only, no placeholder text
+  alt?: string;
 }
-const { name, sizes, class: className, priority = false, label, compact = false } = Astro.props;
+const { name, sizes, class: className, priority = false, label, compact = false, alt } = Astro.props;
 const slot = photoSlots[name];
-const files = import.meta.glob<{ default: ImageMetadata }>('../assets/photos/*.{jpg,jpeg,png,webp,avif}', { eager: true });
-const match = Object.entries(files).find(([file]) => file.split('/').pop()?.replace(/\.[a-z]+$/, '') === name);
+const photo = findPhoto(name);
 ---
 
 <figure class:list={['photo', className]} style={`--ratio: ${slot.ratio}`}>
   {
-    match ? (
+    photo ? (
       <Picture
-        src={match[1].default}
-        alt={slot.alt}
+        src={photo}
+        alt={alt ?? slot.alt}
         formats={['avif', 'webp']}
         widths={[...slot.widths]}
         sizes={sizes}
         quality={62}
         loading={priority ? 'eager' : 'lazy'}
+        decoding={priority ? 'sync' : 'async'}
         fetchpriority={priority ? 'high' : 'auto'}
       />
     ) : (
-      <div class="photo__empty" role="img" aria-label={`Photo to come: ${slot.alt}`}>
+      <div class="photo__empty" role="img" aria-label={`Photo to come: ${alt ?? slot.alt}`}>
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
           <path d="M4 8h3l2-2.5h6L17 8h3v11H4z" />
           <circle cx="12" cy="13" r="3.5" />

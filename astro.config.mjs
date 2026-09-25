@@ -12,6 +12,10 @@ export default defineConfig({
     format: 'file',
     inlineStylesheets: 'always',
   },
+  // Every photo gets the same light grade before Astro encodes it (src/lib/graded-image-service.ts).
+  image: {
+    service: { entrypoint: './src/lib/graded-image-service.ts' },
+  },
   // Keep HTML-aware whitespace so inline links inside copy keep their spaces.
   compressHTML: true,
   devToolbar: { enabled: false },

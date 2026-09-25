@@ -28,8 +28,8 @@ export const site = {
     ownerMessage: "Hi Yogesh, I saw your Grounded Gym demo. Can you look at my gym's website too?",
   },
 
-  // Shown in the footer as "Photos: <credit>". Replace with the real source when photos are added.
-  photoCredit: '[source]',
+  // Shown in the footer as "Photos: <credit>".
+  photoCredit: 'Unsplash, Pexels. Gym interior images are AI-generated for this demo.',
 
   address: {
     street: '2nd floor, above the sports shop',

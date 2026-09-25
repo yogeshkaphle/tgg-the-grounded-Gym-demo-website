@@ -6,6 +6,7 @@ import Page from '../../layouts/Page.astro';
 import WorkoutCards from '../../components/WorkoutCards.astro';
 import FinalCta from '../../components/FinalCta.astro';
 import Icon from '../../components/Icon.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
 import { site } from '../../data/site.ts';
 import { workouts, PROGRESSION_RULE, SAFETY_NOTE, type Workout } from '../../data/workouts.ts';
 
@@ -26,7 +27,8 @@ const share = `https://wa.me/?text=${encodeURIComponent(`${w.title} from ${site.
 >
   <article>
     <header class="w-hero">
-      <div class="wrap w-hero__inner">
+      <div class:list={['wrap', 'w-hero__grid', { 'w-hero__grid--photo': w.photo }]}>
+      <div class="w-hero__inner">
         <nav class="crumbs no-print" aria-label="Breadcrumb">
           <a href="/train-anywhere">Train Anywhere</a>
           <span aria-hidden="true">/</span>
@@ -48,6 +50,8 @@ const share = `https://wa.me/?text=${encodeURIComponent(`${w.title} from ${site.
             <Icon name="print" size={18} /> Print or save as PDF
           </button>
         </div>
+      </div>
+        {w.photo && <PhotoSlot name={w.photo} class="w-hero__photo" sizes="(min-width: 900px) 460px, 92vw" />}
       </div>
     </header>
 
@@ -133,6 +137,17 @@ const share = `https://wa.me/?text=${encodeURIComponent(`${w.title} from ${site.
     padding-block: clamp(28px, 5vw, 64px) clamp(28px, 4vw, 48px);
     border-bottom: 1px solid var(--line);
     overflow: hidden;
+  }
+  .w-hero__grid {
+    display: grid;
+    gap: 28px;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .w-hero__grid--photo {
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 48px;
+    }
   }
   .w-hero__inner {
     display: grid;

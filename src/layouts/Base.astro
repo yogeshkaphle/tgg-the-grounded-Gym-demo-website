@@ -121,6 +121,7 @@ const { metaPixelId, ga4Id } = site.tracking;
     </script>
 
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    <slot name="head" />
   </head>
   <body class={bodyClass}>
     <a class="skip-link" href="#main">Skip to content</a>
