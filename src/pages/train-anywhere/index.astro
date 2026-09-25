@@ -1,0 +1,157 @@
+---
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/PageHero.astro';
+import WorkoutCards from '../../components/WorkoutCards.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import DemoNote from '../../components/DemoNote.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../data/site.ts';
+import { PROGRESSION_RULE } from '../../data/workouts.ts';
+import { classById } from '../../data/classes.ts';
+import { coachById } from '../../data/coaches.ts';
+import { days } from '../../data/timetable.ts';
+import { sortSessions } from '../../lib/schedule.ts';
+import { sessions } from '../../data/timetable.ts';
+
+const circuit = classById('anywhere');
+const circuitTimes = sortSessions(sessions.filter((s) => s.classId === 'anywhere'));
+const steps = [
+  { title: 'Pick the one that fits the day', text: 'Park, hotel room, home or any gym. Each one takes 25 to 45 minutes.' },
+  { title: 'Two or three times a week', text: 'On the days you cannot get here. Not instead of rest.' },
+  { title: 'Add a little each time', text: PROGRESSION_RULE },
+];
+---
+
+<Page
+  title="Train Anywhere"
+  description={`Free workouts from the coaches at ${site.name}: a park session, a hotel room session, a home session and an any-gym session. No app, no sign-up.`}
+>
+  <PageHero
+    eyebrow="Train Anywhere"
+    title="Your training shouldn't stop when you can't get here."
+    lede="Four free sessions from our coaches, for the park, the hotel room, home and any gym. No app, no sign-up, no equipment you don't already have."
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <WorkoutCards headingLevel="h2" />
+      <DemoNote>
+        <p>
+          Every session lives on this website. Several funnels I walked handed out their free content as a Google Drive
+          link or a YouTube video, where no pixel can follow. Here, everyone who opens a session joins a warm audience that
+          Free Trial Week ads can reach later.
+        </p>
+      </DemoNote>
+    </div>
+  </section>
+
+  <section class="section section--dark has-contours" aria-labelledby="basecamp-title">
+    <div class="contours" style="--contour-color: var(--brick-on-dark); --contour-opacity:.14"></div>
+    <div class="wrap split">
+      <div class="stack" style="--stack:1rem">
+        <p class="eyebrow">Why a gym teaches this</p>
+        <h2 id="basecamp-title" class="h2">Think of us as base camp.</h2>
+      </div>
+      <div class="stack" style="--stack:1rem">
+        <p class="lede">
+          Base camp is where you learn the moves, get coached and recover. The climb happens out there: the work trip,
+          the monsoon week, the Dashain visit home.
+        </p>
+        <p>
+          Most people who stop training don't stop because they're lazy. They stop because life moved. These sessions
+          are how you keep going until you're back.
+        </p>
+        <p>
+          <a class="arrow-link" href="/journal/train-without-us">Read: Why a gym should teach you to train without it <Icon name="arrow" size={18} /></a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="how-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">How to use them</p>
+        <h2 id="how-title" class="h2">Simple rules, every session.</h2>
+      </div>
+      <ol role="list" class="rules">
+        {
+          steps.map((s, i) => (
+            <li class="rule">
+              <span class="rule__num">{i + 1}</span>
+              <h3 class="h4">{s.title}</h3>
+              <p class="muted">{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="circuit-title">
+    <div class="wrap split">
+      <div class="stack" style="--stack:1rem">
+        <p class="eyebrow">Learn them with a coach</p>
+        <h2 id="circuit-title" class="h2">{circuit.name}</h2>
+        <p class="lede">{circuit.summary} Your coach fixes your form here, so the first split squat off a hotel bed isn't your first split squat.</p>
+        <a class="btn btn--primary" href="/trial?interest=anywhere" data-track="trial_cta_click" data-track-location="anywhere_circuit">
+          Try it in your {site.offer} <Icon name="arrow" />
+        </a>
+      </div>
+      <ul role="list" class="class-list">
+        {
+          circuitTimes.map((s) => {
+            const coach = coachById(s.coachId);
+            return (
+              <li class="class-row">
+                <div>
+                  <span class="class-row__time">{s.start}</span>
+                  <span class="class-row__when">{days[s.day].long}</span>
+                </div>
+                <div class="class-row__body">
+                  <p class="class-row__name">{circuit.name}</p>
+                  <p class="class-row__meta">
+                    <span>
+                      with <a href={`/coaches#${coach.id}`}>{coach.name}</a>
+                    </span>
+                    <span>{circuit.minutes} min</span>
+                  </p>
+                </div>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+
+  <FinalCta location="anywhere_final" title="Train here. Train anywhere." />
+</Page>
+
+<style>
+  .rules {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+  .rule {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+  .rule__num {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--brick);
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+  }
+</style>

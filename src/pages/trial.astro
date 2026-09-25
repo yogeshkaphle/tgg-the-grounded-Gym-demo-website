@@ -1,0 +1,212 @@
+---
+// The one conversion page. Ads point here. No header navigation.
+// Order from the brief: headline matching the ad, what the week includes,
+// one sample result, the form, three FAQ answers, the map.
+import Landing from '../layouts/Landing.astro';
+import Icon from '../components/Icon.astro';
+import TrialForm from '../components/TrialForm.astro';
+import ResultCards from '../components/ResultCards.astro';
+import Faq from '../components/Faq.astro';
+import FindUs from '../components/FindUs.astro';
+import DemoNote from '../components/DemoNote.astro';
+import { site } from '../data/site.ts';
+import { trialIncludes } from '../data/offer.ts';
+import { trialFaq } from '../data/faq.ts';
+
+const includes = trialIncludes;
+---
+
+<Landing
+  title={`${site.offer} in ${site.area}`}
+  description={`Try any class at ${site.name}, ${site.area}, free for a week. ${site.openingLine}. Book in 30 seconds.`}
+  bodyClass="page-trial"
+>
+  <section class="trial-hero has-contours">
+    <div class="contours" style="--contour-opacity:.13"></div>
+    <div class="wrap trial-layout">
+      <div class="trial-pitch">
+        <p class="eyebrow">{site.category}</p>
+        <h1 class="h1 trial-pitch__title">Your {site.offer} at {site.name}, {site.area}</h1>
+        <p class="lede">Seven days, any class, nothing to pay. Then you decide.</p>
+        <ul role="list" class="trial-pitch__facts">
+          <li><Icon name="clock" size={18} /> {site.openingLine}</li>
+          <li><Icon name="pin" size={18} /> {site.walkMinutes} minutes from {site.landmark}</li>
+        </ul>
+        <a class="btn btn--primary trial-pitch__jump" href="#book" data-track="trial_jump" data-track-location="trial_hero">
+          Start booking <Icon name="arrow" />
+        </a>
+        <DemoNote>
+          <p>
+            No header menu. Ads land here, and the only way forward is the form. The headline repeats the ad's words, so
+            the click feels like the next step instead of a new website.
+          </p>
+          <p>
+            The Meta Pixel and GA4 sit on this page because this is the page the ads reach. One funnel I walked had its
+            pixel on a page no ad ever pointed to.
+          </p>
+        </DemoNote>
+
+        <h2 class="h3 trial-section-title">What your week includes</h2>
+        <ul role="list" class="includes">
+          {
+            includes.map((item) => (
+              <li class="includes__item">
+                <span class="includes__icon">
+                  <Icon name={item.icon} size={22} />
+                </span>
+                <div>
+                  <p class="h4">{item.title}</p>
+                  <p class="small muted">{item.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+
+        <h2 class="h3 trial-section-title">What a few months can look like</h2>
+        <ResultCards ids={['push-ups']} single />
+      </div>
+
+      <div class="trial-form-col" id="book">
+        <TrialForm />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap trial-faq">
+      <h2 class="h2">Before you book</h2>
+      <Faq ids={trialFaq} />
+    </div>
+  </section>
+
+  <section class="section section--tight section--alt">
+    <div class="wrap">
+      <FindUs id="trial-find-us" />
+    </div>
+  </section>
+
+  <div class="trial-sticky no-print" data-trial-sticky hidden>
+    <a class="btn btn--primary btn--block" href="#book" data-track="trial_jump" data-track-location="trial_sticky">
+      Book my {site.offer}
+    </a>
+  </div>
+</Landing>
+
+<script>
+  // Phones: a sticky button that jumps to the form, hidden while the form is on screen.
+  const sticky = document.querySelector<HTMLElement>('[data-trial-sticky]');
+  const formCol = document.getElementById('book');
+  const hero = document.querySelector('.trial-pitch__jump');
+  if (sticky && formCol && hero && 'IntersectionObserver' in window && matchMedia('(max-width: 959px)').matches) {
+    let formVisible = false;
+    let heroVisible = true;
+    const update = () => (sticky.hidden = formVisible || heroVisible);
+    new IntersectionObserver(([e]) => {
+      formVisible = e.isIntersecting;
+      update();
+    }).observe(formCol);
+    new IntersectionObserver(([e]) => {
+      heroVisible = e.isIntersecting;
+      update();
+    }).observe(hero);
+  }
+</script>
+
+<style>
+  .trial-hero {
+    padding-block: clamp(28px, 5vw, 64px) clamp(48px, 6vw, 80px);
+  }
+  .trial-layout {
+    display: grid;
+    gap: 32px;
+  }
+  @media (min-width: 960px) {
+    .trial-layout {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 56px;
+      align-items: start;
+    }
+    .trial-form-col {
+      position: sticky;
+      top: 24px;
+    }
+    .trial-pitch__jump {
+      display: none;
+    }
+  }
+  .trial-pitch {
+    display: grid;
+    gap: 1.1rem;
+    align-content: start;
+  }
+  .trial-pitch__title {
+    font-size: clamp(2.2rem, 1.5rem + 3.4vw, 4.2rem);
+  }
+  .trial-pitch__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+    font-weight: 650;
+    color: var(--ink-2);
+  }
+  .trial-pitch__facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .trial-pitch__facts :global(svg) {
+    color: var(--brick);
+  }
+  .trial-pitch__jump {
+    justify-self: start;
+  }
+  .trial-section-title {
+    margin-top: 1.4rem;
+  }
+  .includes {
+    display: grid;
+    gap: 12px;
+  }
+  .includes__item {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 14px;
+    align-items: start;
+    padding: 14px 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .includes__icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--brick-soft);
+    color: var(--brick-strong);
+  }
+  .trial-form-col {
+    scroll-margin-top: 16px;
+  }
+  .trial-faq {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 820px;
+  }
+  .trial-sticky {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 50;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: rgb(244 239 230 / 0.96);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line-strong);
+  }
+  @media (min-width: 960px) {
+    .trial-sticky {
+      display: none !important;
+    }
+  }
+</style>

@@ -1,0 +1,101 @@
+---
+import Page from '../layouts/Page.astro';
+import PageHero from '../components/PageHero.astro';
+import PlanCards from '../components/PlanCards.astro';
+import FinalCta from '../components/FinalCta.astro';
+import DemoNote from '../components/DemoNote.astro';
+import Faq from '../components/Faq.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site.ts';
+
+const payments = ['Cash', 'eSewa', 'Khalti', 'Fonepay QR', 'Bank transfer'];
+const everyPlan = [
+  'Every class on the timetable',
+  'Open gym during staffed hours',
+  'All four Train Anywhere sessions',
+  'No joining fee',
+];
+---
+
+<Page
+  title="Membership and prices"
+  description={`${site.name} membership prices: ${site.offer}, Starter Month, 3 Months and 12 Months. No joining fee. Everyone starts with a free week.`}
+>
+  <PageHero
+    eyebrow="Membership"
+    title="Simple plans. Start free."
+    lede={`Everyone starts with a ${site.offer}. After that, pick the plan that fits your life, or walk away. The prices are all on this page.`}
+  />
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <DemoNote>
+        <p>
+          Prices on the page, not "DM for price". One high-ticket offer I walked hid its price behind a keyword, so
+          nobody knew what they were clicking into.
+        </p>
+        <p>
+          Every per-month figure and saving here is calculated in code from the price list. Two sales pages I walked had
+          their own savings maths wrong.
+        </p>
+      </DemoNote>
+      <PlanCards />
+      <DemoNote>
+        <p>
+          The Starter Month is the middle rung. In every funnel I walked there was nothing between "free" and a long,
+          expensive commitment, so people who were curious had nowhere to go.
+        </p>
+      </DemoNote>
+      <p class="small muted plans-note">
+        Prices marked [DEMO PRICE] are placeholders for this demo, not real Kathmandu rates.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="wrap split">
+      <div class="stack" style="--stack:1rem">
+        <p class="eyebrow">Every plan</p>
+        <h2 class="h2">What you get, whichever you pick.</h2>
+        <ul role="list" class="check-list">
+          {
+            everyPlan.map((item) => (
+              <li>
+                <Icon name="check" size={20} />
+                <span>{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="stack" style="--stack:1rem">
+        <p class="eyebrow">Paying</p>
+        <h2 class="h3">Pay however is easiest.</h2>
+        <ul role="list" class="pay-list">
+          {payments.map((p) => <li class="chip">{p}</li>)}
+        </ul>
+        <p class="muted">Pay at the front desk on the day you join. There is nothing to pay for your {site.offer}.</p>
+        <Faq ids={['long-signup', 'pause']} />
+      </div>
+    </div>
+  </section>
+
+  <FinalCta location="membership_final" title="Start with a free week." />
+</Page>
+
+<style>
+  .plans-note {
+    margin-top: 1rem;
+  }
+  .pay-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pay-list li {
+    font-size: 0.9rem;
+    padding: 0.45rem 0.8rem;
+    background: var(--card);
+    border: 1px solid var(--line-strong);
+  }
+</style>

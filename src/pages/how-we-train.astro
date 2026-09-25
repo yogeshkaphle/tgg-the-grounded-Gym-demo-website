@@ -1,0 +1,442 @@
+---
+// "Start Here" and "Methods" in one page: the outcome first (being ready),
+// then the three pillars, then the four methods as routes to it.
+import Page from '../layouts/Page.astro';
+import PageHero from '../components/PageHero.astro';
+import PillarCards from '../components/PillarCards.astro';
+import FinalCta from '../components/FinalCta.astro';
+import DemoNote from '../components/DemoNote.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site.ts';
+import { methods } from '../data/methods.ts';
+import { classById, pillars } from '../data/classes.ts';
+import { sessions } from '../data/timetable.ts';
+
+const ready = [
+  'Carry a full gas cylinder up to a fourth-floor flat.',
+  'Walk up to Nagarkot or Chandragiri without stopping at every bend.',
+  'Get down on the floor with your kids, and back up without a hand.',
+  'Play futsal on Friday and walk normally on Saturday.',
+  'Sit through a long day at the desk without your back complaining.',
+  'Stay steady when a session, or a week, gets hard.',
+];
+
+const compare = [
+  ['Look better', 'Move and live better. Looking better comes with it.'],
+  ['Random workouts', 'Sessions with a purpose, planned in blocks.'],
+  ['Fitness that only works inside the gym', 'Training you can take to the park, home and hotel.'],
+  ['Extreme 30-day transformations', 'Readiness you keep for years.'],
+  ['"No pain, no gain"', 'Hard work, added a little at a time.'],
+];
+
+const forYou = [
+  "You've never trained, or you stopped years ago and want to start properly.",
+  'You want to lose weight or build muscle, and keep the result by getting capable.',
+  'You have a trek, a sport or a physical job coming up and want to be ready for it.',
+  'You travel for work or study and keep losing your routine.',
+];
+const notForYou = [
+  'You want a 30-day shred or a crash challenge.',
+  'You want to train alone with headphones and never talk to a coach.',
+];
+
+const perWeek = (ids: string[]) => sessions.filter((s) => ids.includes(s.classId)).length;
+
+const month = [
+  {
+    when: 'Week 1',
+    title: site.offer,
+    text: 'A 20-minute first session with a coach and three simple tests: a carry, a step test and a floor test. Then any classes you like.',
+  },
+  {
+    when: 'Weeks 2 to 5',
+    title: 'Learn the basics',
+    text: 'Foundations twice a week, plus one or two classes picked for your goal. Your coach adjusts the weights as you go.',
+  },
+  {
+    when: 'Month 2 onwards',
+    title: 'Your own mix',
+    text: 'A weekly plan across Move, Perform and Adapt, a Train Anywhere session for the days you cannot come, and a retest every few months.',
+  },
+];
+---
+
+<Page
+  title="How we train"
+  description={`${site.category}. What "ready" means at ${site.name}, the three pillars (Move, Perform, Adapt) and the four methods we use to get you there.`}
+>
+  <PageHero
+    eyebrow="How we train"
+    title="Training for the life you actually live."
+    lede="Every session here has one aim: to make you ready. Ready for the stairs, the trek, the match, and the long day at work. Here is what that means and how we get you there."
+  />
+
+  <section class="section" id="ready" aria-labelledby="ready-title">
+    <div class="wrap split">
+      <div class="stack" style="--stack:1rem">
+        <p class="eyebrow">The outcome</p>
+        <h2 id="ready-title" class="h2">What "ready" looks like.</h2>
+        <p class="lede">
+          Your body is not built only for mirrors or machines. It is built to move, lift, run, climb, carry, play,
+          recover and adapt. We train the physical capacity, and the steady mind, to meet what your life asks of you.
+        </p>
+        <p>
+          <a class="arrow-link" href="/journal/the-gas-cylinder-test">Read: The gas cylinder test <Icon name="arrow" size={18} /></a>
+        </p>
+        <DemoNote>
+          <p>
+            The page leads with the outcome people want, being ready, before any method. People buy the result; the
+            methods are proof we know how to get there. Every example is local and concrete, so it reads like Kathmandu,
+            not a template.
+          </p>
+        </DemoNote>
+      </div>
+      <ul role="list" class="ready-list">
+        {
+          ready.map((r) => (
+            <li>
+              <Icon name="check" size={20} />
+              <span>{r}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--dark" aria-labelledby="compare-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">The difference</p>
+        <h2 id="compare-title" class="h2">Same sweat. Different promise.</h2>
+      </div>
+      <div class="compare" role="table" aria-label="The usual gym promise compared with Grounded Gym">
+        <div class="compare__row compare__row--head" role="row">
+          <span role="columnheader">The usual gym promise</span>
+          <span role="columnheader">The Grounded Gym promise</span>
+        </div>
+        {
+          compare.map(([usual, ours]) => (
+            <div class="compare__row" role="row">
+              <span role="cell" class="compare__usual">
+                {usual}
+              </span>
+              <span role="cell" class="compare__ours">
+                {ours}
+              </span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pillars" aria-labelledby="pillars-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Three pillars</p>
+        <h2 id="pillars-title" class="h2">Move. Perform. Adapt.</h2>
+        <p class="lede">Every week of training touches all three. The balance changes with your goal.</p>
+      </div>
+      <PillarCards detailed />
+    </div>
+  </section>
+
+  <section class="section section--alt" id="methods" aria-labelledby="methods-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Four methods</p>
+        <h2 id="methods-title" class="h2">Tools, not tribes.</h2>
+        <p class="lede">
+          Some gyms are a calisthenics gym, a kettlebell gym or a powerlifting gym. We use all four, because each is good
+          at something different. Your goal decides the mix.
+        </p>
+      </div>
+      <div class="methods">
+        {
+          methods.map((m) => (
+            <article class="method" id={m.id} aria-labelledby={`method-${m.id}`}>
+              <div class="method__head">
+                <p class="method__pillar">{pillars[m.pillar].name}</p>
+                <h3 id={`method-${m.id}`} class="method__name">
+                  {m.name}
+                </h3>
+                <p class="method__tagline">{m.tagline}</p>
+              </div>
+              <dl class="method__facts">
+                <div>
+                  <dt>What it builds</dt>
+                  <dd>{m.builds}</dd>
+                </div>
+                <div>
+                  <dt>Why we use it</dt>
+                  <dd>{m.why}</dd>
+                </div>
+                <div>
+                  <dt>Your first step</dt>
+                  <dd>{m.firstStep}</dd>
+                </div>
+                <div>
+                  <dt>Where you'll find it</dt>
+                  <dd>
+                    {m.classes.map((id, i) => (
+                      <>
+                        {i > 0 && ', '}
+                        <a href={classById(id).href === `/how-we-train#${m.id}` ? '/timetable' : classById(id).href}>{classById(id).name}</a>
+                      </>
+                    ))}
+                    <span class="muted"> · {perWeek(m.classes)} sessions a week</span>
+                  </dd>
+                </div>
+              </dl>
+            </article>
+          ))
+        }
+      </div>
+      <p class="after-methods">
+        <a class="arrow-link" href="/journal/tools-not-tribes">Read: Tools, not tribes <Icon name="arrow" size={18} /></a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="who" aria-labelledby="who-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Who it's for</p>
+        <h2 id="who-title" class="h2">Everyday people. Real lives.</h2>
+      </div>
+      <div class="who">
+        <div class="who__col">
+          <h3 class="h4">This is for you if</h3>
+          <ul role="list" class="check-list">
+            {
+              forYou.map((f) => (
+                <li>
+                  <Icon name="check" size={20} />
+                  <span>{f}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="who__col who__col--not">
+          <h3 class="h4">It probably isn't if</h3>
+          <ul role="list" class="check-list">
+            {
+              notForYou.map((f) => (
+                <li>
+                  <Icon name="close" size={20} />
+                  <span>{f}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <DemoNote>
+        <p>
+          Saying who the gym is not for is deliberate. It makes the right people trust the rest of the page, and it saves
+          the front desk from trial weeks that were never going to convert.
+        </p>
+      </DemoNote>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="first-month" aria-labelledby="month-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Your first month</p>
+        <h2 id="month-title" class="h2">How it starts.</h2>
+      </div>
+      <ol role="list" class="month">
+        {
+          month.map((m, i) => (
+            <li class="month__step">
+              <span class="month__num">{i + 1}</span>
+              <p class="month__when">{m.when}</p>
+              <h3 class="h3">{m.title}</h3>
+              <p class="muted">{m.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <FinalCta location="how_final" title="Start with week one." />
+</Page>
+
+<style>
+  .ready-list {
+    display: grid;
+    gap: 10px;
+  }
+  .ready-list li {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 0.75rem;
+    align-items: start;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    background: var(--card);
+    border: 1px solid var(--line);
+    font-weight: 600;
+  }
+  .ready-list :global(svg) {
+    color: var(--brick);
+    margin-top: 0.15em;
+  }
+  .compare {
+    display: grid;
+    border-top: 1px solid rgb(244 239 230 / 0.2);
+  }
+  .compare__row {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgb(244 239 230 / 0.14);
+    align-items: baseline;
+  }
+  .compare__row--head {
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--on-dark-muted);
+  }
+  .compare__row--head span:last-child {
+    color: var(--brick-on-dark);
+  }
+  .compare__usual {
+    color: var(--on-dark-muted);
+    text-decoration: line-through;
+    text-decoration-color: rgb(236 138 115 / 0.7);
+    text-decoration-thickness: 2px;
+  }
+  .compare__ours {
+    font-weight: 700;
+    font-size: 1.08rem;
+    font-stretch: 104%;
+  }
+  .methods {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  }
+  .method {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    border: 1px solid var(--line);
+    scroll-margin-top: 96px;
+  }
+  .method:target {
+    border-color: var(--brick);
+    box-shadow: 0 0 0 2px var(--brick);
+  }
+  .method__pillar {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brick-strong);
+  }
+  .method__name {
+    font-size: 1.7rem;
+    font-stretch: 118%;
+    margin-top: 0.2rem;
+  }
+  .method__tagline {
+    font-weight: 700;
+    color: var(--ink-2);
+    margin-top: 0.2rem;
+  }
+  .method__facts {
+    display: grid;
+    gap: 0.8rem;
+  }
+  .method__facts dt {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .method__facts dd {
+    margin: 0.15rem 0 0;
+    line-height: 1.5;
+  }
+  .method__facts a {
+    font-weight: 700;
+  }
+  .after-methods {
+    margin-top: 1.25rem;
+  }
+  .who {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  }
+  .who__col {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+  .who__col--not {
+    background: transparent;
+    border-style: dashed;
+    border-color: var(--line-strong);
+  }
+  .who__col--not :global(svg) {
+    color: var(--stone);
+  }
+  .month {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+  .month__step {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+  .month__num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--on-dark);
+    font-weight: 800;
+  }
+  .month__when {
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brick-strong);
+    margin-top: 0.4rem;
+  }
+  @media (max-width: 560px) {
+    .compare__row {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+    }
+    .compare__row--head {
+      display: none;
+    }
+  }
+</style>

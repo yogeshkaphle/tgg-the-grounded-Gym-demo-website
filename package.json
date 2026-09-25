@@ -1,0 +1,24 @@
+{
+  "name": "grounded-gym-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Grounded Gym: a concept gym website for Baneshwor, Kathmandu, built to turn nearby visitors into Free Trial Week bookings. Demo by Yogesh Kaphle.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "astro": "^7.3.5",
+    "d3-array": "^3.2.4",
+    "d3-contour": "^4.0.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/d3-contour": "^3.0.6",
+    "typescript": "^6.0.3"
+  }
+}

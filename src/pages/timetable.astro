@@ -1,0 +1,302 @@
+---
+// The week. Same data as "Classes today" and the thank-you recommendations.
+// Phones: one day at a time with day tabs. Desktop: the whole week.
+import Page from '../layouts/Page.astro';
+import PageHero from '../components/PageHero.astro';
+import FinalCta from '../components/FinalCta.astro';
+import DemoNote from '../components/DemoNote.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site.ts';
+import { days } from '../data/timetable.ts';
+import { classById, levelLabel } from '../data/classes.ts';
+import { coachById } from '../data/coaches.ts';
+import { sessionsOn } from '../lib/schedule.ts';
+
+const hoursLine = site.hours.map((h) => `${h.days} ${h.open} to ${h.close}`).join('. ');
+---
+
+<Page
+  title="Timetable"
+  description={`This week's classes at ${site.name}, ${site.area}. ${hoursLine}. Try any class free during your ${site.offer}.`}
+>
+  <PageHero
+    eyebrow="Timetable"
+    title="This week at Grounded Gym"
+    lede={`${hoursLine}. Saturday is short because it's the weekly holiday. Every class is included in your ${site.offer}.`}
+  />
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <div class="tt-filter" data-coach-filter hidden>
+        <p>
+          Showing <strong data-coach-name></strong>'s classes.
+        </p>
+        <a class="btn btn--ghost btn--sm" href="/timetable">Show every class</a>
+      </div>
+
+      <div class="tt-legend">
+        <span class="chip chip--beginner">{levelLabel.beginner}</span>
+        <span class="small muted">Good first classes. Everything else is marked {levelLabel.all.toLowerCase()}.</span>
+      </div>
+
+      <div class="tt-tabs" role="tablist" aria-label="Day" data-tabs hidden>
+        {
+          days.map((d) => (
+            <button type="button" role="tab" id={`tab-${d.index}`} aria-controls={`day-${d.index}`} aria-selected="false" data-day={d.index}>
+              <span class="tt-tabs__short">{d.short}</span>
+              <span class="tt-tabs__today" data-today-label hidden>
+                Today
+              </span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="tt-week">
+        {
+          days.map((d) => (
+            <section class="tt-day" id={`day-${d.index}`} data-day-panel={d.index} aria-labelledby={`day-title-${d.index}`}>
+              <h2 class="tt-day__title" id={`day-title-${d.index}`}>
+                {d.long}
+                {d.index === 6 && <span class="chip">Short day</span>}
+              </h2>
+              <ol class="class-list" role="list">
+                {sessionsOn(d.index).map((s) => {
+                  const type = classById(s.classId);
+                  const coach = coachById(s.coachId);
+                  return (
+                    <li class="class-row" data-coach={coach.id}>
+                      <div>
+                        <span class="class-row__time">{s.start}</span>
+                        <span class="class-row__when">{type.minutes} min</span>
+                      </div>
+                      <div class="class-row__body">
+                        <p class="class-row__name">
+                          <a href={type.href}>{type.name}</a>
+                        </p>
+                        <p class="class-row__meta">
+                          <span>
+                            with <a href={`/coaches#${coach.id}`}>{coach.name}</a>
+                          </span>
+                          <span class:list={['chip', { 'chip--beginner': type.level === 'beginner' }]}>{levelLabel[type.level]}</span>
+                        </p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+            </section>
+          ))
+        }
+      </div>
+
+      <DemoNote>
+        <p>
+          One data file feeds this page, "Classes today" on the home page and the thank-you recommendations. Change a
+          class once and every page agrees. The build fails if a class runs outside opening hours or two classes overlap.
+        </p>
+      </DemoNote>
+
+      <div class="tt-cta">
+        <p class="h3">Try any class free this week.</p>
+        <a class="btn btn--primary" href="/trial" data-track="trial_cta_click" data-track-location="timetable">
+          Book {site.offer} <Icon name="arrow" />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <FinalCta location="timetable_final" title="Found a class that fits?" />
+</Page>
+
+<script>
+  import { ktmNow } from '../lib/schedule.ts';
+  import { coaches } from '../data/coaches.ts';
+
+  const tabs = document.querySelector<HTMLElement>('[data-tabs]');
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-tabs] [role="tab"]'));
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-day-panel]'));
+  const today = ktmNow().day;
+
+  const select = (day: number, focus = false) => {
+    buttons.forEach((b) => {
+      const on = Number(b.dataset.day) === day;
+      b.setAttribute('aria-selected', String(on));
+      b.tabIndex = on ? 0 : -1;
+      if (on && focus) b.focus();
+    });
+    panels.forEach((p) => p.classList.toggle('is-active', Number(p.dataset.dayPanel) === day));
+  };
+
+  if (tabs) {
+    tabs.hidden = false;
+    document.documentElement.classList.add('tt-tabs-ready');
+    buttons[today]?.querySelector<HTMLElement>('[data-today-label]')?.removeAttribute('hidden');
+    buttons.forEach((b) => b.addEventListener('click', () => select(Number(b.dataset.day))));
+    tabs.addEventListener('keydown', (e) => {
+      const current = buttons.findIndex((b) => b.getAttribute('aria-selected') === 'true');
+      if (e.key === 'ArrowRight') select((current + 1) % 7, true);
+      if (e.key === 'ArrowLeft') select((current + 6) % 7, true);
+    });
+    panels.forEach((p) => {
+      p.setAttribute('role', 'tabpanel');
+      p.setAttribute('aria-labelledby', `tab-${p.dataset.dayPanel}`);
+    });
+    select(today);
+    document.getElementById(`day-${today}`)?.classList.add('is-today');
+  }
+
+  // /timetable?coach=pema-tamang highlights one coach's classes.
+  const coachId = new URLSearchParams(location.search).get('coach');
+  const coach = coaches.find((c) => c.id === coachId);
+  if (coach) {
+    const bar = document.querySelector<HTMLElement>('[data-coach-filter]');
+    const name = document.querySelector('[data-coach-name]');
+    if (bar && name) {
+      name.textContent = coach.firstName;
+      bar.hidden = false;
+    }
+    document.querySelectorAll<HTMLElement>('.class-row[data-coach]').forEach((row) => {
+      row.classList.toggle('is-dimmed', row.dataset.coach !== coach.id);
+    });
+  }
+</script>
+
+<style>
+  .tt-filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+    border-radius: var(--radius);
+    background: var(--brick-soft);
+  }
+  .tt-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+  .tt-tabs {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    padding: 8px 0;
+    margin-bottom: 0.75rem;
+    background: var(--paper);
+  }
+  .tt-tabs button {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    min-height: 52px;
+    border-radius: 10px;
+    border: 1.5px solid var(--line-strong);
+    background: var(--card);
+    font-weight: 750;
+    font-size: 0.95rem;
+    padding: 0.2rem;
+    line-height: 1.1;
+  }
+  .tt-tabs button[aria-selected='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--on-dark);
+  }
+  .tt-tabs__today {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--brick);
+  }
+  .tt-tabs button[aria-selected='true'] .tt-tabs__today {
+    color: var(--brick-on-dark);
+  }
+  .tt-week {
+    display: grid;
+    gap: 28px;
+  }
+  .tt-day {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    scroll-margin-top: 80px;
+  }
+  .tt-day__title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.35rem;
+    font-stretch: 114%;
+  }
+  :global(.tt-tabs-ready) .tt-day:not(.is-active) {
+    display: none;
+  }
+  :global(.tt-tabs-ready) .tt-day__title {
+    display: none;
+  }
+  @media (min-width: 1100px) {
+    .tt-tabs {
+      display: none !important;
+    }
+    .tt-week {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 10px;
+    }
+    :global(.tt-tabs-ready) .tt-day:not(.is-active),
+    :global(.tt-tabs-ready) .tt-day__title {
+      display: flex;
+    }
+    :global(.tt-tabs-ready) .tt-day:not(.is-active) {
+      display: grid;
+    }
+    .tt-day__title {
+      font-size: 1rem;
+      flex-wrap: wrap;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--ink);
+    }
+    .tt-day.is-today .tt-day__title {
+      border-color: var(--brick);
+      color: var(--brick-strong);
+    }
+    .tt-day .class-row {
+      grid-template-columns: 1fr;
+      padding: 12px;
+      min-height: 0;
+      align-items: start;
+    }
+    .tt-day .class-row__time {
+      font-size: 1.1rem;
+    }
+    .tt-day .class-row__when {
+      display: inline;
+      margin: 0 0 0 0.4rem;
+    }
+    .tt-day .class-row__name {
+      font-size: 0.95rem;
+    }
+    .tt-day .class-row__meta {
+      font-size: 0.8rem;
+    }
+  }
+  .tt-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--ink);
+  }
+</style>

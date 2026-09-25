@@ -1,0 +1,65 @@
+---
+// Mark: a kettlebell standing on the ground line. Grounded, and obviously a gym.
+interface Props {
+  href?: string | null;
+  tone?: 'ink' | 'paper';
+  size?: 'md' | 'lg';
+}
+const { href = '/', tone = 'ink', size = 'md' } = Astro.props;
+const Tag = href ? 'a' : 'span';
+---
+
+<Tag class:list={['logo', `logo--${tone}`, `logo--${size}`]} href={href ?? undefined} aria-label={href ? 'Grounded Gym, home' : undefined}>
+  <svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+    <path d="M12.6 21.6C10.6 13 13.6 6 20 6s9.4 7 7.4 15.6" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"></path>
+    <path d="M14.9 33A9.5 9.5 0 1 1 25.1 33Z" fill="currentColor"></path>
+    <rect x="2" y="35.2" width="36" height="2.8" rx="1.4" class="logo__ground"></rect>
+  </svg>
+  <span class="logo__word"><span>Grounded</span> <span class="logo__gym">Gym</span></span>
+</Tag>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+    color: var(--ink);
+    line-height: 1;
+    min-height: 44px;
+  }
+  .logo--paper {
+    color: var(--on-dark);
+  }
+  .logo__mark {
+    width: 34px;
+    height: 34px;
+    flex: none;
+  }
+  .logo__ground {
+    fill: var(--brick);
+  }
+  .logo--paper .logo__ground {
+    fill: var(--brick-on-dark);
+  }
+  .logo__word {
+    font-weight: 850;
+    font-stretch: 122%;
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+  .logo__gym {
+    color: var(--brick);
+  }
+  .logo--paper .logo__gym {
+    color: var(--brick-on-dark);
+  }
+  .logo--lg .logo__mark {
+    width: 44px;
+    height: 44px;
+  }
+  .logo--lg .logo__word {
+    font-size: 1.5rem;
+  }
+</style>

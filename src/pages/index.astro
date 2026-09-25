@@ -1,0 +1,336 @@
+---
+// Home: explain the gym in five seconds, then route to the Free Trial Week.
+import Page from '../layouts/Page.astro';
+import Icon from '../components/Icon.astro';
+import DemoNote from '../components/DemoNote.astro';
+import TrialTicket from '../components/TrialTicket.astro';
+import PillarCards from '../components/PillarCards.astro';
+import ClassesToday from '../components/ClassesToday.astro';
+import ResultCards from '../components/ResultCards.astro';
+import WorkoutCards from '../components/WorkoutCards.astro';
+import CoachCards from '../components/CoachCards.astro';
+import FindUs from '../components/FindUs.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { site } from '../data/site.ts';
+import { trialIncludes } from '../data/offer.ts';
+import { homeFaq } from '../data/faq.ts';
+
+const dayCodes = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const pad = (t: string) => t.padStart(5, '0');
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ExerciseGym',
+  name: site.name,
+  description: `${site.category}. ${site.demo.enabled ? site.demo.line : ''}`.trim(),
+  url: Astro.site?.href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${site.address.street}, ${site.address.locality}`,
+    addressLocality: site.address.city,
+    postalCode: site.address.postcode,
+    addressCountry: site.address.country,
+  },
+  openingHours: site.hours.map((h) => `${h.dayIndexes.map((d) => dayCodes[d]).join(',')} ${pad(h.open)}-${pad(h.close)}`),
+  ...(site.contact.phone ? { telephone: site.contact.phone } : {}),
+};
+---
+
+<Page
+  title={`${site.name}: ${site.category} in ${site.area}, ${site.city}`}
+  description={`Strength, stamina and mobility training in ${site.area}, ${site.city}. ${site.openingLine}. Try any class free for a week.`}
+  jsonLd={jsonLd}
+>
+  <!-- 1. Hero -->
+  <section class="hero has-contours">
+    <div class="contours" style="--contour-opacity:.16"></div>
+    <div class="wrap hero__inner">
+      <div class="hero__text">
+        <h1 class="hero__title">
+          <span class="eyebrow">Gym in {site.area}, {site.city}</span>
+          <span class="h1 hero__line">{site.tagline}</span>
+        </h1>
+        <p class="lede">
+          Build strength, stamina, mobility and confidence with training that works in the gym, at home, outdoors, and
+          wherever life takes you.
+        </p>
+        <div class="cluster hero__actions">
+          <a class="btn btn--primary" href="/trial" data-track="trial_cta_click" data-track-location="home_hero">
+            Book {site.offer} <Icon name="arrow" />
+          </a>
+          <a class="arrow-link" href="/timetable">See this week's classes <Icon name="arrow" size={18} /></a>
+        </div>
+        <ul role="list" class="hero__meta">
+          <li><Icon name="clock" size={18} /> {site.openingLine}</li>
+          <li><Icon name="pin" size={18} /> {site.walkMinutes} minutes from {site.landmark}</li>
+        </ul>
+        <DemoNote>
+          <p>
+            The area is in the first line people read, and in the headline tag, because most gym searches are "gym near
+            me". Visitors from {site.area} know in one second they are in the right place. The brand line comes second.
+          </p>
+        </DemoNote>
+      </div>
+      <div class="hero__visual">
+        <TrialTicket />
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Free Trial Week -->
+  <section class="section section--alt" aria-labelledby="ftw-title">
+    <div class="wrap split split--wide-left">
+      <div class="stack" style="--stack:1.1rem">
+        <p class="eyebrow">{site.offer}</p>
+        <h2 id="ftw-title" class="h2">Try a full week before you pay anything.</h2>
+        <p class="lede">
+          For first-timers, people coming back after a long break, and anyone who wants to see how we coach before they
+          commit.
+        </p>
+        <a class="btn btn--primary" href="/trial" data-track="trial_cta_click" data-track-location="home_offer">
+          Book {site.offer} <Icon name="arrow" />
+        </a>
+        <DemoNote>
+          <p>
+            One name for the offer, everywhere: button, form, thank-you page, WhatsApp message. One coaching funnel I
+            walked called the same call four different things, and people stopped trusting which one they had booked.
+          </p>
+        </DemoNote>
+      </div>
+      <ul role="list" class="offer-list">
+        {
+          trialIncludes.map((item) => (
+            <li>
+              <span class="offer-list__icon">
+                <Icon name={item.icon} size={22} />
+              </span>
+              <div>
+                <p class="h4">{item.title}</p>
+                <p class="small muted">{item.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3. The three pillars -->
+  <section class="section" aria-labelledby="pillars-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">How we train</p>
+        <h2 id="pillars-title" class="h2">Strength you can use outside the gym.</h2>
+        <p class="lede">
+          Your body isn't built only for mirrors or machines. It's built to move, lift, run, climb, carry, play, recover
+          and adapt. We train all of it, in three parts.
+        </p>
+      </div>
+      <PillarCards />
+      <p class="after-grid">
+        <a class="arrow-link" href="/how-we-train">How we train, and why <Icon name="arrow" size={18} /></a>
+      </p>
+    </div>
+  </section>
+
+  <!-- 4. Classes today -->
+  <section class="section section--alt" aria-labelledby="today-title">
+    <div class="wrap split">
+      <div class="stack" style="--stack:1rem">
+        <p class="eyebrow">Classes today</p>
+        <h2 id="today-title" class="h2">Pick one. It's free this week.</h2>
+        <p class="lede">
+          Every class on the timetable is included in your {site.offer}. Beginner-friendly classes are marked, and the
+          first session is always with a coach.
+        </p>
+        <p><a class="arrow-link" href="/timetable">See the full week <Icon name="arrow" size={18} /></a></p>
+        <DemoNote>
+          <p>
+            These three rows come from the same data file as the timetable page, worked out in Kathmandu time on the
+            visitor's phone. The two can never disagree.
+          </p>
+        </DemoNote>
+      </div>
+      <ClassesToday />
+    </div>
+  </section>
+
+  <!-- 5. Results -->
+  <section class="section section--dark" aria-labelledby="results-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Results</p>
+        <h2 id="results-title" class="h2">Progress you notice on the stairs.</h2>
+        <p class="lede">We measure what you can do, not just what you weigh. The mirror usually follows.</p>
+      </div>
+      <ResultCards />
+      <DemoNote>
+        <p>
+          Labelled as samples on purpose. Grounded Gym has no members, and fake results with borrowed faces are exactly the
+          kind of claim this build refuses to make. A real client's cards would carry real names, with permission.
+        </p>
+      </DemoNote>
+    </div>
+  </section>
+
+  <!-- 6. Train Anywhere -->
+  <section class="section" aria-labelledby="anywhere-title">
+    <div class="wrap">
+      <div class="section-head section-head--row">
+        <div class="stack" style="--stack:.85rem">
+          <p class="eyebrow">Train Anywhere</p>
+          <h2 id="anywhere-title" class="h2">When you can't get here, you still know what to do.</h2>
+          <p class="lede">Four free sessions from our coaches for the park, a hotel room, home and any gym. No app, no sign-up.</p>
+        </div>
+        <a class="arrow-link" href="/train-anywhere">Why we teach this <Icon name="arrow" size={18} /></a>
+      </div>
+      <WorkoutCards />
+      <DemoNote>
+        <p>
+          The free sessions live on this domain, not in Google Drive or on YouTube. Several funnels I walked sent their
+          free content off-site, where no pixel can see who read it. Here, every reader joins a warm audience for Free
+          Trial Week ads.
+        </p>
+      </DemoNote>
+    </div>
+  </section>
+
+  <!-- 7. Coaches -->
+  <section class="section section--alt" aria-labelledby="coaches-title">
+    <div class="wrap">
+      <div class="section-head section-head--row">
+        <div class="stack" style="--stack:.85rem">
+          <p class="eyebrow">Coaches</p>
+          <h2 id="coaches-title" class="h2">Coaches who learn your name in the first week.</h2>
+        </div>
+        <a class="arrow-link" href="/coaches">Meet the coaches <Icon name="arrow" size={18} /></a>
+      </div>
+      <CoachCards compact />
+    </div>
+  </section>
+
+  <!-- 8. Find us -->
+  <section class="section" aria-label="Find us">
+    <div class="wrap">
+      <FindUs />
+    </div>
+  </section>
+
+  <!-- 9. FAQ -->
+  <section class="section section--alt" aria-labelledby="faq-title">
+    <div class="wrap faq-wrap">
+      <div class="stack" style="--stack:1rem">
+        <p class="eyebrow">Questions</p>
+        <h2 id="faq-title" class="h2">Before your first visit</h2>
+        <p class="muted">Anything else? Ask us on WhatsApp, or ask your coach on day one.</p>
+      </div>
+      <Faq ids={homeFaq} />
+    </div>
+  </section>
+
+  <!-- 10. Final call to action -->
+  <FinalCta location="home_final" />
+</Page>
+
+<style>
+  .hero {
+    padding-block: clamp(40px, 7vw, 96px) clamp(48px, 7vw, 104px);
+    overflow: hidden;
+  }
+  .hero__inner {
+    display: grid;
+    gap: 40px;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .hero__inner {
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 56px;
+    }
+  }
+  .hero__text {
+    display: grid;
+    gap: 1.3rem;
+    justify-items: start;
+  }
+  .hero__title {
+    display: grid;
+    gap: 0.9rem;
+    font-weight: inherit;
+    font-stretch: inherit;
+    letter-spacing: normal;
+    line-height: normal;
+  }
+  .hero__line {
+    display: block;
+    font-weight: 850;
+    font-stretch: 120%;
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    font-size: clamp(2.9rem, 1.7rem + 6vw, 6.2rem);
+  }
+  .hero__actions {
+    gap: 1rem 1.5rem;
+  }
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    font-weight: 650;
+    color: var(--ink-2);
+    font-size: 0.975rem;
+  }
+  .hero__meta li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .hero__meta :global(svg) {
+    color: var(--brick);
+  }
+  .hero__visual {
+    display: none;
+    justify-self: center;
+  }
+  @media (min-width: 720px) {
+    .hero__visual {
+      display: block;
+    }
+  }
+  .offer-list {
+    display: grid;
+    gap: 12px;
+  }
+  .offer-list li {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 14px;
+    align-items: start;
+    padding: 16px;
+    border-radius: var(--radius);
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+  .offer-list__icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--brick-soft);
+    color: var(--brick-strong);
+  }
+  .after-grid {
+    margin-top: 1.2rem;
+  }
+  .faq-wrap {
+    display: grid;
+    gap: 28px;
+  }
+  @media (min-width: 900px) {
+    .faq-wrap {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 56px;
+    }
+  }
+</style>

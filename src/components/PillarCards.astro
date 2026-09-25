@@ -1,0 +1,120 @@
+---
+// Move, Perform, Adapt: the three things we train.
+import { pillars, classes, type Pillar } from '../data/classes.ts';
+
+interface Props {
+  detailed?: boolean;
+}
+const { detailed = false } = Astro.props;
+const order: Pillar[] = ['move', 'perform', 'adapt'];
+---
+
+<ol role="list" class="pillars">
+  {
+    order.map((key, i) => {
+      const p = pillars[key];
+      const inPillar = classes.filter((c) => c.pillar === key);
+      return (
+        <li class:list={['pillar', `pillar--${key}`]}>
+          <p class="pillar__num">0{i + 1}</p>
+          <h3 class="pillar__name">{p.name}</h3>
+          <p class="pillar__line">{p.line}</p>
+          {detailed && <p class="pillar__detail">{p.detail}</p>}
+          <p class="pillar__life">
+            <span>In real life</span>
+            {p.life}
+          </p>
+          {detailed && (
+            <p class="pillar__classes">
+              <span>Classes</span>
+              {inPillar.map((c, j) => (
+                <>
+                  {j > 0 && ', '}
+                  <a href={c.href}>{c.name}</a>
+                </>
+              ))}
+            </p>
+          )}
+        </li>
+      );
+    })
+  }
+</ol>
+
+<style>
+  .pillars {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  }
+  .pillar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 24px 22px;
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .pillar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--brick);
+  }
+  .pillar--move::after {
+    background: var(--moss);
+  }
+  .pillar--adapt::after {
+    background: var(--ink);
+  }
+  .pillar__num {
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--stone);
+  }
+  .pillar__name {
+    font-size: clamp(2rem, 1.6rem + 1.6vw, 2.6rem);
+    font-stretch: 125%;
+    letter-spacing: -0.03em;
+  }
+  .pillar__line {
+    font-weight: 650;
+    line-height: 1.45;
+  }
+  .pillar__detail {
+    color: var(--ink-2);
+  }
+  .pillar__life,
+  .pillar__classes {
+    margin-top: auto;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.95rem;
+    color: var(--ink-2);
+    line-height: 1.45;
+  }
+  .pillar__classes {
+    margin-top: 0;
+  }
+  .pillar__life span,
+  .pillar__classes span {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brick-strong);
+    margin-bottom: 0.2rem;
+  }
+  .pillar__classes a {
+    color: var(--ink);
+    font-weight: 650;
+  }
+</style>

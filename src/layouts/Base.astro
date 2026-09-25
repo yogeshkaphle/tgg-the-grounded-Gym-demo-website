@@ -1,0 +1,228 @@
+---
+import '../styles/global.css';
+import fontUrl from '../assets/fonts/archivo-subset.woff2?url';
+import { site } from '../data/site.ts';
+import { validateData } from '../lib/validate.ts';
+import { cleanPath } from '../lib/url.ts';
+import DemoStrip from '../components/DemoStrip.astro';
+import Icon from '../components/Icon.astro';
+
+validateData();
+
+interface Props {
+  title: string;
+  description: string;
+  // Pages that must never be indexed, whatever the site setting (thank-you).
+  noindex?: boolean;
+  ogImage?: string;
+  jsonLd?: Record<string, unknown> | null;
+  bodyClass?: string;
+}
+
+const { title, description, noindex = false, ogImage = '/og/default.png', jsonLd = null, bodyClass } = Astro.props;
+const path = cleanPath(Astro.url.pathname);
+const canonical = new URL(path, Astro.site);
+const fullTitle = path === '/' ? title : `${title} | ${site.name}, ${site.area}`;
+const robots = noindex || !site.indexable ? 'noindex, nofollow' : 'index, follow';
+const ogUrl = new URL(ogImage, Astro.site).href;
+
+const fontFace = `@font-face{font-family:'Archivo';font-style:normal;font-display:swap;font-weight:100 900;font-stretch:62% 125%;src:url(${fontUrl}) format('woff2');}`;
+
+const { metaPixelId, ga4Id } = site.tracking;
+---
+
+<!doctype html>
+<html lang="en-NP">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonical.href} />
+    <meta name="theme-color" content="#f4efe6" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
+    <style is:inline set:html={fontFace} />
+
+    <script is:inline>
+      // Runs before first paint: JS flag, demo-notes preference, ad attribution.
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          var q = new URLSearchParams(location.search);
+          var n = q.get('notes');
+          if (n === 'on' || n === 'off') localStorage.setItem('gg_notes', n);
+          if (localStorage.getItem('gg_notes') === 'on') d.dataset.notes = 'on';
+
+          // Keep the ad source for the booking form. A new ad click replaces an old one.
+          var keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid', 'gclid'];
+          var attr = {};
+          var hasAd = false;
+          keys.forEach(function (k) {
+            var v = q.get(k);
+            if (v) { attr[k] = v.slice(0, 200); hasAd = true; }
+          });
+          if (hasAd || !sessionStorage.getItem('gg_attr')) {
+            attr.landing_page = location.pathname;
+            attr.referrer = document.referrer ? new URL(document.referrer).hostname : '';
+            sessionStorage.setItem('gg_attr', JSON.stringify(attr));
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <script is:inline define:vars={{ metaPixelId, ga4Id }}>
+      // Meta Pixel and GA4. Nothing loads until the IDs are set in src/data/site.ts.
+      // Stubs queue events straight away; the real scripts load after the page is idle,
+      // so tracking never slows the first paint on mobile data.
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      if (ga4Id) {
+        window.gtag('js', new Date());
+        window.gtag('config', ga4Id);
+      }
+      if (metaPixelId) {
+        (function (/** @type {any} */ f) {
+          if (f.fbq) return;
+          var n = (f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); });
+          if (!f._fbq) f._fbq = n;
+          n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+        })(window);
+        window.fbq('init', metaPixelId);
+        window.fbq('track', 'PageView');
+      }
+      if (ga4Id || metaPixelId) {
+        var load = function () {
+          var add = function (src) { var s = document.createElement('script'); s.async = true; s.src = src; document.head.appendChild(s); };
+          if (ga4Id) add('https://www.googletagmanager.com/gtag/js?id=' + ga4Id);
+          if (metaPixelId) add('https://connect.facebook.net/en_US/fbevents.js');
+        };
+        addEventListener('load', function () {
+          if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 2500 });
+          else setTimeout(load, 1200);
+        });
+      }
+    </script>
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    {site.demo.enabled && <DemoStrip />}
+    <slot />
+
+    {
+      site.demo.enabled && (
+        <>
+          <dialog id="demo-contact" class="demo-dialog" aria-labelledby="demo-contact-title">
+            <div class="demo-dialog__inner">
+              <p class="eyebrow">Demo site</p>
+              <h2 id="demo-contact-title" class="h3">Grounded Gym isn't a real gym.</h2>
+              <p>
+                In a live build, <span data-demo-channel>this button rings the front desk.</span> Here it doesn't, so you
+                never reach a stranger's number.
+              </p>
+              <p class="muted small">
+                Built by {site.demo.author}, {site.demo.authorRole}. Want this funnel for your gym?
+              </p>
+              <div class="cluster">
+                {site.demo.authorWhatsApp ? (
+                  <a
+                    class="btn btn--whatsapp btn--sm"
+                    href={`https://wa.me/${site.demo.authorWhatsApp}?text=${encodeURIComponent('Hi Yogesh, I saw the Grounded Gym demo and want to talk about my gym.')}`}
+                    data-track="author_contact_click"
+                    data-track-location="demo_dialog"
+                  >
+                    <Icon name="whatsapp" /> Message {site.demo.author.split(' ')[0]}
+                  </a>
+                ) : (
+                  <a
+                    class="btn btn--primary btn--sm"
+                    href={site.demo.authorUrl}
+                    data-track="author_contact_click"
+                    data-track-location="demo_dialog"
+                  >
+                    Visit {site.demo.author.split(' ')[0]}'s site <Icon name="arrow" />
+                  </a>
+                )}
+                <button type="button" class="btn btn--ghost btn--sm" data-dialog-close>
+                  Close
+                </button>
+              </div>
+            </div>
+          </dialog>
+          <ol id="event-log" class="event-log" aria-live="polite" aria-label="Tracked events"></ol>
+        </>
+      )
+    }
+
+    <script>
+      import '../scripts/site.ts';
+      import '../scripts/demo.ts';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .demo-dialog {
+    border: 0;
+    padding: 0;
+    border-radius: var(--radius-lg);
+    max-width: min(460px, calc(100% - 32px));
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.45);
+  }
+  .demo-dialog::backdrop {
+    background: rgb(29 27 24 / 0.55);
+  }
+  .demo-dialog__inner {
+    padding: 24px;
+    display: grid;
+    gap: 0.9rem;
+  }
+  .event-log {
+    position: fixed;
+    left: 12px;
+    bottom: calc(var(--bar-h) + 12px);
+    z-index: 60;
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+    pointer-events: none;
+    max-width: calc(100% - 24px);
+  }
+  .event-log li {
+    background: var(--ink);
+    color: var(--on-dark);
+    border-left: 4px solid var(--brick-on-dark);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    box-shadow: var(--shadow);
+    transition: opacity 0.5s ease;
+  }
+  .event-log li.is-out {
+    opacity: 0;
+  }
+  .event-log code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--brick-on-dark);
+  }
+</style>

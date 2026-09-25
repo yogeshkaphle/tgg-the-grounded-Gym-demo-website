@@ -1,0 +1,37 @@
+---
+// Header block for inside pages.
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+  narrow?: boolean;
+}
+const { eyebrow, title, lede, narrow = false } = Astro.props;
+---
+
+<section class="page-hero has-contours">
+  <div class="contours" style="--contour-opacity:.14"></div>
+  <div class:list={[narrow ? 'wrap--narrow' : 'wrap', 'page-hero__inner']}>
+    <p class="eyebrow">{eyebrow}</p>
+    <h1 class="h1 page-hero__title">{title}</h1>
+    {lede && <p class="lede">{lede}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    padding-block: clamp(40px, 6vw, 88px) clamp(36px, 5vw, 64px);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .page-hero__inner {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+  }
+  .page-hero__title {
+    font-size: clamp(2.3rem, 1.5rem + 3.8vw, 4.6rem);
+    max-width: 16em;
+  }
+</style>

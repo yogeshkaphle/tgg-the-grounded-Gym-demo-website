@@ -1,0 +1,88 @@
+---
+import Page from '../layouts/Page.astro';
+import PageHero from '../components/PageHero.astro';
+import CoachCards from '../components/CoachCards.astro';
+import FinalCta from '../components/FinalCta.astro';
+import DemoNote from '../components/DemoNote.astro';
+import { site } from '../data/site.ts';
+
+const promises = [
+  { title: 'We learn your name', text: 'And your goal, and the knee that clicks. By the end of your first week, not your first year.' },
+  { title: 'We coach, not count', text: 'Small groups, so someone is watching your form. We would rather you lift less and move well.' },
+  { title: 'We tell you what is next', text: 'Every month a coach checks in: what improved, what to change, what to aim for.' },
+];
+---
+
+<Page
+  title="Coaches"
+  description={`Meet the coaches at ${site.name}, ${site.area}: strength, conditioning and movement coaches who learn your name in the first week.`}
+>
+  <PageHero
+    eyebrow="Coaches"
+    title="Coaches who learn your name in the first week."
+    lede="Three coaches, three specialities, one way of working: small steps, good form, and training that carries over to real life."
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <CoachCards />
+      <p class="small muted demo-line">
+        {site.demo.enabled && 'Grounded Gym is a demo. These coaches are fictional; a real client shows its own team, with their own photos.'}
+      </p>
+      <DemoNote>
+        <p>
+          Placeholder portraits, on purpose. A stock photo of a stranger with a made-up name would be a lie about a real
+          person. The photo slots fill themselves when real photos are added to the project.
+        </p>
+      </DemoNote>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">How we coach</p>
+        <h2 class="h2">What every coach here does.</h2>
+      </div>
+      <ol role="list" class="promises">
+        {
+          promises.map((p, i) => (
+            <li class="promise">
+              <span class="promise__num">0{i + 1}</span>
+              <h3 class="h3">{p.title}</h3>
+              <p class="muted">{p.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <FinalCta location="coaches_final" title="Meet them in person." text={`Your first session in the ${site.offer} is one-to-one with a coach. It takes 20 minutes.`} />
+</Page>
+
+<style>
+  .demo-line {
+    margin-top: 1.5rem;
+  }
+  .promises {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+  .promise {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+  .promise__num {
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--brick-strong);
+  }
+</style>

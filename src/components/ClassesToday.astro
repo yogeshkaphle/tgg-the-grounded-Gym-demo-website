@@ -1,0 +1,32 @@
+---
+// The next three classes, worked out in the visitor's browser in Kathmandu time.
+// Same data file as /timetable, so the two can never disagree.
+---
+
+<div class="classes-today" data-classes-today>
+  <ol class="class-list" data-list aria-live="polite">
+    {
+      [0, 1, 2].map(() => (
+        <li class="class-row class-row--skeleton" aria-hidden="true">
+          <span />
+        </li>
+      ))
+    }
+  </ol>
+  <noscript>
+    <p class="small">See today's classes on the <a class="link" href="/timetable">full timetable</a>.</p>
+  </noscript>
+</div>
+
+<script>
+  import { classRow } from '../scripts/class-row.ts';
+  import { ktmNow, upcoming, dayLabel } from '../lib/schedule.ts';
+
+  const root = document.querySelector<HTMLElement>('[data-classes-today]');
+  const list = root?.querySelector<HTMLOListElement>('[data-list]');
+  if (list) {
+    const now = ktmNow();
+    const next = upcoming(now, 3);
+    list.replaceChildren(...next.map((u) => classRow(u.session, dayLabel(now, u.offset))));
+  }
+</script>

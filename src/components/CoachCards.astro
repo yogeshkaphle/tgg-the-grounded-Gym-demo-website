@@ -1,0 +1,142 @@
+---
+// Coach cards. The classes each coach runs come from the timetable, and each
+// links to the timetable filtered to that coach.
+import CoachPortrait from './CoachPortrait.astro';
+import Icon from './Icon.astro';
+import { coaches } from '../data/coaches.ts';
+import { classById } from '../data/classes.ts';
+import { sessions } from '../data/timetable.ts';
+
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+
+const runs = (coachId: string) => {
+  const ids = [...new Set(sessions.filter((s) => s.coachId === coachId).map((s) => s.classId))];
+  return ids.map((id) => ({ type: classById(id), count: sessions.filter((s) => s.coachId === coachId && s.classId === id).length }));
+};
+---
+
+<ul role="list" class:list={['coaches', { 'coaches--compact': compact }]}>
+  {
+    coaches.map((c) => (
+      <li class="coach" id={compact ? undefined : c.id}>
+        <CoachPortrait coach={c} small={compact} sizes={compact ? '104px' : undefined} />
+        <div class="coach__body">
+          <p class="coach__role">{c.role}</p>
+          <h3 class="coach__name">{c.name}</h3>
+          <p class="coach__coaches">{c.coaches}</p>
+          {!compact && <p class="coach__bio">{c.bio}</p>}
+          {!compact && (
+            <ul role="list" class="coach__tags">
+              {c.specialities.map((s) => (
+                <li class="chip">{s}</li>
+              ))}
+            </ul>
+          )}
+          {!compact && (
+            <div class="coach__runs">
+              <p class="coach__runs-title">Runs these classes</p>
+              <ul role="list">
+                {runs(c.id).map((r) => (
+                  <li>
+                    <a href={r.type.href}>{r.type.name}</a>
+                    <span class="muted"> · {r.count}x a week</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <a class="arrow-link" href={`/timetable?coach=${c.id}`}>
+            {c.firstName}'s classes this week <Icon name="arrow" size={18} />
+          </a>
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .coaches {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  }
+  .coach {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    scroll-margin-top: 96px;
+  }
+  .coaches--compact .coach {
+    grid-template-columns: 104px 1fr;
+    align-items: start;
+    gap: 1rem;
+    padding: 16px;
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+  .coaches--compact .coach__name {
+    font-size: 1.3rem;
+  }
+  .coaches--compact .coach__coaches {
+    font-size: 0.95rem;
+  }
+  .coaches--compact .arrow-link {
+    font-size: 0.95rem;
+  }
+  .coach__body {
+    display: grid;
+    gap: 0.45rem;
+    align-content: start;
+  }
+  .coach__role {
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brick-strong);
+  }
+  .coach__name {
+    font-size: 1.6rem;
+    font-stretch: 116%;
+  }
+  .coach__coaches {
+    font-weight: 650;
+    color: var(--ink-2);
+  }
+  .coach__bio {
+    color: var(--ink-2);
+  }
+  .coach__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 0.2rem;
+  }
+  .coach__runs {
+    margin-top: 0.4rem;
+    padding: 0.9rem 1rem;
+    border-radius: var(--radius);
+    background: var(--card);
+    border: 1px solid var(--line);
+    font-size: 0.95rem;
+  }
+  .coach__runs-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 0.35rem;
+  }
+  .coach__runs ul {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .coach__runs a {
+    font-weight: 700;
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+// The four Train Anywhere sessions as cards.
+import Icon from './Icon.astro';
+import { workouts } from '../data/workouts.ts';
+
+interface Props {
+  exclude?: string;
+  headingLevel?: 'h2' | 'h3';
+}
+const { exclude, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+const list = workouts.filter((w) => w.slug !== exclude);
+---
+
+<ul role="list" class="workouts">
+  {
+    list.map((w) => (
+      <li>
+        <a class="workout card--link" href={`/train-anywhere/${w.slug}`}>
+          <span class="workout__place">{w.place}</span>
+          <H class="workout__title">{w.title}</H>
+          <span class="workout__meta">
+            <Icon name="clock" size={16} /> {w.minutes} min
+            <span aria-hidden="true">·</span>
+            {w.kitShort}
+          </span>
+          <span class="workout__summary">{w.summary}</span>
+          <span class="workout__go">
+            Open the session <Icon name="arrow" size={18} />
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .workouts {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  }
+  .workouts li {
+    display: flex;
+  }
+  .workout {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 22px 20px 20px;
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .workout::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--brick);
+    opacity: 0.1;
+    -webkit-mask: url('/contours.svg') center / 260% no-repeat;
+    mask: url('/contours.svg') center / 260% no-repeat;
+  }
+  .workouts li:nth-child(2) .workout::before {
+    -webkit-mask-position: 20% 70%;
+    mask-position: 20% 70%;
+  }
+  .workouts li:nth-child(3) .workout::before {
+    -webkit-mask-position: 80% 20%;
+    mask-position: 80% 20%;
+  }
+  .workouts li:nth-child(4) .workout::before {
+    -webkit-mask-position: 60% 90%;
+    mask-position: 60% 90%;
+  }
+  .workout__place {
+    align-self: flex-start;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--on-dark);
+  }
+  .workout__title {
+    font-size: 1.35rem;
+    font-stretch: 114%;
+    line-height: 1.1;
+    margin-top: 0.3rem;
+  }
+  .workout__meta {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 650;
+    color: var(--stone);
+  }
+  .workout__summary {
+    color: var(--ink-2);
+    font-size: 0.975rem;
+    line-height: 1.45;
+    flex: 1;
+  }
+  .workout__go {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 750;
+    color: var(--brick-strong);
+    margin-top: 0.4rem;
+  }
+  .workout:hover .workout__go {
+    color: var(--ink);
+  }
+</style>

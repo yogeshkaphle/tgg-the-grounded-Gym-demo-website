@@ -1,0 +1,88 @@
+---
+import Page from '../layouts/Page.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site.ts';
+
+const updated = '24 September 2026';
+---
+
+<Page title="Privacy" description={`What ${site.name} does with your phone number and the other details you give us.`}>
+  <PageHero eyebrow="Privacy" title="What happens to your phone number." narrow lede={`In plain English. Last updated ${updated}.`} />
+
+  <section class="section section--tight">
+    <div class="wrap--narrow prose">
+      {
+        site.demo.enabled && (
+          <div class="privacy-demo">
+            <p>
+              <strong>This is a demo site.</strong> {site.name} is not a real gym. If you use the booking form here, your
+              details go to {site.demo.author}, who built the site, so he can show gym owners how the funnel works. No gym
+              will call you. Demo bookings are deleted within 30 days. To have yours deleted sooner, contact him through{' '}
+              <a href={site.demo.authorUrl}>his website</a>.
+            </p>
+          </div>
+        )
+      }
+
+      <h2>What we collect</h2>
+      <p>When you book a {site.offer}, we ask for:</p>
+      <ul>
+        <li>your name and mobile number,</li>
+        <li>the area you live or work in,</li>
+        <li>what you want most from training, and when you can usually train.</li>
+      </ul>
+      <p>
+        We also note which page or ad brought you to the site (for example "Facebook ad, trial campaign") and when you
+        booked. We never ask for payment details online.
+      </p>
+
+      <h2>Why we need it</h2>
+      <p>
+        To call or WhatsApp you and book your first session, to suggest classes that fit your goal and your day, and to
+        know which of our ads are worth paying for.
+      </p>
+
+      <h2>Who sees it</h2>
+      <p>
+        Our front desk and coaches. The booking form is delivered to our email by a form service; it does not use your
+        details for anything else. We don't sell your number or share it with anyone who wants to sell you something.
+      </p>
+
+      <h2>How long we keep it</h2>
+      <p>
+        If you don't join after your {site.offer}, we delete your details after six months. If you become a member, we
+        keep them while you are a member and for a year after, then delete them.
+      </p>
+
+      <h2>Cookies and measurement</h2>
+      <p>
+        We use Google Analytics and the Meta Pixel to count visits and bookings, so we can tell which pages and ads help
+        people find us. They receive what happened ("someone booked a trial week"), never your name or phone number. You
+        can block them with your browser's privacy settings or an ad blocker, and the site will still work.
+      </p>
+
+      <h2>Your choices</h2>
+      <p>
+        You can ask us what we hold about you, ask us to correct it, or ask us to delete it. Message us on WhatsApp or
+        ask at the front desk, and we will do it within seven days.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap--narrow">
+      <p>
+        <a class="link" href="/trial">Back to the {site.offer}</a>
+      </p>
+    </div>
+  </section>
+</Page>
+
+<style>
+  .privacy-demo {
+    padding: 1rem 1.2rem;
+    border-radius: var(--radius);
+    border: 1.5px dashed var(--brick);
+    background: #fff6f0;
+  }
+</style>

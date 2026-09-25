@@ -1,0 +1,60 @@
+---
+// A call / WhatsApp / Viber / social link. When the channel has no real value
+// in site.ts it renders a button that explains the demo instead.
+import Icon from './Icon.astro';
+import { site, whatsappLink } from '../data/site.ts';
+
+type Channel = 'call' | 'whatsapp' | 'viber' | 'instagram' | 'facebook';
+interface Props {
+  channel: Channel;
+  class?: string;
+  message?: string; // prefilled WhatsApp text
+  location: string; // for click tracking
+  iconSize?: number;
+}
+const { channel, class: className, message = `Hi, I'd like to ask about the ${site.offer}.`, location, iconSize = 20 } =
+  Astro.props;
+
+const c = site.contact;
+const href: string | null =
+  channel === 'call'
+    ? c.phone && `tel:${c.phone}`
+    : channel === 'whatsapp'
+      ? whatsappLink(message)
+      : channel === 'viber'
+        ? c.viber && `viber://chat?number=${encodeURIComponent(c.viber)}`
+        : channel === 'instagram'
+          ? c.instagram
+          : c.facebook;
+
+const icon = channel === 'call' ? 'phone' : channel;
+const external = channel === 'instagram' || channel === 'facebook';
+---
+
+{
+  href ? (
+    <a
+      class={className}
+      href={href}
+      data-track="contact_click"
+      data-track-channel={channel}
+      data-track-location={location}
+      {...(external ? { rel: 'noopener', target: '_blank' } : {})}
+    >
+      <Icon name={icon} size={iconSize} />
+      <slot />
+    </a>
+  ) : (
+    <button
+      type="button"
+      class={className}
+      data-demo-contact={channel}
+      data-track="contact_click"
+      data-track-channel={channel}
+      data-track-location={location}
+    >
+      <Icon name={icon} size={iconSize} />
+      <slot />
+    </button>
+  )
+}

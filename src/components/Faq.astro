@@ -1,0 +1,27 @@
+---
+import { faq, type FaqId } from '../data/faq.ts';
+interface Props {
+  ids: FaqId[];
+}
+const { ids } = Astro.props;
+---
+
+<div class="faq">
+  {
+    ids.map((id) => (
+      <details>
+        <summary>
+          <span>{faq[id].q}</span>
+          <span class="faq__icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </span>
+        </summary>
+        <div>
+          <p>{faq[id].a}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>

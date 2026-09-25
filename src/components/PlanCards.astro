@@ -1,0 +1,177 @@
+---
+// Prices shown up front (no "DM for price"). Per-month figures and savings
+// come from src/lib/pricing.ts, calculated from the price list.
+import Icon from './Icon.astro';
+import { plans } from '../data/plans.ts';
+import { maths, npr } from '../lib/pricing.ts';
+import { site } from '../data/site.ts';
+---
+
+<ol role="list" class="plans">
+  {
+    plans.map((plan) => {
+      const m = maths(plan);
+      const featured = plan.id === 'three-months';
+      return (
+        <li class:list={['plan', { 'plan--featured': featured, 'plan--trial': plan.months === 0 }]} id={`plan-${plan.id}`}>
+          {plan.badge && <p class="plan__badge">{plan.badge}</p>}
+          <h3 class="plan__name">{plan.name}</h3>
+          <p class="plan__role">{plan.role}</p>
+          <div class="plan__price">
+            {plan.months === 0 ? (
+              <p class="plan__amount">Free</p>
+            ) : (
+              <>
+                <p class="plan__amount">{npr(plan.price)}</p>
+                {plan.demoPrice && <span class="chip chip--demo">[DEMO PRICE]</span>}
+                {plan.months > 1 && m.perMonth !== null && (
+                  <p class="plan__per">
+                    {npr(m.perMonth)} a month
+                    {m.savingPerMonth > 0 && (
+                      <strong class="plan__save">
+                        Save {npr(m.savingPerMonth)} a month ({m.savingPercent}%)
+                      </strong>
+                    )}
+                  </p>
+                )}
+                {plan.months === 1 && <p class="plan__per">Month to month</p>}
+              </>
+            )}
+          </div>
+          <ul role="list" class="check-list plan__list">
+            {plan.includes.map((item) => (
+              <li>
+                <Icon name="check" size={18} />
+                <span>{item}</span>
+              </li>
+            ))}
+            {plan.pauseWeeks > 0 && (
+              <li>
+                <Icon name="check" size={18} />
+                <span>
+                  Pause for up to {plan.pauseWeeks} {plan.pauseWeeks === 1 ? 'week' : 'weeks'}
+                </span>
+              </li>
+            )}
+            {plan.guestPasses > 0 && (
+              <li>
+                <Icon name="check" size={18} />
+                <span>
+                  {plan.guestPasses} guest {plan.guestPasses === 1 ? 'pass' : 'passes'} for a friend
+                </span>
+              </li>
+            )}
+          </ul>
+          {m.savingTotal > 0 && <p class="plan__total">{npr(m.savingTotal)} less than paying month to month for {plan.months} months</p>}
+          <a
+            class:list={['btn', 'btn--block', featured || plan.months === 0 ? 'btn--primary' : 'btn--ghost']}
+            href={plan.months === 0 ? '/trial' : `/trial?plan=${plan.id}`}
+            data-track="trial_cta_click"
+            data-track-location={`plan_${plan.id}`}
+          >
+            {plan.months === 0 ? `Book ${site.offer}` : `Start with the ${site.offer}`}
+          </a>
+        </li>
+      );
+    })
+  }
+</ol>
+
+<style>
+  .plans {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    align-items: stretch;
+  }
+  .plan {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 24px 22px 22px;
+  }
+  .plan--featured {
+    border: 2px solid var(--brick);
+    box-shadow: var(--shadow);
+  }
+  .plan--trial {
+    background: var(--ink);
+    color: var(--on-dark);
+    border-color: var(--ink);
+  }
+  .plan--trial .plan__role,
+  .plan--trial .plan__per {
+    color: var(--on-dark-muted);
+  }
+  .plan--trial :global(.check-list svg) {
+    color: var(--brick-on-dark);
+  }
+  .plan__badge {
+    position: absolute;
+    top: -13px;
+    left: 20px;
+    background: var(--brick);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+  }
+  .plan__name {
+    font-size: 1.45rem;
+    font-stretch: 116%;
+  }
+  .plan__role {
+    color: var(--stone);
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  .plan__price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.6rem;
+    padding-block: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0.3rem;
+  }
+  .plan--trial .plan__price {
+    border-color: rgb(244 239 230 / 0.16);
+  }
+  .plan__amount {
+    font-size: 2rem;
+    font-weight: 850;
+    font-stretch: 116%;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .plan__per {
+    flex-basis: 100%;
+    display: grid;
+    gap: 0.15rem;
+    font-size: 0.95rem;
+    color: var(--ink-2);
+  }
+  .plan__save {
+    color: var(--brick-strong);
+    font-weight: 750;
+  }
+  .plan__list {
+    flex: 1;
+    font-size: 0.975rem;
+  }
+  .plan__total {
+    font-size: 0.875rem;
+    color: var(--stone);
+  }
+  .plan .btn {
+    margin-top: 0.4rem;
+  }
+</style>

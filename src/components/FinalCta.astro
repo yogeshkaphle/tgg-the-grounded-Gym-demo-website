@@ -1,0 +1,63 @@
+---
+// Every page ends here: one step to /trial.
+import Icon from './Icon.astro';
+import { site } from '../data/site.ts';
+
+interface Props {
+  title?: string;
+  text?: string;
+  location: string;
+  href?: string;
+}
+const {
+  title = 'Ready when you are.',
+  text = `Seven days, any class, nothing to pay. Booking your ${site.offer} takes about 30 seconds.`,
+  location,
+  href = '/trial',
+} = Astro.props;
+---
+
+<section class="final-cta section has-contours" aria-labelledby={`cta-${location}`}>
+  <div class="contours" style="--contour-color: #fff; --contour-opacity: .14"></div>
+  <div class="wrap"><div class="final-cta__inner">
+    <h2 id={`cta-${location}`} class="h2">{title}</h2>
+    <p class="lede">{text}</p>
+    <div class="cluster">
+      <a class="btn btn--light" href={href} data-track="trial_cta_click" data-track-location={location}>
+        Book {site.offer}
+        <Icon name="arrow" />
+      </a>
+      <span class="final-cta__meta">
+        <Icon name="clock" size={18} />
+        {site.openingLine}
+      </span>
+    </div>
+  </div></div>
+</section>
+
+<style>
+  .final-cta {
+    background: var(--brick);
+    color: #fff;
+  }
+  .final-cta :global(.lede) {
+    color: rgb(255 255 255 / 0.92);
+  }
+  .final-cta :global(:focus-visible) {
+    outline-color: #fff;
+  }
+  .final-cta__inner {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+    max-width: 760px;
+  }
+  .final-cta__meta {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    color: rgb(255 255 255 / 0.92);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+</style>

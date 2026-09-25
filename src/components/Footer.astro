@@ -1,0 +1,248 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import ContactLink from './ContactLink.astro';
+import { site } from '../data/site.ts';
+import { footerNav } from '../data/nav.ts';
+
+interface Props {
+  minimal?: boolean; // landing pages: no navigation out of the funnel
+}
+const { minimal = false } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    {
+      !minimal && (
+        <div class="site-footer__grid">
+          <div class="site-footer__brand">
+            <Logo tone="paper" />
+            <p class="site-footer__category">{site.category}.</p>
+            <address class="site-footer__address">
+              {site.address.street}
+              <br />
+              {site.address.locality}, {site.address.city} {site.address.postcode}
+              <br />
+              <span class="site-footer__landmark">
+                {site.walkMinutes} minutes' walk from {site.landmark}
+              </span>
+            </address>
+            <ul role="list" class="site-footer__hours">
+              {site.hours.map((h) => (
+                <li>
+                  <span>{h.days}</span> {h.open} to {h.close}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <nav aria-label="Visit">
+            <h2 class="site-footer__heading">Visit</h2>
+            <ul role="list">
+              {footerNav.visit.map((l) => (
+                <li>
+                  <a href={l.href}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <nav aria-label="Learn">
+            <h2 class="site-footer__heading">Learn</h2>
+            <ul role="list">
+              {footerNav.learn.map((l) => (
+                <li>
+                  <a href={l.href}>{l.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <div>
+            <h2 class="site-footer__heading">Talk to us</h2>
+            <ul role="list" class="site-footer__contact">
+              <li>
+                <ContactLink channel="call" class="site-footer__contact-link" location="footer" iconSize={18}>
+                  {site.contact.phoneDisplay}
+                </ContactLink>
+              </li>
+              <li>
+                <ContactLink channel="whatsapp" class="site-footer__contact-link" location="footer" iconSize={18}>
+                  WhatsApp
+                </ContactLink>
+              </li>
+              <li>
+                <ContactLink channel="viber" class="site-footer__contact-link" location="footer" iconSize={18}>
+                  Viber
+                </ContactLink>
+              </li>
+              <li>
+                <ContactLink channel="instagram" class="site-footer__contact-link" location="footer" iconSize={18}>
+                  Instagram
+                </ContactLink>
+              </li>
+              <li>
+                <ContactLink channel="facebook" class="site-footer__contact-link" location="footer" iconSize={18}>
+                  Facebook
+                </ContactLink>
+              </li>
+            </ul>
+          </div>
+        </div>
+      )
+    }
+    <div class:list={['site-footer__base', { 'site-footer__base--minimal': minimal }]}>
+      {site.demo.enabled && (
+        <p class="site-footer__demo">
+          <Icon name="info" size={16} />
+          <span>
+            {site.demo.line} <a href={site.demo.authorUrl}>See more of {site.demo.author.split(' ')[0]}'s work</a>.
+          </span>
+        </p>
+      )}
+      <p class="site-footer__legal">
+        <span>
+          &copy; {year} {site.name}
+        </span>
+        <a href="/privacy">Privacy</a>
+        {site.demo.enabled && (
+          <button
+            type="button"
+            class="site-footer__notes"
+            data-notes-toggle
+            data-label-off="Show how this site converts"
+            data-label-on="Hide the conversion notes"
+            aria-pressed="false"
+          >
+            <span data-notes-label>Show how this site converts</span>
+          </button>
+        )}
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    color: var(--on-dark-muted);
+    padding-block: clamp(48px, 7vw, 80px) 28px;
+    font-size: 0.975rem;
+  }
+  .site-footer a {
+    color: var(--on-dark);
+    text-decoration: none;
+  }
+  .site-footer a:hover {
+    text-decoration: underline;
+  }
+  .site-footer__grid {
+    display: grid;
+    gap: 36px 24px;
+    grid-template-columns: 1fr 1fr;
+    padding-bottom: 36px;
+    border-bottom: 1px solid rgb(244 239 230 / 0.14);
+  }
+  .site-footer__brand {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+  }
+  @media (min-width: 860px) {
+    .site-footer__grid {
+      grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+    }
+    .site-footer__brand {
+      grid-column: auto;
+    }
+  }
+  .site-footer__category {
+    color: var(--on-dark);
+    font-weight: 700;
+    font-stretch: 110%;
+  }
+  .site-footer__address {
+    font-style: normal;
+    line-height: 1.55;
+  }
+  .site-footer__landmark {
+    color: var(--brick-on-dark);
+  }
+  .site-footer__hours span {
+    display: inline-block;
+    min-width: 6.5em;
+    color: var(--on-dark);
+  }
+  .site-footer__heading {
+    font-size: 0.8125rem;
+    font-stretch: 112%;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--on-dark);
+    margin-bottom: 0.6rem;
+  }
+  .site-footer nav a,
+  .site-footer :global(.site-footer__contact-link) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+  }
+  .site-footer :global(.site-footer__contact-link) {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: var(--on-dark);
+    text-align: left;
+    font-size: inherit;
+  }
+  .site-footer :global(button.site-footer__contact-link:hover) {
+    text-decoration: underline;
+  }
+  .site-footer__base {
+    padding-top: 24px;
+    display: grid;
+    gap: 0.9rem;
+  }
+  .site-footer__base--minimal {
+    padding-top: 0;
+  }
+  .site-footer__demo {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    color: var(--on-dark);
+    font-weight: 600;
+  }
+  .site-footer__demo :global(svg) {
+    margin-top: 0.25em;
+    color: var(--brick-on-dark);
+  }
+  .site-footer__demo a {
+    color: var(--brick-on-dark);
+    text-decoration: underline;
+  }
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    align-items: center;
+    font-size: 0.875rem;
+  }
+  .site-footer__legal a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .site-footer__notes {
+    min-height: 44px;
+    background: none;
+    border: 0;
+    padding: 0;
+    color: var(--brick-on-dark);
+    font-weight: 700;
+    font-size: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>

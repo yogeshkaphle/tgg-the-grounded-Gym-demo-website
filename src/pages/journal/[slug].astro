@@ -1,0 +1,188 @@
+---
+// A journal post. Every post ends somewhere useful: a related session and the trial.
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import Page from '../../layouts/Page.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import DemoNote from '../../components/DemoNote.astro';
+import Icon from '../../components/Icon.astro';
+import CoachPortrait from '../../components/CoachPortrait.astro';
+import { site } from '../../data/site.ts';
+import { coachById } from '../../data/coaches.ts';
+import { workoutBySlug } from '../../data/workouts.ts';
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection('journal');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  post: CollectionEntry<'journal'>;
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const author = coachById(post.data.author);
+const workout = workoutBySlug(post.data.workout)!;
+const others = (await getCollection('journal')).filter((p) => p.id !== post.id);
+const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const minutes = Math.max(2, Math.round((post.body ?? '').split(/\s+/).length / 200));
+---
+
+<Page title={post.data.title} description={post.data.description}>
+  <article>
+    <header class="post-hero has-contours">
+      <div class="contours" style="--contour-opacity:.12"></div>
+      <div class="wrap--narrow post-hero__inner">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="/journal">Journal</a>
+        </nav>
+        <h1 class="h1 post-hero__title">{post.data.title}</h1>
+        <p class="lede">{post.data.description}</p>
+        <div class="byline">
+          <div class="byline__avatar">
+            <CoachPortrait coach={author} small sizes="48px" />
+          </div>
+          <p>
+            <a href={`/coaches#${author.id}`}>{author.name}</a>
+            <span class="muted">
+              {author.role} · <time datetime={post.data.date.toISOString().slice(0, 10)}>{fmt.format(post.data.date)}</time> · {minutes} min read
+            </span>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="section section--tight">
+      <div class="wrap--narrow prose">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  <section class="section section--tight" aria-labelledby="next-title">
+    <div class="wrap--narrow">
+      <div class="next-step">
+        <p class="eyebrow">Do this next</p>
+        <h2 id="next-title" class="h3">{workout.title}</h2>
+        <p class="muted">{workout.summary} {workout.minutes} minutes, {workout.kitShort.toLowerCase()}.</p>
+        <div class="cluster">
+          <a class="btn btn--ghost btn--sm" href={`/train-anywhere/${workout.slug}`}>
+            Open the session <Icon name="arrow" size={18} />
+          </a>
+          <a class="btn btn--primary btn--sm" href="/trial" data-track="trial_cta_click" data-track-location={`journal_${post.id}`}>
+            Book {site.offer}
+          </a>
+        </div>
+      </div>
+      <DemoNote>
+        <p>
+          Every post ends with a next step: a session to try and the trial. Reading should lead somewhere, and the pixel
+          on this page adds every reader to the audience for trial ads.
+        </p>
+      </DemoNote>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="more-posts">
+    <div class="wrap--narrow">
+      <h2 id="more-posts" class="h3 more-posts">More from the journal</h2>
+      <ul role="list" class="more-list">
+        {
+          others.map((p) => (
+            <li>
+              <a href={`/journal/${p.id}`}>
+                <span class="more-list__title">{p.data.title}</span>
+                <span class="muted small">{p.data.description}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <FinalCta location={`journal_${post.id}_final`} />
+</Page>
+
+<style>
+  .post-hero {
+    padding-block: clamp(28px, 5vw, 64px) clamp(28px, 4vw, 48px);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .post-hero__inner {
+    display: grid;
+    gap: 1rem;
+  }
+  .post-hero__title {
+    font-size: clamp(2.2rem, 1.5rem + 3.2vw, 3.8rem);
+  }
+  .crumbs a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 700;
+    color: var(--brick-strong);
+  }
+  .byline {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .byline__avatar {
+    width: 48px;
+    flex: none;
+  }
+  .byline__avatar :global(.portrait) {
+    border-radius: 50%;
+  }
+  .byline__avatar :global(.portrait__initials) {
+    font-size: 0.95rem;
+  }
+  .byline p {
+    display: grid;
+    line-height: 1.35;
+  }
+  .byline a {
+    font-weight: 750;
+  }
+  .byline .muted {
+    font-size: 0.9rem;
+  }
+  .prose {
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+  .next-step {
+    display: grid;
+    gap: 0.8rem;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--ink);
+    background: var(--card);
+  }
+  .more-posts {
+    margin-bottom: 1rem;
+  }
+  .more-list {
+    display: grid;
+    gap: 10px;
+  }
+  .more-list a {
+    display: grid;
+    gap: 0.25rem;
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    background: var(--card);
+    border: 1px solid var(--line);
+    text-decoration: none;
+  }
+  .more-list a:hover {
+    border-color: var(--line-strong);
+  }
+  .more-list__title {
+    font-weight: 750;
+    font-stretch: 106%;
+    font-size: 1.1rem;
+  }
+</style>

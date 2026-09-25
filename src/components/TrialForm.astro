@@ -1,0 +1,362 @@
+---
+// The one conversion. Two steps: taps first, typing last.
+import Icon from './Icon.astro';
+import DemoNote from './DemoNote.astro';
+import { site } from '../data/site.ts';
+import { goals, timeSlots, areas, OUTSIDE_AREA } from '../data/goals.ts';
+
+const { callback, form } = site;
+const reassure = `We don't share your number. We'll call or WhatsApp you ${callback.within} (${callback.window}) to book your first session.`;
+---
+
+<form
+  class="trial-form"
+  id="trial-form"
+  novalidate
+  data-trial-form
+  data-key={form.web3formsKey}
+  data-outside={OUTSIDE_AREA}
+  aria-labelledby="trial-form-title"
+>
+  <div class="trial-form__head">
+    <h2 id="trial-form-title" class="trial-form__title">Book your {site.offer}</h2>
+    <p class="trial-form__progress" aria-live="polite">
+      <span data-step-label>Step 1 of 2</span>
+      <span class="trial-form__bar" aria-hidden="true"><span data-step-bar></span></span>
+    </p>
+    <p class="trial-form__interest" data-interest hidden></p>
+  </div>
+
+  <!-- Step 1: taps only -->
+  <div class="trial-form__step" data-step="1">
+    <fieldset class="choice-group" aria-describedby="err-goal">
+      <legend class="legend">What do you want most?</legend>
+      <div class="choices choices--2">
+        {
+          goals.map((g) => (
+            <label class="choice">
+              <input type="radio" name="goal" value={g.id} />
+              <span>{g.label}</span>
+            </label>
+          ))
+        }
+      </div>
+      <p class="field-error" id="err-goal" hidden>
+        <Icon name="alert" size={18} /><span>Pick the one that fits best. You can change your mind later.</span>
+      </p>
+    </fieldset>
+
+    <fieldset class="choice-group" aria-describedby="err-time">
+      <legend class="legend">When can you train?</legend>
+      <div class="choices choices--3">
+        {
+          timeSlots.map((t) => (
+            <label class="choice">
+              <input type="radio" name="time" value={t.id} />
+              <span>
+                {t.label}
+                <small>{t.hint}</small>
+              </span>
+            </label>
+          ))
+        }
+      </div>
+      <p class="field-error" id="err-time" hidden>
+        <Icon name="alert" size={18} /><span>Pick when you can usually train.</span>
+      </p>
+    </fieldset>
+
+    <button type="button" class="btn btn--primary btn--block" data-next>
+      Next: your details <Icon name="arrow" />
+    </button>
+    <p class="trial-form__small">Takes about 30 seconds. Nothing to pay.</p>
+    <DemoNote>
+      <p>
+        Taps first, typing last. Two easy questions get people moving before we ask for a phone number. The goal they
+        pick changes the classes the thank-you page recommends.
+      </p>
+    </DemoNote>
+  </div>
+
+  <!-- Step 2: details -->
+  <div class="trial-form__step" data-step="2" hidden>
+    <button type="button" class="trial-form__back" data-back>
+      <Icon name="arrow-left" size={18} /> Back
+    </button>
+
+    <div class="field">
+      <label for="f-name">Your name</label>
+      <input class="input" id="f-name" name="name" type="text" autocomplete="name" autocapitalize="words" required aria-describedby="err-name" />
+      <p class="field-error" id="err-name" hidden><Icon name="alert" size={18} /><span>Enter your name so we know who to ask for.</span></p>
+    </div>
+
+    <div class="field">
+      <label for="f-phone">Phone number</label>
+      <p class="hint" id="hint-phone">We call or WhatsApp you to book your first session.</p>
+      <div class="input-group">
+        <span class="input-group__prefix" aria-hidden="true">+977</span>
+        <input
+          class="input"
+          id="f-phone"
+          name="phone"
+          type="tel"
+          inputmode="tel"
+          autocomplete="tel-national"
+          placeholder="98XXXXXXXX"
+          maxlength="16"
+          required
+          aria-describedby="hint-phone err-phone"
+        />
+      </div>
+      <p class="field-error" id="err-phone" hidden><Icon name="alert" size={18} /><span>Enter a 10-digit mobile number, like 98XXXXXXXX.</span></p>
+    </div>
+
+    <div class="field">
+      <label for="f-area">Where do you live or work?</label>
+      <select class="input" id="f-area" name="area" required aria-describedby="note-area err-area">
+        <option value="" selected disabled>Choose the closest area</option>
+        {areas.map((a) => <option value={a}>{a}</option>)}
+      </select>
+      <p class="trial-form__note" id="note-area" hidden aria-live="polite">
+        <Icon name="info" size={18} />
+        <span>We're in {site.area}, {site.city}. Still want to visit? Leave your number and we'll help you plan it.</span>
+      </p>
+      <p class="field-error" id="err-area" hidden><Icon name="alert" size={18} /><span>Choose the closest area.</span></p>
+    </div>
+
+    {
+      form.collectEmail && (
+        <div class="field">
+          <label for="f-email">
+            Email <span class="muted">(optional)</span>
+          </label>
+          <p class="hint" id="hint-email">For your confirmation.</p>
+          <input class="input" id="f-email" name="email" type="email" autocomplete="email" aria-describedby="hint-email err-email" />
+          <p class="field-error" id="err-email" hidden>
+            <Icon name="alert" size={18} />
+            <span>That email doesn't look right. Check it, or leave it empty.</span>
+          </p>
+        </div>
+      )
+    }
+
+    <!-- spam trap: people never see or fill this -->
+    <input type="checkbox" name="botcheck" class="trial-form__trap" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+    <DemoNote>
+      <p>
+        The area question catches people who can't reach the gym. One studio whose funnel I walked had no location
+        field and took bookings from people who couldn't get there. Here, "{OUTSIDE_AREA}" still submits, tagged
+        out-of-area, with an honest reply.
+      </p>
+    </DemoNote>
+
+    <button type="submit" class="btn btn--primary btn--block" data-submit>
+      <span data-submit-label>Book my {site.offer}</span>
+    </button>
+    <p class="trial-form__small">{reassure}</p>
+    <p class="trial-form__error" role="alert" data-form-error hidden></p>
+    {
+      site.demo.enabled && (
+        <p class="trial-form__demo">
+          <Icon name="info" size={16} />
+          <span>
+            Demo site: this form sends your details to {site.demo.author}, who built it. No gym will call you.
+            {!form.web3formsKey && ' Test mode is on, so nothing is sent at all.'}
+          </span>
+        </p>
+      )
+    }
+  </div>
+</form>
+
+<script>
+  import '../scripts/trial-form.ts';
+</script>
+
+<style>
+  .trial-form {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 3vw, 30px);
+    box-shadow: var(--shadow);
+    display: grid;
+    gap: 1.2rem;
+  }
+  .trial-form__head {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .trial-form__title {
+    font-size: clamp(1.45rem, 1.25rem + 1vw, 1.9rem);
+    font-stretch: 114%;
+  }
+  .trial-form__progress {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--stone);
+  }
+  .trial-form__bar {
+    height: 6px;
+    border-radius: 99px;
+    background: var(--paper-3);
+    overflow: hidden;
+  }
+  .trial-form__bar span {
+    display: block;
+    height: 100%;
+    width: 50%;
+    background: var(--brick);
+    border-radius: inherit;
+    transition: width 0.3s ease;
+  }
+  .trial-form__step {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .trial-form__interest {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    padding: 0.6rem 0.8rem;
+    border-radius: 10px;
+    background: var(--paper-2);
+  }
+  .choice-group {
+    border: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+    min-width: 0;
+  }
+  .choice-group .legend {
+    padding: 0;
+    margin-bottom: 0.1rem;
+  }
+  .choices {
+    display: grid;
+    gap: 8px;
+  }
+  .choices--2 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .choices--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .choice {
+    position: relative;
+    display: block;
+  }
+  .choice input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .choice span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    padding: 0.55rem 0.5rem;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 12px;
+    background: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: center;
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .choice small {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--stone);
+    margin-top: 2px;
+  }
+  .choice:hover span {
+    border-color: var(--ink);
+  }
+  .choice input:checked + span {
+    border-color: var(--brick);
+    background: var(--brick-soft);
+    box-shadow: inset 0 0 0 1px var(--brick);
+  }
+  .choice input:focus-visible + span {
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
+  }
+  .choice-group[data-invalid] .choice span {
+    border-color: var(--brick-strong);
+  }
+  .trial-form__small {
+    font-size: 0.875rem;
+    color: var(--stone);
+    text-align: center;
+    line-height: 1.45;
+  }
+  .trial-form__back {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 44px;
+    padding: 0 0.2rem;
+    border: 0;
+    background: none;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+  .trial-form__note {
+    display: flex;
+    gap: 0.45rem;
+    align-items: flex-start;
+    padding: 0.7rem 0.8rem;
+    border-radius: 10px;
+    background: var(--paper-2);
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  .trial-form__note :global(svg) {
+    flex: none;
+    margin-top: 0.1em;
+    color: var(--brick);
+  }
+  .trial-form__trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  .trial-form__error {
+    padding: 0.75rem 0.9rem;
+    border-radius: 10px;
+    background: var(--brick-soft);
+    color: var(--brick-strong);
+    font-weight: 650;
+    font-size: 0.95rem;
+  }
+  .trial-form__demo {
+    display: flex;
+    gap: 0.45rem;
+    align-items: flex-start;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--stone);
+    border-top: 1px dashed var(--line-strong);
+    padding-top: 0.9rem;
+  }
+  .trial-form__demo :global(svg) {
+    flex: none;
+    margin-top: 0.15em;
+    color: var(--brick);
+  }
+</style>

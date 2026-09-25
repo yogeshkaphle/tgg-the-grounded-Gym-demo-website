@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/PageHero.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../data/site.ts';
+import { coachById } from '../../data/coaches.ts';
+
+const posts = (await getCollection('journal')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const minutes = (body = '') => Math.max(2, Math.round(body.split(/\s+/).length / 200));
+---
+
+<Page
+  title="Journal"
+  description={`Ideas from the coaches at ${site.name} on movement, training culture, practical fitness and a steady mind.`}
+>
+  <PageHero
+    eyebrow="Journal"
+    title="Notes on getting ready for real life."
+    lede="Short pieces from our coaches on movement, training culture, practical fitness and a steady mind. Each one ends with something you can do today."
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <ol role="list" class="posts">
+        {
+          posts.map((p) => {
+            const author = coachById(p.data.author);
+            return (
+              <li>
+                <a class="post card--link" href={`/journal/${p.id}`}>
+                  <p class="post__meta">
+                    <time datetime={p.data.date.toISOString().slice(0, 10)}>{fmt.format(p.data.date)}</time>
+                    <span aria-hidden="true">·</span>
+                    <span>{minutes(p.body)} min read</span>
+                  </p>
+                  <h2 class="post__title">{p.data.title}</h2>
+                  <p class="post__desc">{p.data.description}</p>
+                  <p class="post__author">By {author.name}, {author.role.toLowerCase()}</p>
+                  <span class="post__go">
+                    Read <Icon name="arrow" size={18} />
+                  </span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ol>
+    </div>
+  </section>
+
+  <FinalCta location="journal_final" />
+</Page>
+
+<style>
+  .posts {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  }
+  .posts li {
+    display: flex;
+  }
+  .post {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 26px 24px 22px;
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+  .post__meta {
+    display: flex;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 650;
+    color: var(--stone);
+  }
+  .post__title {
+    font-size: clamp(1.45rem, 1.25rem + 0.8vw, 1.8rem);
+    font-stretch: 114%;
+    line-height: 1.1;
+  }
+  .post__desc {
+    color: var(--ink-2);
+    flex: 1;
+  }
+  .post__author {
+    font-size: 0.9rem;
+    font-weight: 650;
+  }
+  .post__go {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 750;
+    color: var(--brick-strong);
+  }
+</style>

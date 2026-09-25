@@ -1,0 +1,50 @@
+---
+// Landing pages (/trial, /thank-you): no header navigation, one goal.
+// The logo is not a link, so the only way forward is the form.
+import Base from './Base.astro';
+import Logo from '../components/Logo.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site.ts';
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  ogImage?: string;
+  bodyClass?: string;
+}
+const props = Astro.props;
+---
+
+<Base {...props}>
+  <header class="landing-header">
+    <div class="wrap landing-header__inner">
+      <Logo href={null} />
+      <p class="landing-header__meta">{site.area}, {site.city}</p>
+    </div>
+  </header>
+  <main id="main">
+    <slot />
+  </main>
+  <Footer minimal />
+  <slot name="after" />
+</Base>
+
+<style>
+  .landing-header {
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .landing-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 64px;
+  }
+  .landing-header__meta {
+    font-size: 0.875rem;
+    font-weight: 650;
+    color: var(--stone);
+  }
+</style>

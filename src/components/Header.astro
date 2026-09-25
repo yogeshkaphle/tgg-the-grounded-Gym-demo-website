@@ -1,0 +1,165 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site } from '../data/site.ts';
+import { cleanPath, isCurrent } from '../lib/url.ts';
+import { mainNav as nav } from '../data/nav.ts';
+
+const current = cleanPath(Astro.url.pathname);
+---
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <Logo />
+    <nav class="site-nav" aria-label="Main">
+      <ul role="list">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(current, item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <a class="btn btn--primary btn--sm site-header__cta" href="/trial" data-track="trial_cta_click" data-track-location="header">
+      Book {site.offer}
+    </a>
+    <button class="menu-button" type="button" data-menu-button aria-expanded="false" aria-controls="mobile-menu">
+      <span class="menu-button__open"><Icon name="menu" size={22} /></span>
+      <span class="menu-button__close"><Icon name="close" size={22} /></span>
+      <span class="menu-button__label">Menu</span>
+    </button>
+  </div>
+  <nav id="mobile-menu" class="mobile-menu" aria-label="Main" hidden>
+    <ul role="list" class="wrap">
+      {
+        [...nav, { href: '/journal', label: 'Journal' }].map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(current, item.href) ? 'page' : undefined}>
+              {item.label}
+              <Icon name="arrow" size={18} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 40;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  @media (min-width: 960px) {
+    .site-header {
+      position: sticky;
+      top: 0;
+      background: rgb(244 239 230 / 0.94);
+      backdrop-filter: saturate(1.4) blur(10px);
+    }
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 68px;
+  }
+  .site-nav {
+    display: none;
+    margin-left: auto;
+  }
+  .site-nav ul {
+    display: flex;
+    gap: 0.15rem;
+  }
+  .site-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 0.75rem;
+    border-radius: 8px;
+    font-weight: 620;
+    font-size: 0.975rem;
+    text-decoration: none;
+    color: var(--ink-2);
+  }
+  .site-nav a:hover {
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+  .site-nav a[aria-current='page'] {
+    color: var(--brick-strong);
+    box-shadow: inset 0 -2px 0 var(--brick);
+    border-radius: 8px 8px 0 0;
+  }
+  .site-header__cta {
+    display: none;
+  }
+  @media (min-width: 960px) {
+    .site-nav {
+      display: block;
+    }
+    .site-header__cta {
+      display: inline-flex;
+    }
+  }
+  .menu-button {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0 0.8rem;
+    border-radius: 10px;
+    border: 1.5px solid var(--line-strong);
+    background: transparent;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .menu-button span {
+    display: inline-flex;
+  }
+  .menu-button .menu-button__close,
+  .menu-button[aria-expanded='true'] .menu-button__open {
+    display: none;
+  }
+  .menu-button[aria-expanded='true'] .menu-button__close {
+    display: inline-flex;
+  }
+  @media (min-width: 960px) {
+    .menu-button {
+      display: none;
+    }
+  }
+  .mobile-menu {
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+    padding-block: 0.5rem 1.25rem;
+  }
+  .mobile-menu a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 56px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 750;
+    font-stretch: 110%;
+    font-size: 1.2rem;
+    text-decoration: none;
+  }
+  .mobile-menu a[aria-current='page'] {
+    color: var(--brick-strong);
+  }
+  @media (min-width: 960px) {
+    .mobile-menu {
+      display: none !important;
+    }
+  }
+</style>

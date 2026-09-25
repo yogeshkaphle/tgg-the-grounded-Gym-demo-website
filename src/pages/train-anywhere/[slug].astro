@@ -1,0 +1,282 @@
+---
+// One Train Anywhere session: printable, shareable on WhatsApp, and ending
+// with a way to learn it with a coach.
+import type { GetStaticPaths } from 'astro';
+import Page from '../../layouts/Page.astro';
+import WorkoutCards from '../../components/WorkoutCards.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../data/site.ts';
+import { workouts, PROGRESSION_RULE, SAFETY_NOTE, type Workout } from '../../data/workouts.ts';
+
+export const getStaticPaths = (() => workouts.map((w) => ({ params: { slug: w.slug }, props: { workout: w } }))) satisfies GetStaticPaths;
+
+interface Props {
+  workout: Workout;
+}
+const { workout: w } = Astro.props;
+const pageUrl = new URL(`/train-anywhere/${w.slug}`, Astro.site).href;
+const share = `https://wa.me/?text=${encodeURIComponent(`${w.title} from ${site.name}: ${w.minutes} minutes, ${w.kitShort.toLowerCase()}. ${pageUrl}`)}`;
+---
+
+<Page
+  title={`${w.title}: a ${w.minutes}-minute ${w.place.toLowerCase()} workout`}
+  description={`${w.summary} A free ${w.minutes}-minute session from the coaches at ${site.name}, ${site.area}.`}
+  ogImage={`/og/${w.slug}.png`}
+>
+  <article>
+    <header class="w-hero has-contours">
+      <div class="contours" style="--contour-opacity:.14"></div>
+      <div class="wrap w-hero__inner">
+        <nav class="crumbs no-print" aria-label="Breadcrumb">
+          <a href="/train-anywhere">Train Anywhere</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{w.place}</span>
+        </nav>
+        <p class="eyebrow">{w.place} · {w.minutes} minutes</p>
+        <h1 class="h1 w-hero__title">{w.title}</h1>
+        <p class="lede">{w.when}</p>
+        <div class="w-kit">
+          <p class="w-kit__label">You need</p>
+          <ul role="list">
+            {w.kit.map((k) => <li class="chip">{k}</li>)}
+          </ul>
+        </div>
+        <div class="cluster no-print">
+          <a class="btn btn--whatsapp btn--sm" href={share} target="_blank" rel="noopener" data-track="workout_share" data-track-channel="whatsapp" data-track-location={w.slug}>
+            <Icon name="whatsapp" size={18} /> Send to a friend
+          </a>
+          <button type="button" class="btn btn--ghost btn--sm" data-print data-track="workout_print" data-track-location={w.slug}>
+            <Icon name="print" size={18} /> Print or save as PDF
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <section class="section section--tight">
+      <div class="wrap w-body">
+        <div class="w-blocks">
+          {
+            w.blocks.map((b) => (
+              <section class="w-block" aria-label={b.title}>
+                <header class="w-block__head">
+                  <h2 class="h3">{b.title}</h2>
+                  <p class="w-block__format">{b.format}</p>
+                </header>
+                <ol role="list" class="w-list">
+                  {b.items.map((e) => (
+                    <li class="w-item">
+                      <div class="w-item__top">
+                        <p class="w-item__name">{e.name}</p>
+                        <p class="w-item__dose">{e.dose}</p>
+                      </div>
+                      {e.how && <p class="w-item__how">{e.how}</p>}
+                      {(e.easier || e.harder) && (
+                        <p class="w-item__scale">
+                          {e.easier && (
+                            <span>
+                              <strong>Easier:</strong> {e.easier}
+                            </span>
+                          )}
+                          {e.harder && (
+                            <span>
+                              <strong>Harder:</strong> {e.harder}
+                            </span>
+                          )}
+                        </p>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ))
+          }
+        </div>
+
+        <aside class="w-side">
+          <div class="w-note">
+            <p class="h4">Next time</p>
+            <p>{PROGRESSION_RULE}</p>
+          </div>
+          <div class="w-note w-note--quiet">
+            <p class="h4">Safety</p>
+            <p class="small">{SAFETY_NOTE}</p>
+          </div>
+          <div class="w-note w-note--cta no-print">
+            <p class="h4">Want a coach to check your form?</p>
+            <p class="small">
+              The Anywhere Circuit class teaches these movements. It is included in your {site.offer}.
+            </p>
+            <a class="btn btn--primary btn--block" href="/trial?interest=anywhere" data-track="trial_cta_click" data-track-location={`workout_${w.slug}`}>
+              Book {site.offer}
+            </a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </article>
+
+  <section class="section section--alt no-print" aria-labelledby="more-title">
+    <div class="wrap">
+      <h2 id="more-title" class="h3 more-title">More sessions</h2>
+      <WorkoutCards exclude={w.slug} />
+    </div>
+  </section>
+
+  <FinalCta location={`workout_${w.slug}_final`} title="Train here. Train anywhere." />
+</Page>
+
+<script>
+  document.querySelectorAll('[data-print]').forEach((b) => b.addEventListener('click', () => window.print()));
+</script>
+
+<style>
+  .w-hero {
+    padding-block: clamp(28px, 5vw, 64px) clamp(28px, 4vw, 48px);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .w-hero__inner {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+  .w-hero__title {
+    font-size: clamp(2.3rem, 1.5rem + 3.8vw, 4.4rem);
+  }
+  .crumbs {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 650;
+    color: var(--stone);
+  }
+  .crumbs a {
+    color: var(--ink-2);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .w-kit {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .w-kit__label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .w-kit ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .w-kit .chip {
+    white-space: normal;
+    font-size: 0.875rem;
+    background: var(--card);
+    border: 1px solid var(--line-strong);
+  }
+  .w-body {
+    display: grid;
+    gap: 32px;
+  }
+  @media (min-width: 960px) {
+    .w-body {
+      grid-template-columns: 1fr 320px;
+      align-items: start;
+    }
+    .w-side {
+      position: sticky;
+      top: 96px;
+    }
+  }
+  .w-blocks {
+    display: grid;
+    gap: 28px;
+  }
+  .w-block__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 0.75rem;
+  }
+  .w-block__format {
+    font-weight: 700;
+    color: var(--brick-strong);
+    font-size: 0.95rem;
+  }
+  .w-list {
+    display: grid;
+    gap: 10px;
+  }
+  .w-item {
+    display: grid;
+    gap: 0.35rem;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    background: var(--card);
+    border: 1px solid var(--line);
+    break-inside: avoid;
+  }
+  .w-item__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    flex-wrap: wrap;
+  }
+  .w-item__name {
+    font-weight: 750;
+    font-stretch: 104%;
+  }
+  .w-item__dose {
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .w-item__how {
+    color: var(--ink-2);
+    font-size: 0.95rem;
+  }
+  .w-item__scale {
+    display: grid;
+    gap: 0.15rem;
+    font-size: 0.9rem;
+    color: var(--stone);
+  }
+  .w-item__scale strong {
+    color: var(--ink-2);
+  }
+  .w-side {
+    display: grid;
+    gap: 14px;
+  }
+  .w-note {
+    display: grid;
+    gap: 0.5rem;
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    background: var(--ink);
+    color: var(--on-dark);
+  }
+  .w-note--quiet {
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+  .w-note--cta {
+    background: var(--card);
+    color: var(--ink);
+    border: 2px solid var(--brick);
+  }
+  .more-title {
+    margin-bottom: 1.25rem;
+  }
+</style>

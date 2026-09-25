@@ -1,0 +1,211 @@
+---
+// Landmark directions first (that's how people find places in Kathmandu),
+// a light drawing of the walk, and the real Google map only when asked for.
+// Loading Google Maps up front would cost mobile visitors about a megabyte.
+import Icon from './Icon.astro';
+import DemoNote from './DemoNote.astro';
+import { site, mapsLink, mapsEmbed } from '../data/site.ts';
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  headingLevel?: 'h2' | 'h3';
+  id?: string;
+}
+const {
+  eyebrow = 'Find us',
+  heading = `${site.walkMinutes} minutes from ${site.landmark}.`,
+  headingLevel = 'h2',
+  id = 'find-us',
+} = Astro.props;
+const H = headingLevel;
+---
+
+<div class="find-us" id={id}>
+  <div class="find-us__text">
+    <p class="eyebrow">{eyebrow}</p>
+    <H class={headingLevel === 'h2' ? 'h2' : 'h3'}>{heading}</H>
+    <p class="find-us__directions">{site.directions}</p>
+    <ul role="list" class="find-us__facts">
+      <li>
+        <Icon name="pin" />
+        <span>
+          {site.address.street}, {site.address.locality}, {site.address.city}
+        </span>
+      </li>
+      <li>
+        <Icon name="clock" />
+        <span>
+          {site.hours.map((h, i) => (
+            <>
+              {i > 0 && <br />}
+              {h.days} {h.open} to {h.close}
+            </>
+          ))}
+        </span>
+      </li>
+      <li>
+        <Icon name="parking" />
+        <span>{site.parking}</span>
+      </li>
+    </ul>
+    <div class="cluster">
+      <a class="btn btn--ghost btn--sm" href={mapsLink} rel="noopener" target="_blank" data-track="map_open" data-track-location={id}>
+        <Icon name="map" size={18} /> Open in Google Maps
+      </a>
+    </div>
+    <DemoNote>
+      <p>
+        Landmark directions, not just a pin. Here people find places by landmark, so the words and the map have to
+        agree. On the live site both point at the gym's own building.
+      </p>
+    </DemoNote>
+  </div>
+
+  <div class="find-us__map" data-map>
+    <svg class="find-us__drawing" viewBox="0 0 520 360" role="img" aria-labelledby={`${id}-map-title`}>
+      <title id={`${id}-map-title`}>
+        Sketch of the walk: from {site.landmark} along the road towards Tinkune, the gym is on the left.
+      </title>
+      <defs>
+        <pattern id={`${id}-grid`} width="26" height="26" patternUnits="userSpaceOnUse">
+          <path d="M26 0H0V26" fill="none" stroke="rgb(29 27 24 / .07)" stroke-width="1"></path>
+        </pattern>
+      </defs>
+      <rect width="520" height="360" rx="18" fill="#efe8dc"></rect>
+      <rect width="520" height="360" rx="18" fill={`url(#${id}-grid)`}></rect>
+      <!-- side road through the chowk -->
+      <path d="M150 20 L150 340" stroke="#d9cfbf" stroke-width="30" stroke-linecap="round"></path>
+      <!-- main road towards Tinkune -->
+      <path d="M-10 212 L530 212" stroke="#d9cfbf" stroke-width="40"></path>
+      <path d="M-10 212 L530 212" stroke="#fbf8f2" stroke-width="2" stroke-dasharray="14 12"></path>
+      <!-- chowk -->
+      <circle cx="150" cy="212" r="34" fill="#e2d8c6" stroke="#cbbfac" stroke-width="2"></circle>
+      <circle cx="150" cy="212" r="7" fill="#1d1b18"></circle>
+      <!-- walking route -->
+      <path d="M150 190 C 190 176, 250 176, 330 178 L 352 178" fill="none" stroke="#b3412c" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 10"></path>
+      <!-- gym building -->
+      <rect x="330" y="104" width="92" height="66" rx="8" fill="#1d1b18"></rect>
+      <g transform="translate(360 108) scale(.8)">
+        <path d="M12.6 21.6C10.6 13 13.6 6 20 6s9.4 7 7.4 15.6" fill="none" stroke="#f4efe6" stroke-width="3.4" stroke-linecap="round"></path>
+        <path d="M14.9 33A9.5 9.5 0 1 1 25.1 33Z" fill="#f4efe6"></path>
+      </g>
+      <rect x="330" y="160" width="92" height="10" rx="3" fill="#b3412c"></rect>
+      <!-- labels -->
+      <g font-family="Archivo, sans-serif" fill="#1d1b18">
+        <text x="150" y="272" text-anchor="middle" font-size="15" font-weight="800">{site.landmark}</text>
+        <text x="376" y="92" text-anchor="middle" font-size="15" font-weight="800">Grounded Gym</text>
+        <text x="376" y="197" text-anchor="middle" font-size="12.5" fill="#655e53">2nd floor · on the left</text>
+        <text x="250" y="160" text-anchor="middle" font-size="13" font-weight="700" fill="#97341f">{site.walkMinutes} min walk</text>
+        <text x="505" y="246" text-anchor="end" font-size="13" font-weight="700">Tinkune →</text>
+        <text x="18" y="246" font-size="13" font-weight="700" fill="#655e53">← Maitighar</text>
+      </g>
+      <g transform="translate(476 44)" font-family="Archivo, sans-serif">
+        <circle r="18" fill="#fbf8f2" stroke="#cbbfac"></circle>
+        <path d="M0 -11 L5 5 L0 1 L-5 5 Z" fill="#1d1b18"></path>
+        <text y="-22" text-anchor="middle" font-size="11" font-weight="800" fill="#1d1b18">N</text>
+      </g>
+      <text x="18" y="342" font-family="Archivo, sans-serif" font-size="11" fill="#655e53">Sketch, not to scale</text>
+    </svg>
+    <button type="button" class="find-us__load" data-map-load data-src={mapsEmbed}>
+      <Icon name="map" size={18} /> Show the live map
+    </button>
+  </div>
+</div>
+
+<script>
+  import { track } from '../scripts/track.ts';
+  document.querySelectorAll<HTMLButtonElement>('[data-map-load]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const holder = btn.closest<HTMLElement>('[data-map]');
+      if (!holder) return;
+      const iframe = document.createElement('iframe');
+      iframe.src = btn.dataset.src!;
+      iframe.title = 'Map of New Baneshwor, Kathmandu';
+      iframe.loading = 'lazy';
+      iframe.referrerPolicy = 'no-referrer-when-downgrade';
+      iframe.className = 'find-us__iframe';
+      holder.replaceChildren(iframe);
+      track('map_load', { page: location.pathname });
+    });
+  });
+</script>
+
+<style>
+  .find-us {
+    display: grid;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .find-us {
+      grid-template-columns: 1fr 1.1fr;
+      align-items: center;
+    }
+  }
+  .find-us__text {
+    display: grid;
+    gap: 1.1rem;
+  }
+  .find-us__text .eyebrow {
+    margin-bottom: -0.35rem;
+  }
+  .find-us__directions {
+    font-size: 1.15rem;
+    line-height: 1.5;
+    font-weight: 520;
+    max-width: 32em;
+  }
+  .find-us__facts {
+    display: grid;
+    gap: 0.7rem;
+    color: var(--ink-2);
+  }
+  .find-us__facts li {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 0.6rem;
+    align-items: start;
+  }
+  .find-us__facts :global(svg) {
+    color: var(--brick);
+    margin-top: 0.15em;
+  }
+  .find-us__map {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background: #efe8dc;
+    aspect-ratio: 13 / 9;
+  }
+  .find-us__drawing {
+    width: 100%;
+    height: 100%;
+  }
+  .find-us__load {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    padding: 0 0.95rem;
+    border-radius: 999px;
+    border: 0;
+    background: var(--ink);
+    color: var(--on-dark);
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: var(--shadow);
+  }
+  .find-us__load:hover {
+    background: var(--brick-strong);
+  }
+  .find-us__map :global(.find-us__iframe) {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>

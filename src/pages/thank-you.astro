@@ -1,0 +1,359 @@
+---
+import Landing from '../layouts/Landing.astro';
+import Icon from '../components/Icon.astro';
+import FindUs from '../components/FindUs.astro';
+import ContactLink from '../components/ContactLink.astro';
+import { site } from '../data/site.ts';
+
+const { callback } = site;
+const next = [
+  {
+    when: `${callback.within[0].toUpperCase()}${callback.within.slice(1)}`,
+    note: callback.window,
+    what: 'We call or WhatsApp you to pick the session that suits you. Save our number so you know it is us.',
+  },
+  {
+    when: 'The evening before',
+    note: 'by WhatsApp',
+    what: 'A reminder with the time, the address and what to bring.',
+  },
+  {
+    when: 'Day 1',
+    note: '20 minutes',
+    what: 'A coach meets you at the front desk: your goals, a quick movement check, and your plan for the week.',
+  },
+  {
+    when: 'Day 6',
+    note: 'no pressure',
+    what: "We ask how the week went and show you the plans. If it isn't for you, that is the end of it.",
+  },
+];
+const bring = [
+  { item: 'Clean indoor shoes', note: 'Not the pair you walked here in. The dust is real.' },
+  { item: 'A towel', note: 'For you and for the bench.' },
+  { item: 'A water bottle', note: 'Refill it from our drinking water.' },
+];
+---
+
+<Landing
+  title="You're booked in"
+  description={`Your ${site.offer} at ${site.name} is booked. Here is what happens next.`}
+  noindex
+  bodyClass="no-bar"
+>
+  <script is:inline>
+    // Only reachable by submitting the form (or the ?preview= check used for QA).
+    try {
+      var q = new URLSearchParams(location.search);
+      if (!sessionStorage.getItem('gg_booking') && !q.get('preview')) location.replace('/trial');
+    } catch (e) {}
+  </script>
+
+  <section class="section section--tight ty-hero has-contours">
+    <div class="contours" style="--contour-opacity:.12"></div>
+    <div class="wrap ty-hero__inner">
+      <p class="chip chip--demo" data-ty-preview hidden>Preview: no booking was made</p>
+      <p class="ty-hero__tick"><Icon name="check" size={28} /></p>
+      <h1 class="h1 ty-hero__title" data-ty-title>You're booked in for your {site.offer}.</h1>
+      <p class="lede">
+        Your first week at {site.name} is free. Here is exactly what happens next, when, and what to bring.
+      </p>
+      <p class="ty-flag" data-ty-test hidden>
+        <Icon name="info" size={18} />
+        <span>Test mode: no form key is set, so this booking wasn't sent anywhere.</span>
+      </p>
+      <p class="ty-flag" data-ty-outside hidden>
+        <Icon name="pin" size={18} />
+        <span>
+          You said you're outside the valley. When we call, we'll help you plan it: the best days, the easiest route from
+          the bus park, and whether a full week makes sense.
+        </span>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap split">
+      <div class="ty-block">
+        <h2 class="h3">What happens next</h2>
+        <ol role="list" class="timeline">
+          {
+            next.map((s, i) => (
+              <li class="timeline__item">
+                <span class="timeline__num">{i + 1}</span>
+                <div>
+                  <p class="timeline__when">
+                    {s.when} <span class="muted">· {s.note}</span>
+                  </p>
+                  <p>{s.what}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="ty-whatsapp" data-ty-whatsapp>
+          <p class="small muted">Want to say hello first, or pick a time yourself?</p>
+          <ContactLink
+            channel="whatsapp"
+            class="btn btn--whatsapp"
+            location="thank_you"
+            message="Hi, I just booked my Free Trial Week. My name is "
+          >
+            Send us a WhatsApp
+          </ContactLink>
+        </div>
+      </div>
+
+      <div class="ty-block">
+        <h2 class="h3">Classes we'd pick for you</h2>
+        <p class="small">
+          <span class="chip chip--brick" data-ty-goal>Your goal</span>
+        </p>
+        <p data-ty-plan>We picked these from your answers.</p>
+        <ol class="class-list" data-ty-recs aria-live="polite">
+          {
+            [0, 1, 2].map(() => (
+              <li class="class-row class-row--skeleton" aria-hidden="true">
+                <span />
+              </li>
+            ))
+          }
+        </ol>
+        <p class="small muted" data-ty-slot-note hidden></p>
+        <p class="small">
+          Every class is included in your week. <a class="link" href="/timetable">See the full timetable</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight section--alt">
+    <div class="wrap">
+      <h2 class="h3">What to bring</h2>
+      <ul role="list" class="bring">
+        {
+          bring.map((b) => (
+            <li class="bring__item">
+              <Icon name="check" size={22} />
+              <div>
+                <p class="h4">{b.item}</p>
+                <p class="small muted">{b.note}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <FindUs eyebrow="How to find us" id="ty-find-us" />
+    </div>
+  </section>
+
+  {
+    site.demo.enabled && (
+      <section class="section section--tight" aria-labelledby="owner-panel">
+        <div class="wrap">
+          <div class="owner-panel">
+            <p class="eyebrow">For gym owners testing this demo</p>
+            <h2 id="owner-panel" class="h3">
+              You just walked the funnel your members would walk.
+            </h2>
+            <div class="owner-panel__grid">
+              <div>
+                <p class="h4">What you saw</p>
+                <ul role="list" class="check-list small">
+                  <li>
+                    <Icon name="check" size={18} />
+                    <span>One name for the offer, from the button to this page to the WhatsApp message.</span>
+                  </li>
+                  <li>
+                    <Icon name="check" size={18} />
+                    <span>Two short steps, taps before typing, with a location check.</span>
+                  </li>
+                  <li>
+                    <Icon name="check" size={18} />
+                    <span>Recommendations that change with the goal you picked.</span>
+                  </li>
+                  <li>
+                    <Icon name="check" size={18} />
+                    <span>A Lead event fired on this page, once, so the ads learn from bookings, not clicks.</span>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <p class="h4">What a live build adds</p>
+                <ul role="list" class="check-list small">
+                  <li>
+                    <Icon name="check" size={18} />
+                    <span>The booking lands in your CRM (GoHighLevel) with its ad source attached.</span>
+                  </li>
+                  <li>
+                    <Icon name="check" size={18} />
+                    <span>An instant WhatsApp and email confirmation, and a call task for the front desk.</span>
+                  </li>
+                  <li>
+                    <Icon name="check" size={18} />
+                    <span>The reminder the evening before, to cut no-shows.</span>
+                  </li>
+                  <li>
+                    <Icon name="check" size={18} />
+                    <span>A day-6 check-in that opens the membership conversation.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="cluster">
+              {site.demo.authorWhatsApp ? (
+                <a
+                  class="btn btn--whatsapp"
+                  href={`https://wa.me/${site.demo.authorWhatsApp}?text=${encodeURIComponent('Hi Yogesh, I just tested the Grounded Gym demo. I want this for my gym.')}`}
+                  data-track="author_contact_click"
+                  data-track-location="thank_you_owner_panel"
+                >
+                  <Icon name="whatsapp" /> Want this for your gym? Message {site.demo.author.split(' ')[0]}
+                </a>
+              ) : (
+                <a
+                  class="btn btn--primary"
+                  href={site.demo.authorUrl}
+                  data-track="author_contact_click"
+                  data-track-location="thank_you_owner_panel"
+                >
+                  Want this for your gym? Talk to {site.demo.author.split(' ')[0]} <Icon name="arrow" />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+</Landing>
+
+<script>
+  import '../scripts/thank-you.ts';
+</script>
+
+<style>
+  .ty-hero__inner {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    max-width: 900px;
+  }
+  .ty-hero__tick {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--brick);
+    color: #fff;
+  }
+  .ty-hero__title {
+    font-size: clamp(2.1rem, 1.5rem + 3.2vw, 4rem);
+  }
+  .ty-flag {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    padding: 0.75rem 0.9rem;
+    border-radius: 12px;
+    background: var(--paper-2);
+    max-width: 44rem;
+    font-size: 0.975rem;
+  }
+  .ty-flag :global(svg) {
+    flex: none;
+    margin-top: 0.15em;
+    color: var(--brick);
+  }
+  .ty-block {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+  .timeline {
+    display: grid;
+    gap: 0;
+    counter-reset: step;
+  }
+  .timeline__item {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 14px;
+    padding-bottom: 1.1rem;
+    position: relative;
+  }
+  .timeline__item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    bottom: 0;
+    width: 2px;
+    background: var(--line-strong);
+  }
+  .timeline__num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--on-dark);
+    font-weight: 800;
+  }
+  .timeline__when {
+    font-weight: 750;
+    font-stretch: 106%;
+  }
+  .ty-whatsapp {
+    display: grid;
+    gap: 0.6rem;
+    justify-items: start;
+    padding-top: 0.4rem;
+  }
+  .bring {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    margin-top: 1.2rem;
+  }
+  .bring__item {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 0.6rem;
+    align-items: start;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  .bring__item :global(svg) {
+    color: var(--brick);
+  }
+  .owner-panel {
+    display: grid;
+    gap: 1.2rem;
+    border: 2px dashed var(--brick);
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 3vw, 32px);
+    background: #fff6f0;
+  }
+  .owner-panel__grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 800px) {
+    .owner-panel__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .owner-panel__grid .h4 {
+    margin-bottom: 0.6rem;
+  }
+</style>

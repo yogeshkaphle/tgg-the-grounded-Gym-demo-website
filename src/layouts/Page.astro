@@ -1,0 +1,24 @@
+---
+// Standard page: header, content, footer, and the phone action bar.
+import Base from './Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileBar from '../components/MobileBar.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  jsonLd?: Record<string, unknown> | null;
+}
+const props = Astro.props;
+---
+
+<Base {...props}>
+  <Header />
+  <main id="main">
+    <slot />
+  </main>
+  <Footer />
+  <MobileBar />
+</Base>
