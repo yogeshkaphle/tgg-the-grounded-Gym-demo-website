@@ -667,10 +667,8 @@ html[data-notes='on'] .demo-note p + p {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 0.875rem;
+  font-weight: 750;
   color: var(--flag-ink);
   margin-bottom: 0.3rem;
 }

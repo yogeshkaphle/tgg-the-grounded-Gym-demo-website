@@ -6,7 +6,7 @@ import { site } from '../data/site.ts';
 import { footerNav } from '../data/nav.ts';
 
 interface Props {
-  minimal?: boolean; // landing pages: no navigation out of the funnel
+  minimal?: boolean; // landing pages: no navigation off the booking path
 }
 const { minimal = false } = Astro.props;
 const year = new Date().getFullYear();

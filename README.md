@@ -45,7 +45,7 @@ has fewer than three classes to recommend, or a longer plan costs more per month
 - [x] **Domain.** `groundedgym.yogeshkaphle.com` (set in `astro.config.mjs`, `SITE_URL`).
 - [ ] **Form key.** Create a free Web3Forms key with the email that should receive bookings and add it in Vercel as the environment variable `PUBLIC_WEB3FORMS_KEY`, then redeploy (the key is read at build time). Until then the form runs in test mode and says so on the thank-you page. For local testing, put it in a `.env` file (git-ignored).
 - [x] **Your WhatsApp.** Owner-facing buttons (demo strip, thank-you owner panel, conversion notes, demo dialog) open `site.demo.authorWhatsApp` with a prefilled message. The gym's own Call/WhatsApp buttons still explain the demo.
-- [ ] **Photo credit.** Replace `[source]` in `site.photoCredit` once photos are in.
+- [x] **Photo credit.** Footer reads "Photos: Unsplash, Pexels. Gym interior images are AI-generated for this demo." (`site.photoCredit`). Update it if the sources change.
 - [ ] **Tracking.** Add `site.tracking.metaPixelId` and `ga4Id` if you want live events. Nothing loads while they are empty.
 - [ ] **Photos.** See `src/assets/photos/README.md`.
 - [ ] **Deploy.** Vercel, from `main`. `vercel.json` sets clean URLs (no `.html`, no trailing slash) and cache headers. Node 22.12 or newer.

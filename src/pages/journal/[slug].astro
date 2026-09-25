@@ -65,7 +65,7 @@ const minutes = Math.max(2, Math.round((post.body ?? '').split(/\s+/).length / 2
         <p class="muted">{workout.summary} {workout.minutes} minutes, {workout.kitShort.toLowerCase()}.</p>
         <div class="cluster">
           <a class="btn btn--ghost btn--sm" href={`/train-anywhere/${workout.slug}`}>
-            Open the session <Icon name="arrow" size={18} />
+            Open the session
           </a>
           <a class="btn btn--primary btn--sm" href="/trial" data-track="trial_cta_click" data-track-location={`journal_${post.id}`}>
             Book {site.offer}
