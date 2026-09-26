@@ -1,0 +1,25 @@
+# Netlify equivalent of vercel.json. Keep the two in step.
+# Clean URLs need no rule here: Astro writes /timetable as dist/timetable.html
+# (build.format 'file') and Netlify serves it at /timetable. Internal links and
+# canonical tags never end in a slash, and dist/404.html is served for anything
+# unknown. Netlify redirect rules cannot strip a trailing slash; /timetable/ and
+# /timetable.html are normalised by the Pretty URLs site setting instead.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # package.json engines asks for >=22.12; "22" resolves to the newest 22.x.
+  NODE_VERSION = "22"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
